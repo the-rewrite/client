@@ -156,7 +156,7 @@ export default class Guest extends Delegator {
     // nb. The `anchoring` field defaults to HTML anchoring and in PDFs is replaced
     // by `PDFIntegration` below.
     this.anchoring = anchoring;
-    this.documentMeta = new DocumentMeta(this.element);
+    this.documentMeta = new DocumentMeta();
     if (config.documentType === 'pdf') {
       this.pdfIntegration = new PDFIntegration(this.element, this);
     }
@@ -341,7 +341,6 @@ export default class Guest extends Delegator {
 
     removeAllHighlights(this.element);
 
-    this.documentMeta.destroy();
     this.pdfIntegration?.destroy();
 
     super.destroy();

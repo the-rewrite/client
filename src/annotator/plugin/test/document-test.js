@@ -11,7 +11,7 @@
  */
 
 import { normalizeURI } from '../../util/url';
-import DocumentMeta from '../document';
+import DocumentMeta, { $imports } from '../document';
 
 describe('DocumentMeta', function () {
   let fakeNormalizeURI;
@@ -25,22 +25,19 @@ describe('DocumentMeta', function () {
     tempDocumentHead = document.createElement('head');
     tempDocument.appendChild(tempDocumentHead);
 
-    fakeNormalizeURI = sinon.stub().callsFake((url, base) => {
-      return normalizeURI(url, base);
+    fakeNormalizeURI = sinon.spy(normalizeURI);
+
+    $imports.$mock({
+      '../util/url': { normalizeURI: fakeNormalizeURI },
     });
 
-    // Root element to use for the `Delegator` event bus. This can be different
-    // than the document from which metadata is gathered.
-    const rootElement = document.body;
-
-    testDocument = new DocumentMeta(rootElement, {
+    testDocument = new DocumentMeta({
       document: tempDocument,
-      normalizeURI: fakeNormalizeURI,
     });
   });
 
   afterEach(() => {
-    testDocument.destroy();
+    $imports.$restore();
   });
 
   describe('annotation should have some metadata', function () {
@@ -256,20 +253,19 @@ describe('DocumentMeta', function () {
         htmlDoc = document.implementation.createHTMLDocument();
       }
 
-      // `DocumentMeta.location` is not overridable. In order to fake the
+      // `Document.location` is not overridable. In order to fake the
       // location in tests, create a proxy object in front of our blank HTML
       // document.
       const fakeDocument = {
+        baseURI,
         createElement: htmlDoc.createElement.bind(htmlDoc), // eslint-disable-line no-restricted-properties
         querySelectorAll: htmlDoc.querySelectorAll.bind(htmlDoc), // eslint-disable-line no-restricted-properties
         location: {
           href,
         },
       };
-      const divEl = document.createElement('div');
-      const doc = new DocumentMeta(divEl, {
+      const doc = new DocumentMeta({
         document: fakeDocument,
-        baseURI,
       });
       return doc;
     };

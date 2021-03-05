@@ -17,8 +17,6 @@
  * @typedef {import('../../types/annotator').DocumentMetadata} Metadata
  */
 
-import Delegator from '../delegator';
-
 import { normalizeURI } from '../util/url';
 
 /**
@@ -59,19 +57,19 @@ function createMetadata() {
 }
 
 /**
- * DocumentMeta reads metadata/links from the current HTML document and
- * populates the `document` property of new annotations.
+ * DocumentMeta extracts metadata from an HTML document for use in an annotation's
+ * `document`, `uri` and `target` properties.
  */
-export default class DocumentMeta extends Delegator {
-  constructor(element, options = {}) {
-    super(element, options);
+export default class DocumentMeta {
+  /**
+   * @param {object} options
+   *   @param {Document} [options.document] - HTML document to read metadata from
+   */
+  constructor(options = {}) {
+    this.document = options.document || document;
+    this.baseURI = this.document.baseURI;
 
     this.metadata = createMetadata();
-
-    this.baseURI = options.baseURI || document.baseURI;
-    this.document = options.document || document;
-    this.normalizeURI = options.normalizeURI || normalizeURI;
-
     this.getDocumentMetadata();
   }
 
@@ -309,7 +307,7 @@ export default class DocumentMeta extends Delegator {
    * exception if the URL cannot be parsed.
    */
   _absoluteUrl(url) {
-    return this.normalizeURI(url, this.baseURI);
+    return normalizeURI(url, this.baseURI);
   }
 
   // Get the true URI record when it's masked via a different protocol.
