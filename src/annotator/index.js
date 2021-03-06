@@ -19,8 +19,9 @@ registerIcons(iconSet);
 
 import configFrom from './config/index';
 import Guest from './guest';
+import { HTMLIntegration } from './integrations/html';
+import { PDFIntegration } from './integrations/pdf';
 import Notebook from './notebook';
-import PdfSidebar from './pdf-sidebar';
 import Sidebar from './sidebar';
 
 const window_ = /** @type {HypothesisWindow} */ (window);
@@ -35,13 +36,9 @@ const config = configFrom(window);
 
 function init() {
   const isPDF = typeof window_.PDFViewerApplication !== 'undefined';
-
-  /** @type {(new (e: HTMLElement, guest: Guest, config: Record<string,any>) => Sidebar)|null} */
-  let SidebarClass = isPDF ? PdfSidebar : Sidebar;
+  const integration = isPDF ? new PDFIntegration() : new HTMLIntegration();
 
   if (config.subFrameIdentifier) {
-    SidebarClass = null;
-
     // Other modules use this to detect if this
     // frame context belongs to hypothesis.
     // Needs to be a global property that's set.
@@ -51,10 +48,10 @@ function init() {
   // Load the PDF anchoring/metadata integration.
   config.documentType = isPDF ? 'pdf' : 'html';
 
-  const guest = new Guest(document.body, config);
-  const sidebar = SidebarClass
-    ? new SidebarClass(document.body, guest, config)
-    : null;
+  const guest = new Guest(document.body, integration, config);
+  const sidebar = config.subFrameIdentifier
+    ? null
+    : new Sidebar(document.body, guest, config);
   const notebook = new Notebook(document.body, config);
 
   appLinkEl.addEventListener('destroy', () => {

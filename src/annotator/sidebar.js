@@ -92,7 +92,7 @@ export default class Sidebar extends Delegator {
         const bucketBar = new BucketBar(
           this.iframeContainer,
           guest,
-          config.BucketBar
+          guest.integration.contentContainer()
         );
         guest.subscribe('anchorsChanged', () => bucketBar.update());
         this.bucketBar = bucketBar;
@@ -106,6 +106,12 @@ export default class Sidebar extends Delegator {
       shadowDom.appendChild(this.iframeContainer);
 
       element.appendChild(this.hypothesisSidebar);
+
+      this._lastLayoutState = {
+        expanded: false,
+        width: 0,
+        height: 0,
+      };
     }
 
     this.guest = guest;
@@ -363,6 +369,10 @@ export default class Sidebar extends Delegator {
       this.onLayoutChange(layoutState);
     }
     this.publish('sidebarLayoutChanged', [layoutState]);
+
+    this.sideBySideActive = this.guest.integration.fitSideBySide(layoutState);
+    this.guest.closeSidebarOnDocumentClick = !this.sideBySideActive;
+    this._lastLayoutState = layoutState;
   }
 
   /**
