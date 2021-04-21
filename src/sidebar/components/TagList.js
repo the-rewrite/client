@@ -10,14 +10,14 @@ import { withServices } from '../service-context';
  * @typedef TagListProps
  * @prop {Annotation} annotation - Annotation that owns the tags.
  * @prop {string[]} tags - List of tags as strings.
- * @prop {(a: string, b: Object<'tag', string>) => any} serviceUrl - Services
+ * @prop {import('../services/service-url').ServiceURLService} serviceURL
  */
 
 /**
  * Component to render an annotation's tags.
  * @param {TagListProps} props
  */
-function TagList({ annotation, serviceUrl, tags }) {
+function TagList({ annotation, serviceURL, tags }) {
   const store = useStoreProxy();
   const defaultAuthority = store.defaultAuthority();
   const renderLink = useMemo(
@@ -32,7 +32,7 @@ function TagList({ annotation, serviceUrl, tags }) {
    * @return {string}
    */
   const createTagSearchURL = tag => {
-    return serviceUrl('search.tag', { tag: tag });
+    return serviceURL.getURL('search.tag', { tag: tag });
   };
 
   return (
@@ -63,6 +63,6 @@ function TagList({ annotation, serviceUrl, tags }) {
   );
 }
 
-TagList.injectedProps = ['serviceUrl'];
+TagList.injectedProps = ['serviceURL'];
 
 export default withServices(TagList);

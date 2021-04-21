@@ -7,7 +7,7 @@ import { checkAccessibility } from '../../../test-util/accessibility';
 import mockImportedComponents from '../../../test-util/mock-imported-components';
 
 describe('TagList', () => {
-  let fakeServiceUrl;
+  let fakeServiceURL;
   let fakeIsThirdPartyUser;
   let fakeStore;
   const fakeTags = ['tag1', 'tag2'];
@@ -19,14 +19,16 @@ describe('TagList', () => {
         annotation={{}}
         tags={fakeTags}
         // service props
-        serviceUrl={fakeServiceUrl}
+        serviceURL={fakeServiceURL}
         {...props}
       />
     );
   }
 
   beforeEach(() => {
-    fakeServiceUrl = sinon.stub().returns('http://serviceurl.com');
+    fakeServiceURL = {
+      getURL: sinon.stub().returns('http://serviceurl.com'),
+    };
     fakeIsThirdPartyUser = sinon.stub().returns(false);
 
     fakeStore = {
@@ -68,8 +70,8 @@ describe('TagList', () => {
 
     it('calls fakeServiceUrl()', () => {
       createComponent();
-      assert.calledWith(fakeServiceUrl, 'search.tag', { tag: 'tag1' });
-      assert.calledWith(fakeServiceUrl, 'search.tag', { tag: 'tag2' });
+      assert.calledWith(fakeServiceURL.getURL, 'search.tag', { tag: 'tag1' });
+      assert.calledWith(fakeServiceURL.getURL, 'search.tag', { tag: 'tag2' });
     });
   });
 
@@ -89,7 +91,7 @@ describe('TagList', () => {
 
     it('does not call fakeServiceUrl()', () => {
       createComponent();
-      assert.notCalled(fakeServiceUrl);
+      assert.notCalled(fakeServiceURL);
     });
   });
 

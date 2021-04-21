@@ -2,12 +2,12 @@ import { LinkButton, SvgIcon } from '@hypothesis/frontend-shared';
 
 import { withServices } from '../service-context';
 
-/** @typedef {import('../services/service-url').ServiceUrlGetter} ServiceUrlGetter */
+/** @typedef {import('../services/service-url').ServiceURLService} ServiceURLService */
 
 /**
  * @typedef LoggedOutMessageProps
  * @prop {() => any} onLogin
- * @prop {ServiceUrlGetter} serviceUrl
+ * @prop {ServiceURLService} serviceURL
  */
 
 /**
@@ -17,7 +17,7 @@ import { withServices } from '../service-context';
  *
  * @param {LoggedOutMessageProps} props
  */
-function LoggedOutMessage({ onLogin, serviceUrl }) {
+function LoggedOutMessage({ onLogin, serviceURL }) {
   return (
     <div className="LoggedOutMessage">
       <span>
@@ -25,7 +25,7 @@ function LoggedOutMessage({ onLogin, serviceUrl }) {
         To reply or make your own annotations on this document,{' '}
         <a
           className="LoggedOutMessage__link"
-          href={serviceUrl('signup')}
+          href={serviceURL.getURL('signup')}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -54,6 +54,6 @@ function LoggedOutMessage({ onLogin, serviceUrl }) {
   );
 }
 
-LoggedOutMessage.injectedProps = ['serviceUrl'];
+LoggedOutMessage.injectedProps = ['serviceURL'];
 
 export default withServices(LoggedOutMessage);

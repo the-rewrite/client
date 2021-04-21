@@ -8,7 +8,7 @@ import { actionTypes } from '../util';
  * The links object is initially null, and can only be updated by completely
  * replacing it with a new links object.
  *
- * Used by serviceUrl.
+ * Used by ServiceURLService.
  */
 
 /** Return the initial links. */

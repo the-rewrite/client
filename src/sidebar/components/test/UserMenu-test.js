@@ -13,7 +13,7 @@ describe('UserMenu', () => {
   let fakeIsThirdPartyUser;
   let fakeOnLogout;
   let fakeServiceConfig;
-  let fakeServiceUrl;
+  let fakeServiceURL;
   let fakeSettings;
   let fakeStore;
 
@@ -23,7 +23,7 @@ describe('UserMenu', () => {
         auth={fakeAuth}
         bridge={fakeBridge}
         onLogout={fakeOnLogout}
-        serviceUrl={fakeServiceUrl}
+        serviceURL={fakeServiceURL}
         settings={fakeSettings}
       />
     );
@@ -46,7 +46,9 @@ describe('UserMenu', () => {
     fakeIsThirdPartyUser = sinon.stub();
     fakeOnLogout = sinon.stub();
     fakeServiceConfig = sinon.stub();
-    fakeServiceUrl = sinon.stub();
+    fakeServiceURL = {
+      getURL: sinon.stub(),
+    };
     fakeSettings = {};
     fakeStore = {
       defaultAuthority: sinon.stub().returns('hypothes.is'),
@@ -72,7 +74,7 @@ describe('UserMenu', () => {
     context('first-party user', () => {
       beforeEach(() => {
         fakeIsThirdPartyUser.returns(false);
-        fakeServiceUrl.returns('profile-link');
+        fakeServiceURL.getURL.returns('profile-link');
       });
 
       it('should be enabled', () => {
@@ -174,7 +176,7 @@ describe('UserMenu', () => {
 
       const accountMenuItem = findMenuItem(wrapper, 'Account settings');
       assert.isTrue(accountMenuItem.exists());
-      assert.calledWith(fakeServiceUrl, 'account.settings');
+      assert.calledWith(fakeServiceURL.getURL, 'account.settings');
     });
 
     it('should not be present if third-party user', () => {

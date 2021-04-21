@@ -11,7 +11,7 @@ describe('LoggedOutMessage', () => {
     return mount(
       <LoggedOutMessage
         onLogin={sinon.stub()}
-        serviceUrl={sinon.stub()}
+        serviceURL={sinon.stub()}
         {...props}
       />
     );
@@ -26,12 +26,14 @@ describe('LoggedOutMessage', () => {
   });
 
   it('should link to signup', () => {
-    const fakeServiceUrl = sinon.stub().returns('signup_link');
-    const wrapper = createLoggedOutMessage({ serviceUrl: fakeServiceUrl });
+    const fakeServiceURL = {
+      getURL: sinon.stub().returns('signup_link'),
+    };
+    const wrapper = createLoggedOutMessage({ serviceURL: fakeServiceURL });
 
     const signupLink = wrapper.find('.LoggedOutMessage__link').at(0);
 
-    assert.calledWith(fakeServiceUrl, 'signup');
+    assert.calledWith(fakeServiceURL.getURL, 'signup');
     assert.equal(signupLink.prop('href'), 'signup_link');
   });
 

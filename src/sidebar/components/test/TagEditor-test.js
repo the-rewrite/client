@@ -12,7 +12,7 @@ describe('TagEditor', function () {
   let containers = [];
   let fakeTags = ['tag1', 'tag2'];
   let fakeTagsService;
-  let fakeServiceUrl;
+  let fakeServiceURL;
   let fakeOnAddTag;
   let fakeOnRemoveTag;
   let fakeOnTagInput;
@@ -31,7 +31,7 @@ describe('TagEditor', function () {
         onTagInput={fakeOnTagInput}
         tagList={fakeTags}
         // service props
-        serviceUrl={fakeServiceUrl}
+        serviceURL={fakeServiceURL}
         tags={fakeTagsService}
         {...props}
       />,
@@ -43,7 +43,9 @@ describe('TagEditor', function () {
     fakeOnAddTag = sinon.stub().returns(true);
     fakeOnRemoveTag = sinon.stub();
     fakeOnTagInput = sinon.stub();
-    fakeServiceUrl = sinon.stub().returns('http://serviceurl.com');
+    fakeServiceURL = {
+      getURL: sinon.stub().returns('http://serviceurl.com'),
+    };
     fakeTagsService = {
       filter: sinon.stub().returns(['tag4', 'tag3']),
     };
