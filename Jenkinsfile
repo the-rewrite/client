@@ -79,6 +79,13 @@ node {
       }
     }
 
+    stage('Environment check') {
+      nodeEnv.inside("-e HOME=${workspace}") {
+        sh "node --version"
+        sh "yarn --version"
+      }
+    }
+
     stage('Test') {
         nodeEnv.inside("-e HOME=${workspace}") {
             withCredentials([
