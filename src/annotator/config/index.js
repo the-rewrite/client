@@ -9,7 +9,7 @@ import { urlFromLinkTag } from './url-from-link-tag';
  * @typedef {import('./settings').SettingsGetters} SettingsGetters
  *
  * @typedef ConfigDefinition
- * @prop {(settings: SettingsGetters) => any} getValue -
+ * @prop {(settings: SettingsGetters, name: string) => any} getValue -
  *  Method to retrieve the value from the incoming source
  * @prop {boolean} allowInBrowserExt -
  *  Allow this name to be available in the browser extension. If this is false
@@ -90,12 +90,12 @@ const configDefinitions = {
   appType: {
     allowInBrowserExt: true,
     defaultValue: null,
-    getValue: settings => settings.hostPageSetting('appType'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   branding: {
     defaultValue: null,
     allowInBrowserExt: false,
-    getValue: settings => settings.hostPageSetting('branding'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   // URL of the client's boot script. Used when injecting the client into
   // child iframes.
@@ -107,8 +107,7 @@ const configDefinitions = {
   enableExperimentalNewNoteButton: {
     allowInBrowserExt: false,
     defaultValue: null,
-    getValue: settings =>
-      settings.hostPageSetting('enableExperimentalNewNoteButton'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   group: {
     allowInBrowserExt: false,
@@ -118,28 +117,28 @@ const configDefinitions = {
   focus: {
     allowInBrowserExt: false,
     defaultValue: null,
-    getValue: settings => settings.hostPageSetting('focus'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   theme: {
     allowInBrowserExt: false,
     defaultValue: null,
-    getValue: settings => settings.hostPageSetting('theme'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   usernameUrl: {
     allowInBrowserExt: false,
     defaultValue: null,
-    getValue: settings => settings.hostPageSetting('usernameUrl'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   onLayoutChange: {
     allowInBrowserExt: false,
     defaultValue: null,
-    getValue: settings => settings.hostPageSetting('onLayoutChange'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   openSidebar: {
     allowInBrowserExt: true,
     defaultValue: false,
     coerce: toBoolean,
-    getValue: settings => settings.hostPageSetting('openSidebar'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   query: {
     allowInBrowserExt: true,
@@ -149,12 +148,12 @@ const configDefinitions = {
   requestConfigFromFrame: {
     allowInBrowserExt: false,
     defaultValue: null,
-    getValue: settings => settings.hostPageSetting('requestConfigFromFrame'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   services: {
     allowInBrowserExt: false,
     defaultValue: null,
-    getValue: settings => settings.hostPageSetting('services'),
+    getValue: (settings, name) => settings.hostPageSetting(name),
   },
   showHighlights: {
     allowInBrowserExt: false,
@@ -214,7 +213,7 @@ export function getConfig(appContext = 'annotator', window_ = window) {
     }
 
     // Get the value from the configuration source
-    const value = configDef.getValue(settings);
+    const value = configDef.getValue(settings, name);
     if (value === undefined) {
       // If there is no value (e.g. undefined), then set to the default if provided,
       // otherwise ignore the config key:value pair
