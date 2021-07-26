@@ -31,7 +31,7 @@ export default class Bridge {
    * Deprecated - Remove after MessagePort conversion
    *
    * @typedef WindowOptions
-   * @prop {Window} source - The source window
+   * @prop {Window} source - The window to communicate with
    * @prop {string} origin - The origin of the document in `source`
    * @prop {string} token - Shared token between the `source` and this window
    *   agreed during the discovery process
