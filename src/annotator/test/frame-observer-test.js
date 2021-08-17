@@ -77,27 +77,18 @@ describe('FrameObserver', () => {
     assert.notCalled(onFrameAdded);
   });
 
-  it('removal of the annotatable iframe triggers onFrameRemoved', done => {
-    sinon.stub(frameObserver, '_removeFrame').callThrough();
+  it('removal of the annotatable iframe triggers onFrameRemoved', async () => {
     const frame = createAnnotatableIFrame();
 
-    waitForFrameObserver()
-      .then(() => {
-        assert.calledOnce(onFrameAdded);
-        assert.calledWith(onFrameAdded, frame);
-      })
-      .then(() => {
-        frame.remove();
-      });
+    await waitForFrameObserver();
+    assert.calledOnce(onFrameAdded);
+    assert.calledWith(onFrameAdded, frame);
 
-    waitForIFrameUnload(frame)
-      .then(() => waitForFrameObserver())
-      .then(() => {
-        assert.calledOnce(frameObserver._removeFrame);
-        assert.calledOnce(onFrameRemoved);
-        assert.calledWith(onFrameRemoved, frame);
-      })
-      .then(done);
+    frame.remove();
+
+    await waitForFrameObserver();
+    assert.calledOnce(onFrameRemoved);
+    assert.calledWith(onFrameRemoved, frame);
   });
 
   it('removal of the `enable-annotation` attribute triggers onFrameRemoved', async () => {
