@@ -121,7 +121,6 @@ export function onDocumentReady(iframe) {
     // (3) has a empty body and head. If a blank document is detected and there
     // is a 'src' attribute, it is expected that the blank document will be
     // replaced by the final document.
-    /* istanbul ignore next */
     if (
       iframeDocument.location.href === 'about:blank' &&
       iframe.hasAttribute('src')
@@ -134,7 +133,6 @@ export function onDocumentReady(iframe) {
       return;
     }
 
-    /* istanbul ignore next */
     if (state === 'loading') {
       iframeDocument.addEventListener('DOMContentLoaded', () => resolve());
       return;
