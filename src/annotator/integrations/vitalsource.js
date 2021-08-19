@@ -1,5 +1,6 @@
 import warnOnce from '../../shared/warn-once';
 import { ListenerCollection } from '../util/listener-collection';
+import { scrollElement } from '../util/scroll';
 import { HTMLIntegration } from './html';
 
 /**
@@ -217,9 +218,25 @@ export class VitalSourceIntegration {
   /**
    * @param {Anchor} anchor
    */
-  scrollToAnchor(anchor) {
-    // TODO - Customize this to work with the tall iframe that VitalSource
-    // creates for its reader.
-    return this._htmlIntegration.scrollToAnchor(anchor);
+  async scrollToAnchor(anchor) {
+    const highlights = anchor.highlights;
+    if (!highlights || !highlights.length) {
+      return;
+    }
+
+    // When the user scrolls through a book they are not scrolling the content
+    // frame but the container frame. The content frame itself is sized to be
+    // the height of the chapter content.
+    //
+    // To scroll a highlight into view we need to scroll the document element of
+    // the container frame so that the relevant part of the content frame is
+    // in view.
+    const frameHeight = window.parent.innerHeight;
+    const scrollTarget = window.parent.document.documentElement;
+
+    // Choose the scroll offset so that the highlight appears ~1/3rd of the
+    // way down the window, so the surrounding context is available to read.
+    const offset = highlights[0].getBoundingClientRect().top - frameHeight / 3;
+    await scrollElement(scrollTarget, offset);
   }
 }
