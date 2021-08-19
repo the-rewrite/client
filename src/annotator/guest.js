@@ -338,6 +338,9 @@ export default class Guest {
   }
 
   destroy() {
+    // Notify sidebar that frame is going away.
+    this.crossframe.call('destroyFrame', this._frameIdentifier);
+
     this._listeners.removeAll();
 
     this._selectionObserver.disconnect();
