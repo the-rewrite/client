@@ -120,15 +120,11 @@ export function onDocumentReady(iframe) {
     // on Chrome and Safari, and an 'uninitialized' readyState on Firefox and
     // (3) has a empty body and head. If a blank document is detected and there
     // is a 'src' attribute, it is expected that the blank document will be
-    // replaced by the document from 'src'.
+    // replaced by the final document.
     /* istanbul ignore next */
     if (
-      // @ts-ignore
-      state === 'uninitialized' ||
-      (state === 'complete' &&
-        iframe.hasAttribute('src') &&
-        iframeDocument.head.hasChildNodes() === false &&
-        iframeDocument.body.hasChildNodes() === false)
+      iframeDocument.location.href === 'about:blank' &&
+      iframe.hasAttribute('src')
     ) {
       // Unfortunately, listening for 'DOMContentLoaded' on the iframeDocument
       // doesn't work. Instead, we need to wait for a 'load' event to be triggered.
