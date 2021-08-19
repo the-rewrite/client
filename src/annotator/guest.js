@@ -1,7 +1,6 @@
 import { Adder } from './adder';
 import { CrossFrame } from './cross-frame';
-import { HTMLIntegration } from './integrations/html';
-import { PDFIntegration } from './integrations/pdf';
+import { createIntegration } from './integrations';
 
 import { TextRange } from './anchoring/text-range';
 import {
@@ -22,7 +21,6 @@ import { ListenerCollection } from './util/listener-collection';
  * @typedef {import('../types/annotator').AnnotationData} AnnotationData
  * @typedef {import('../types/annotator').Anchor} Anchor
  * @typedef {import('../types/annotator').Destroyable} Destroyable
- * @typedef {import('../types/annotator').Integration} Integration
  * @typedef {import('../types/annotator').SidebarLayout} SidebarLayout
  * @typedef {import('../types/api').Target} Target
  */
@@ -154,11 +152,11 @@ export default class Guest {
      */
     this.anchors = [];
 
-    /** @type {Integration} */
-    this._integration =
-      config.documentType === 'pdf'
-        ? new PDFIntegration(this)
-        : new HTMLIntegration(this.element);
+    /**
+     * Integration that handles document-type specific functionality in the
+     * guest.
+     */
+    this._integration = createIntegration(this, config.documentType);
 
     // Set the frame identifier if it's available.
     // The "top" guest instance will have this as null since it's in a top frame not a sub frame
