@@ -12,6 +12,7 @@ import { withServices } from '../service-context';
 
 import AnnotationView from './AnnotationView';
 import SidebarView from './SidebarView';
+import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
 import StreamView from './StreamView';
 
 import HelpPanel from './HelpPanel';
@@ -73,6 +74,7 @@ function HypothesisApp({ auth, bridge, settings, session, toastMessenger }) {
   const hasFetchedProfile = store.hasFetchedProfile();
   const profile = store.profile();
   const route = store.route();
+  console.log('route is', route);
 
   /** @type {AuthState} */
   const authState = useMemo(() => {
@@ -89,6 +91,7 @@ function HypothesisApp({ auth, bridge, settings, session, toastMessenger }) {
   const isThemeClean = settings.theme === 'clean';
 
   const isSidebar = route === 'sidebar';
+  console.log('route is', route);
 
   useEffect(() => {
     if (shouldAutoDisplayTutorial(isSidebar, profile, settings)) {
@@ -190,6 +193,9 @@ function HypothesisApp({ auth, bridge, settings, session, toastMessenger }) {
           <main>
             {route === 'annotation' && <AnnotationView onLogin={login} />}
             {route === 'notebook' && <NotebookView />}
+            {route === 'the-rewrite' && (
+              <TheRewriteView onLogin={login} onSignUp={signUp} />
+            )}
             {route === 'stream' && <StreamView />}
             {route === 'sidebar' && (
               <SidebarView onLogin={login} onSignUp={signUp} />

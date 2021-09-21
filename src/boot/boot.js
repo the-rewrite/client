@@ -23,6 +23,7 @@ const commonPolyfills = [
  * @typedef AnnotatorConfig
  * @prop {string} assetRoot - The root URL to which URLs in `manifest` are relative
  * @prop {string} notebookAppUrl - The URL of the sidebar's notebook
+ * @prop {string} theRewriteAppUrl - The URL of The Rewrite HTML page
  * @prop {string} sidebarAppUrl - The URL of the sidebar's HTML page
  * @prop {Object.<string,string>} manifest -
  *   A mapping from canonical asset path to cache-busted asset path
@@ -151,6 +152,9 @@ export function bootHypothesisClient(doc, config) {
   // The <link> tag is also used by browser extensions etc. to detect the
   // presence of the Hypothesis client on the page.
   injectLink(doc, 'sidebar', 'html', config.sidebarAppUrl);
+
+  // Register the URL of the notebook app which the Hypothesis client should load.
+  injectLink(doc, 'the-rewrite', 'html', config.theRewriteAppUrl);
 
   // Register the URL of the notebook app which the Hypothesis client should load.
   injectLink(doc, 'notebook', 'html', config.notebookAppUrl);

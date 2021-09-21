@@ -13,6 +13,7 @@ import { urlFromLinkTag } from './url-from-link-tag';
  * @prop {string} clientUrl
  * @prop {string} sidebarAppUrl
  * @prop {string} notebookAppUrl
+ * @prop {string} theRewriteAppUrl
  
  * @prop {(name: string, options?: Object) => (string|null)} hostPageSetting
  */
@@ -162,6 +163,9 @@ export default function settingsFrom(window_) {
     },
     get notebookAppUrl() {
       return urlFromLinkTag(window_, 'notebook', 'html');
+    },
+    get theRewriteAppUrl() {
+      return urlFromLinkTag(window_, 'the-rewrite', 'html');
     },
     get showHighlights() {
       return showHighlights();

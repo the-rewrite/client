@@ -4,7 +4,7 @@ import { toBoolean } from '../../shared/type-coercions';
 import { urlFromLinkTag } from './url-from-link-tag';
 
 /**
- * @typedef {'sidebar'|'notebook'|'annotator'|'all'} AppContext
+ * @typedef {'sidebar'|'notebook'|'the-rewrite'|'annotator'|'all'} AppContext
  * @typedef {import('./settings').SettingsGetters} SettingsGetters
  * @typedef {(settings: SettingsGetters, name: string) => any} ValueGetter
  *
@@ -57,6 +57,15 @@ function configurationKeys(appContext) {
       'theme',
       'usernameUrl',
     ],
+    theRewrite: [
+      'branding',
+      'group',
+      'theRewriteAppUrl',
+      'requestConfigFromFrame',
+      'services',
+      'theme',
+      'usernameUrl',
+    ],
   };
 
   switch (appContext) {
@@ -66,9 +75,16 @@ function configurationKeys(appContext) {
       return contexts.sidebar;
     case 'notebook':
       return contexts.notebook;
+    case 'the-rewrite':
+      return contexts.theRewrite;
     case 'all':
       // Complete list of configuration keys used for testing.
-      return [...contexts.annotator, ...contexts.sidebar, ...contexts.notebook];
+      return [
+        ...contexts.annotator,
+        ...contexts.sidebar,
+        ...contexts.notebook,
+        ...contexts.theRewrite,
+      ];
     default:
       throw new Error(`Invalid application context used: "${appContext}"`);
   }
@@ -166,6 +182,11 @@ const configDefinitions = {
     allowInBrowserExt: true,
     defaultValue: null,
     getValue: settings => settings.notebookAppUrl,
+  },
+  theRewriteAppUrl: {
+    allowInBrowserExt: true,
+    defaultValue: null,
+    getValue: settings => settings.theRewriteAppUrl,
   },
   sidebarAppUrl: {
     allowInBrowserExt: true,

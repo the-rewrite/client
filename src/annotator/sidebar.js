@@ -140,6 +140,7 @@ export default class Sidebar {
     // Set up the toolbar on the left edge of the sidebar.
     const toolbarContainer = document.createElement('div');
     this.toolbar = new ToolbarController(toolbarContainer, {
+      eventBus,
       createAnnotation: () => guest.createAnnotation(),
       setSidebarOpen: open => (open ? this.open() : this.close()),
       setHighlightsVisible: show => this.setAllVisibleHighlights(show),
@@ -242,6 +243,19 @@ export default class Sidebar {
       }
     );
     this._emitter.subscribe('closeNotebook', () => {
+      this.show();
+    });
+
+    // Sidebar listens to the `openTheRewrite` event coming from the sidebar's
+    // iframe and re-publishes it via the emitter to the Notebook
+    this.guest.crossframe.on(
+      'openTheRewrite',
+      (/** @type {string} */ groupId) => {
+        this.hide();
+        this._emitter.publish('openTheRewrite', groupId);
+      }
+    );
+    this._emitter.subscribe('closeTheRewrite', () => {
       this.show();
     });
 

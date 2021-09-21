@@ -35,7 +35,9 @@ export function createSidebarConfig(config) {
   // nb. We don't currently strip all the annotator-only properties here.
   // That's OK because validation / filtering happens in the sidebar app itself.
   // It just results in unnecessary content in the sidebar iframe's URL string.
-  ['notebookAppUrl', 'sidebarAppUrl'].forEach(key => delete sidebarConfig[key]);
+  ['notebookAppUrl', 'theRewriteAppUrl', 'sidebarAppUrl'].forEach(
+    key => delete sidebarConfig[key]
+  );
 
   return sidebarConfig;
 }

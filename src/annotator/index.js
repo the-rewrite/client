@@ -19,6 +19,7 @@ registerIcons(iconSet);
 
 import { getConfig } from './config/index';
 import Guest from './guest';
+import TheRewrite from '../the-rewrite';
 import Notebook from './notebook';
 import Sidebar from './sidebar';
 import { EventBus } from './util/emitter';
@@ -73,9 +74,18 @@ function init() {
     );
   }
 
+  // @ts-ignore
+  window._getConfig = getConfig;
+
   // Clear `annotations` value from the notebook's config to prevent direct-linked
   // annotations from filtering the threads.
   const notebook = new Notebook(document.body, eventBus, getConfig('notebook'));
+
+  const theRewrite = new TheRewrite(
+    document.body,
+    eventBus,
+    getConfig('the-rewrite')
+  );
 
   // Set up communication between this host/guest frame and the sidebar frame.
   let sidebarWindow = window_.__hypothesis.sidebarWindow;
@@ -109,6 +119,7 @@ Guest frames can only connect to sidebars in their same-origin parent frame.`
     sidebar?.destroy();
 
     notebook.destroy();
+    theRewrite.destroy();
     guest.destroy();
 
     // Remove all the `<link>`, `<script>` and `<style>` elements added to the

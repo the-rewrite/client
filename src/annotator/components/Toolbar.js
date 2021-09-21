@@ -48,6 +48,7 @@ function ToolbarButton({
  * @prop {'annotation'|'note'} newAnnotationType -
  *   Icon to show on the "Create annotation" button indicating what kind of annotation
  *   will be created.
+ * @prop {() => any} openTheRewrite -
  * @prop {boolean} showHighlights - Are highlights currently visible in the document?
  * @prop {() => any} toggleHighlights -
  *   Callback to toggle visibility of highlights in the document.
@@ -73,6 +74,7 @@ export default function Toolbar({
   createAnnotation,
   isSidebarOpen,
   newAnnotationType,
+  openTheRewrite,
   showHighlights,
   toggleHighlights,
   toggleSidebar,
@@ -101,6 +103,11 @@ export default function Toolbar({
       )}
       {!useMinimalControls && (
         <div className="Toolbar__buttonbar">
+          <ToolbarButton
+            label="The Rewrite"
+            icon="the-rewrite"
+            onClick={openTheRewrite}
+          />
           <ToolbarButton
             label="Show highlights"
             icon={showHighlights ? 'show' : 'hide'}

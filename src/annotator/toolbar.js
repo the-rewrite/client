@@ -4,6 +4,7 @@ import Toolbar from './components/Toolbar';
 
 /**
  * @typedef ToolbarOptions
+ * @prop {import('./util/emitter').EventBus} eventBus -
  * @prop {() => any} createAnnotation
  * @prop {(open: boolean) => any} setSidebarOpen
  * @prop {(visible: boolean) => any} setHighlightsVisible
@@ -21,7 +22,8 @@ export class ToolbarController {
    * @param {ToolbarOptions} options
    */
   constructor(container, options) {
-    const { createAnnotation, setSidebarOpen, setHighlightsVisible } = options;
+    const { eventBus, createAnnotation, setSidebarOpen, setHighlightsVisible } =
+      options;
 
     this._container = container;
 
@@ -32,7 +34,9 @@ export class ToolbarController {
 
     this._highlightsVisible = false;
     this._sidebarOpen = false;
+    this._emitter = eventBus.createEmitter();
 
+    this._openTheRewrite = () => this._emitter.publish('openTheRewrite');
     this._closeSidebar = () => setSidebarOpen(false);
     this._toggleSidebar = () => setSidebarOpen(!this._sidebarOpen);
     this._toggleHighlights = () =>
@@ -120,6 +124,7 @@ export class ToolbarController {
         createAnnotation={this._createAnnotation}
         newAnnotationType={this._newAnnotationType}
         isSidebarOpen={this._sidebarOpen}
+        openTheRewrite={this._openTheRewrite}
         showHighlights={this._highlightsVisible}
         toggleHighlights={this._toggleHighlights}
         toggleSidebar={this._toggleSidebar}

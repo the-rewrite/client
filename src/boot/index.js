@@ -29,6 +29,9 @@ if (isBrowserSupported()) {
     const notebookAppUrl = processUrlTemplate(
       settings.notebookAppUrl || '__NOTEBOOK_APP_URL__'
     );
+    const theRewriteAppUrl = processUrlTemplate(
+      settings.theRewriteAppUrl || '__THE_REWRITE_APP_URL__'
+    );
     const sidebarAppUrl = processUrlTemplate(
       settings.sidebarAppUrl || '__SIDEBAR_APP_URL__'
     );
@@ -36,6 +39,7 @@ if (isBrowserSupported()) {
       assetRoot,
       manifest,
       notebookAppUrl,
+      theRewriteAppUrl,
       sidebarAppUrl,
     });
   }

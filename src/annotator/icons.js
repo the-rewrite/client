@@ -15,4 +15,5 @@ export default {
   note: require('../images/icons/note.svg'),
   pointer: require('../images/icons/pointer.svg'),
   show: require('../images/icons/show.svg'),
+  'the-rewrite': require('../the-rewrite/images/the-rewrite.svg'),
 };
