@@ -5,6 +5,7 @@ import { withServices } from '../../sidebar/service-context';
 import { useStoreProxy } from '../../sidebar/store/use-store';
 import { tabForAnnotation } from '../../sidebar/helpers/tabs';
 
+
 import FilterStatus from '../../sidebar/components/FilterStatus';
 import LoggedOutMessage from '../../sidebar/components/LoggedOutMessage';
 import LoginPromptPanel from '../../sidebar/components/LoginPromptPanel';
@@ -34,11 +35,13 @@ function TheRewriteView({
   streamer,
 }) {
   const rootThread = useRootThread();
-  console.log(rootThread);
+  console.log("fart", rootThread);
 
   // Store state values
   const store = useStoreProxy();
   const focusedGroupId = store.focusedGroupId();
+  console.log('group', focusedGroupId);
+  console.log('store', store);
   const hasAppliedFilter =
     store.hasAppliedFilter() || store.hasSelectedAnnotations();
   const isLoading = store.isLoading();
@@ -55,6 +58,53 @@ function TheRewriteView({
   const searchUris = store.searchUris();
   const sidebarHasOpened = store.hasSidebarOpened();
   const userId = store.profile().userid;
+
+  // tests added by f
+  const maxResults = 5000;
+  const focusedGroup = store.focusedGroup();
+  const groupId = focusedGroup?.id || store.directLinkedGroupId();
+
+  const onLoadError = error => {
+    console.error( error );
+  };
+
+  const hasFetchedProfile = store.hasFetchedProfile();
+
+  useEffect(() => {
+    if (hasFetchedProfile) {
+      streamer.connect({ applyUpdatesImmediately: false });
+    }
+  }, [hasFetchedProfile, streamer]);
+
+
+  useEffect(() => {
+    // NB: In current implementation, this will only happen/load once (initial
+    // annotation fetch on application startup), as there is no mechanism
+    // within the Notebook to change the `focusedGroup`. If the focused group
+    // is changed within the sidebar and the Notebook re-opened, an entirely
+    // new iFrame/app is created. This will need to be revisited.
+    store.setSortKey('Newest');
+    if (groupId) {
+      loadAnnotationsService.load({
+        groupId,
+        // Load annotations in reverse-chronological order because that is how
+        // threads are sorted in the notebook view. By aligning the fetch
+        // order with the thread display order we reduce the changes in visible
+        // content as annotations are loaded. This reduces the amount of time
+        // the user has to wait for the content to load before they can start
+        // reading it.
+        //
+        // Fetching is still suboptimal because we fetch both annotations and
+        // replies together from the backend, but the user initially sees only
+        // the top-level threads.
+        sortBy: 'updated',
+        sortOrder: 'desc',
+        maxResults,
+        onError: onLoadError,
+        streamFilterBy: 'group',
+      });
+    }
+  }, [loadAnnotationsService, groupId, store]);
 
   // The local `$tag` of a direct-linked annotation; populated once it
   // has anchored: meaning that it's ready to be focused and scrolled to
@@ -129,7 +179,6 @@ function TheRewriteView({
   ]);
 
   // Connect to the streamer when the sidebar has opened or if user is logged in
-  const hasFetchedProfile = store.hasFetchedProfile();
   useEffect(() => {
     if (hasFetchedProfile && (sidebarHasOpened || isLoggedIn)) {
       streamer.connect({ applyUpdatesImmediately: false });
@@ -137,7 +186,7 @@ function TheRewriteView({
   }, [hasFetchedProfile, isLoggedIn, sidebarHasOpened, streamer]);
 
   return (
-    <div class="TheRewriteView">
+    <div className="TheRewriteView">
       {showFilterStatus && <FilterStatus />}
       <LoginPromptPanel onLogin={onLogin} onSignUp={onSignUp} />
       {hasDirectLinkedAnnotationError && (
