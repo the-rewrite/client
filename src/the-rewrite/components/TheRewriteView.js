@@ -5,7 +5,6 @@ import { withServices } from '../../sidebar/service-context';
 import { useStoreProxy } from '../../sidebar/store/use-store';
 import { tabForAnnotation } from '../../sidebar/helpers/tabs';
 
-
 import FilterStatus from '../../sidebar/components/FilterStatus';
 import LoggedOutMessage from '../../sidebar/components/LoggedOutMessage';
 import LoginPromptPanel from '../../sidebar/components/LoginPromptPanel';
@@ -35,6 +34,28 @@ function TheRewriteView({
   streamer,
 }) {
   const rootThread = useRootThread();
+<<<<<<< HEAD
+=======
+
+  const buckets = {};
+
+  for (let c of rootThread.children) {
+    if (c.annotation) {
+      const selector = c.annotation.target[0].selector || [];
+      for (let s of selector) {
+        if (s.type === 'RangeSelector') {
+          const { startContainer } = s;
+          if (!buckets[startContainer]) {
+            buckets[startContainer] = [];
+          }
+          buckets[startContainer].push(c.annotation);
+        }
+      }
+    }
+  }
+
+  console.log(buckets);
+>>>>>>> d8efcd103fe2aa30262c70ba2e42104eb4eb6ef7
 
   // Store state values
   const store = useStoreProxy();
@@ -64,7 +85,7 @@ function TheRewriteView({
   const groupId = focusedGroup?.id || store.directLinkedGroupId();
 
   const onLoadError = error => {
-    console.error( error );
+    console.error(error);
   };
 
   const hasFetchedProfile = store.hasFetchedProfile();
@@ -74,7 +95,6 @@ function TheRewriteView({
       streamer.connect({ applyUpdatesImmediately: false });
     }
   }, [hasFetchedProfile, streamer]);
-
 
   useEffect(() => {
     // NB: In current implementation, this will only happen/load once (initial
