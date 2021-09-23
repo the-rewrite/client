@@ -35,7 +35,6 @@ function TheRewriteView({
   streamer,
 }) {
   const rootThread = useRootThread();
-  console.log("fart", rootThread);
 
   // Store state values
   const store = useStoreProxy();
