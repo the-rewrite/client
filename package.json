@@ -6,7 +6,6 @@
   "homepage": "https://hypothes.is",
   "bugs": "https://github.com/hypothesis/client/issues",
   "repository": "hypothesis/client",
-  "dependencies": {},
   "devDependencies": {
     "@actions/core": "^1.2.6",
     "@babel/core": "^7.1.6",
@@ -22,6 +21,7 @@
     "babel-plugin-inject-args": "^1.0.0",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-mockable-imports": "^1.5.1",
+    "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-transform-async-to-promises": "^0.8.6",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
@@ -129,5 +129,9 @@
     "typecheck": "tsc --build tsconfig.json",
     "report-coverage": "codecov -f coverage/coverage-final.json",
     "version": "make clean build"
+  },
+  "dependencies": {
+    "muuri": "^0.8.0",
+    "muuri-react": "^3.1.6"
   }
 }
