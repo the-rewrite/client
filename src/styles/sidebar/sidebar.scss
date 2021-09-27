@@ -59,8 +59,6 @@
 @use './components/Tutorial';
 @use './components/VersionInfo';
 
-@use '../../the-rewrite/styles/TheRewrite.scss';
-
 // Make the shared package utility styles available
 @use '@hypothesis/frontend-shared/styles/util' as hyp-u;
 

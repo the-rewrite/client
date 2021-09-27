@@ -34,6 +34,12 @@ const sidebarLinkElement = /** @type {HTMLLinkElement} */ (
   )
 );
 
+const theRewriteLinkElement = /** @type {HTMLLinkElement} */ (
+  document.querySelector(
+    'link[type="application/annotator+html"][rel="the-rewrite"]'
+  )
+);
+
 /**
  * Entry point for the part of the Hypothesis client that runs in the page being
  * annotated.
@@ -74,9 +80,6 @@ function init() {
     );
   }
 
-  // @ts-ignore
-  window._getConfig = getConfig;
-
   // Clear `annotations` value from the notebook's config to prevent direct-linked
   // annotations from filtering the threads.
   const notebook = new Notebook(document.body, eventBus, getConfig('notebook'));
@@ -85,6 +88,13 @@ function init() {
     document.body,
     eventBus,
     getConfig('the-rewrite')
+  );
+
+  // FIXME: check types
+  // @ts-ignore
+  window_.__hypothesis.theRewriteWindow = theRewrite.ready.then(
+    // @ts-ignore
+    () => theRewrite.iframe.contentWindow
   );
 
   // Set up communication between this host/guest frame and the sidebar frame.
@@ -111,6 +121,14 @@ function init() {
     console.warn(
       `Hypothesis guest frame in ${location.origin} could not find a sidebar to connect to.
 Guest frames can only connect to sidebars in their same-origin parent frame.`
+    );
+  }
+
+  let theRewriteWindow = window_.__hypothesis.theRewriteWindow;
+  if (theRewriteWindow) {
+    const theRewriteOrigin = new URL(theRewriteLinkElement.href).origin;
+    theRewriteWindow.then(frame =>
+      guest.crossframe.connectToSidebar(frame, theRewriteOrigin)
     );
   }
 

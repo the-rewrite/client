@@ -17,6 +17,7 @@
 @use './components/Toolbar';
 @use './components/WarningBanner';
 @use './highlights';
+@use '../../the-rewrite/styles/TheRewrite.scss';
 
 // Sidebar
 .annotator-frame {

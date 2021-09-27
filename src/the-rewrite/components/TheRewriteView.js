@@ -16,6 +16,7 @@ import ThreadList from './ThreadList';
  * @typedef TheRewriteViewProps
  * @prop {() => any} onLogin
  * @prop {() => any} onSignUp
+ * @prop {import('../../shared/bridge').Bridge} bridge
  * @prop {import('../../sidebar/services/frame-sync').FrameSyncService} frameSync
  * @prop {import('../../sidebar/services/load-annotations').LoadAnnotationsService} loadAnnotationsService
  * @prop {import('../../sidebar/services/streamer').StreamerService} streamer
@@ -27,6 +28,7 @@ import ThreadList from './ThreadList';
  * @param {TheRewriteViewProps} props
  */
 function TheRewriteView({
+  bridge,
   frameSync,
   onLogin,
   onSignUp,
@@ -35,6 +37,9 @@ function TheRewriteView({
 }) {
   const rootThread = useRootThread();
 
+  useEffect(() => {
+    window.parent.postMessage({ type: 'theRewriteReady' }, '*');
+  }, []);
   const buckets = {};
 
   for (let c of rootThread.children) {
@@ -86,6 +91,25 @@ function TheRewriteView({
   };
 
   const hasFetchedProfile = store.hasFetchedProfile();
+
+  useEffect(() => {
+    window.addEventListener('message', e => {
+      if (e.data?.type !== 'hypothesisGuestReady') {
+        return;
+      }
+      if (e.ports.length === 0) {
+        console.warn(
+          'Ignoring `hypothesisGuestReady` message without a MessagePort'
+        );
+        return;
+      }
+      const port = e.ports[0];
+      bridge.createChannel(port);
+    });
+    bridge.on('the-rewrite-test-event', () =>
+      console.log('hey im the rewrite i got a test event')
+    );
+  }, [bridge]);
 
   useEffect(() => {
     if (hasFetchedProfile) {
@@ -223,6 +247,7 @@ function TheRewriteView({
 }
 
 export default withServices(TheRewriteView, [
+  'bridge',
   'frameSync',
   'loadAnnotationsService',
   'streamer',

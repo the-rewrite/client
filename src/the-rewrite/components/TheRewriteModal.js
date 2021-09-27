@@ -15,7 +15,7 @@ import { createSidebarConfig } from '../../annotator/config/sidebar';
  *
  * @param {NotebookIframeProps} props
  */
-function NotebookIframe({ config, groupId }) {
+function TheRewriteIframe({ config, groupId }) {
   const notebookConfig = createSidebarConfig(config);
   // Explicity set the "focused" group
   notebookConfig.group = groupId;
@@ -25,7 +25,7 @@ function NotebookIframe({ config, groupId }) {
   return (
     <iframe
       title={'Hypothesis annotation notebook'}
-      className="NotebookIframe"
+      className="TheRewriteIframe"
       // Enable media in annotations to be shown fullscreen
       allowFullScreen
       src={theRewriteAppSrc}
@@ -70,11 +70,13 @@ export default function NotebookModal({ eventBus, config }) {
   // The overflow CSS property is set to hidden to prevent scrolling of the host page,
   // while the notebook modal is open. It is restored when the modal is closed.
   useEffect(() => {
+    /*
     if (isHidden) {
       document.body.style.overflow = originalDocumentOverflowStyle.current;
     } else {
       document.body.style.overflow = 'hidden';
     }
+    */
   }, [isHidden]);
 
   useEffect(() => {
@@ -104,10 +106,12 @@ export default function NotebookModal({ eventBus, config }) {
 
   return (
     <div
-      className={classnames('NotebookModal__outer', { 'is-hidden': isHidden })}
+      className={classnames('TheRewriteModal__outer', {
+        'is-hidden': isHidden,
+      })}
     >
-      <div className="NotebookModal__inner">
-        <div className="NotebookModal__close-button-container">
+      <div className="TheRewriteModal__inner">
+        <div className="TheRewriteModal__close-button-container">
           <IconButton
             icon="cancel"
             title="Close the Notebook"
@@ -115,7 +119,7 @@ export default function NotebookModal({ eventBus, config }) {
             variant="dark"
           />
         </div>
-        <NotebookIframe key={iframeKey} config={config} groupId={groupId} />
+        <TheRewriteIframe key={iframeKey} config={config} groupId={groupId} />
       </div>
     </div>
   );

@@ -146,6 +146,8 @@
  *   @prop {Promise<Window>} [__hypothesis.sidebarWindow] -
  *     The sidebar window that is active in this frame. This resolves once the sidebar
  *     application has started and is ready to connect to guests.
+ *   @prop {Promise<Window>} [__hypothesis.theRewriteWindow] -
+ *     The Rewrite window that is active in this frame.
  */
 
 /**

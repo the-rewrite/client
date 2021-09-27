@@ -7,6 +7,8 @@ import TheRewriteModal from './components/TheRewriteModal';
 /** @implements Destroyable */
 export default class TheRewrite {
   /**
+   * @typedef {import('../annotator/guest').default} Guest
+   *
    * @param {HTMLElement} element
    * @param {import('../annotator/util/emitter').EventBus} eventBus -
    *   Enables communication between components sharing the same eventBus
@@ -20,6 +22,42 @@ export default class TheRewrite {
     this._outerContainer = document.createElement('hypothesis-the-rewrite');
     element.appendChild(this._outerContainer);
     this.shadowRoot = createShadowRoot(this._outerContainer);
+    this.bodyContainer = document.createElement('div');
+    this.extensionContainer = document.createElement('div');
+    while (document.body.hasChildNodes()) {
+      const c = document.body.firstChild;
+      if (c) {
+        const tagName =
+          c.nodeType === Node.ELEMENT_NODE
+            ? /** @type {Element} */ (c).tagName
+            : '';
+        if (tagName.startsWith('HYPOTHESIS')) {
+          // @ts-ignore
+          this.extensionContainer.appendChild(document.body.firstChild);
+        } else {
+          // @ts-ignore
+          this.bodyContainer.appendChild(document.body.firstChild);
+        }
+      }
+    }
+
+    document.body.appendChild(this.bodyContainer);
+    document.body.style.cssText = `
+      display: flex;
+    `;
+    document.body.appendChild(this.extensionContainer);
+
+    this.ready = /** @type {Promise<void>} */ (
+      new Promise(resolve => {
+        window.addEventListener('message', event => {
+          console.log('[TheRewrite] got message:', event.data);
+          if (event.data.type === 'theRewriteReady') {
+            this.iframe = this.shadowRoot.querySelector('iframe');
+            resolve();
+          }
+        });
+      })
+    );
 
     render(
       <TheRewriteModal eventBus={eventBus} config={config} />,

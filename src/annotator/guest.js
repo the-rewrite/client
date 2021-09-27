@@ -166,6 +166,11 @@ export default class Guest {
 
     // Setup connection to sidebar.
     this.crossframe = new CrossFrame(this.element, eventBus, config);
+
+    // FIXME: remove bridge from window
+    // @ts-ignore
+    window._bridge = this.crossframe._bridge;
+
     this.crossframe.onConnect(() => this._setupInitialState(config));
     this._connectSidebarEvents();
 
