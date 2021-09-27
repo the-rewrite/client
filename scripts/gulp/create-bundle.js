@@ -202,7 +202,10 @@ module.exports = function createBundle(config, buildOpts) {
       stream = stream.pipe(minifyStream());
     }
 
-    stream = stream.pipe(exorcist(sourcemapPath)).pipe(output);
+    // REVIEW: check if this is really working
+    // and reset for production
+    //stream = stream.pipe(exorcist(sourcemapPath)).pipe(output);
+    stream = stream.pipe(output);
     return streamFinished(stream);
   }
 

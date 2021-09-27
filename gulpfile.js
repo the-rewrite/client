@@ -262,6 +262,7 @@ function generateBootScript(manifest, { usingDevServer = false } = {}) {
   }
   defaultAssetRoot = `${defaultAssetRoot}/${version}/`;
 
+
   if (isFirstBuild) {
     log(`Sidebar app URL: ${defaultSidebarAppUrl}`);
     log(`Notebook app URL: ${defaultNotebookAppUrl}`);
@@ -277,7 +278,8 @@ function generateBootScript(manifest, { usingDevServer = false } = {}) {
     .pipe(replace('__SIDEBAR_APP_URL__', defaultSidebarAppUrl))
     // Strip sourcemap link. It will have been invalidated by the previous
     // replacements and the bundle is so small that it isn't really valuable.
-    .pipe(replace(/^\/\/# sourceMappingURL=\S+$/m, ''))
+  // REVIEW second part of sourcemap fix, plz revert for production
+    // .pipe(replace(/^\/\/# sourceMappingURL=\S+$/m, ''))
     .pipe(rename('boot.js'))
     .pipe(gulp.dest('build/'));
 }
