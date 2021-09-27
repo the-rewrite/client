@@ -36,6 +36,8 @@ function TheRewriteView({
   streamer,
 }) {
   const rootThread = useRootThread();
+<<<<<<< HEAD
+=======
 
   useEffect(() => {
     window.parent.postMessage({ type: 'theRewriteReady' }, '*');
@@ -58,6 +60,7 @@ function TheRewriteView({
   }
 
   console.log(buckets);
+>>>>>>> d8efcd103fe2aa30262c70ba2e42104eb4eb6ef7
 
   // Store state values
   const store = useStoreProxy();
