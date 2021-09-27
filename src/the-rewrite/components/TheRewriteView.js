@@ -37,9 +37,6 @@ function TheRewriteView({
 }) {
   const rootThread = useRootThread();
 
-  useEffect(() => {
-    window.parent.postMessage({ type: 'theRewriteReady' }, '*');
-  }, []);
   const buckets = {};
 
   for (let c of rootThread.children) {
@@ -92,7 +89,20 @@ function TheRewriteView({
 
   const hasFetchedProfile = store.hasFetchedProfile();
 
+  // The following two blocks are used to setup communication
+  // between this view, that is run in the its own iframe context,
+  // and the code that is run in the context of the annotated text.
   useEffect(() => {
+    // first we signal to our parent that the view is ready
+    // please see line 53 in index.js and src/annotator/index.js
+    window.parent.postMessage({ type: 'theRewriteReady' }, '*');
+  }, []);
+
+
+  useEffect(() => {
+    // as soon as the we connect in src/annotator/index.js
+    // the bridge is going to post a 'hypothesisGuestReady'
+    // message and finish the connection here
     window.addEventListener('message', e => {
       if (e.data?.type !== 'hypothesisGuestReady') {
         return;
@@ -106,6 +116,9 @@ function TheRewriteView({
       const port = e.ports[0];
       bridge.createChannel(port);
     });
+
+    // this is a test event, please us the _bridge
+    // on the window to test it
     bridge.on('the-rewrite-test-event', () =>
       console.log('hey im the rewrite i got a test event')
     );
