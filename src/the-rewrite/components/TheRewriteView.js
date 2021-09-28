@@ -11,7 +11,6 @@ import LoginPromptPanel from '../../sidebar/components/LoginPromptPanel';
 import SelectionTabs from '../../sidebar/components/SelectionTabs';
 import SidebarContentError from '../../sidebar/components/SidebarContentError';
 import ThreadList from './ThreadList';
-import evaluateXpathBatched from './events';
 
 /**
  * @typedef TheRewriteViewProps
@@ -37,23 +36,37 @@ function TheRewriteView({
   streamer,
 }) {
   const rootThread = useRootThread();
+  const buckets = {};
 
   useEffect(() => {
-    const buckets = {};
-
     // REVIEW temporary solution without
     // communication over bridge
     const splitAtParent = xpath => {
+      // instead of a simple number
+      // we use easier to visualise chars
       const splitAt = ['/', '/', '/', '/'];
+      // naturally we have to start at the beginning of
+      // the string
       let index = 0;
       while (splitAt.length > 0) {
+        // find the occurence of the char
+        // that we pop from our splitAt stack
+        // starting from index
         index = xpath.indexOf(splitAt.pop(), index);
+        // if indexOf returns -1 it means that we have
+        // reached the end of the string, which
+        // in this case means that there are no further
+        // elements after the parent block element
         if (index === -1) {
           return xpath;
         } else {
+          // we increase the index by one to
+          // include the char we were looking for
           index = index + 1;
         }
       }
+      // we return a substring of xpath that
+      // spans from 0 to the index that we computed
       return xpath.substring(0, index);
     };
 
