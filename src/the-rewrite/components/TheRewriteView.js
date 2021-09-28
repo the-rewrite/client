@@ -11,6 +11,7 @@ import LoginPromptPanel from '../../sidebar/components/LoginPromptPanel';
 import SelectionTabs from '../../sidebar/components/SelectionTabs';
 import SidebarContentError from '../../sidebar/components/SidebarContentError';
 import ThreadList from './ThreadList';
+import evaluateXpathBatched from './events';
 
 /**
  * @typedef TheRewriteViewProps
@@ -37,24 +38,57 @@ function TheRewriteView({
 }) {
   const rootThread = useRootThread();
 
-  const buckets = {};
+  useEffect(() => {
+    const buckets = {};
 
-  for (let c of rootThread.children) {
-    if (c.annotation) {
-      const selector = c.annotation.target[0].selector || [];
-      for (let s of selector) {
-        if (s.type === 'RangeSelector') {
-          const { startContainer } = s;
-          if (!buckets[startContainer]) {
-            buckets[startContainer] = [];
+    // REVIEW temporary solution without
+    // communication over bridge
+    const splitAtParent = xpath => {
+      const splitAt = ['/', '/', '/', '/'];
+      let index = 0;
+      while (splitAt.length > 0) {
+        index = xpath.indexOf(splitAt.pop(), index);
+        if (index === -1) {
+          return xpath;
+        } else {
+          index = index + 1;
+        }
+      }
+      return xpath.substring(0, index);
+    };
+
+    for (let c of rootThread.children) {
+      if (c.annotation) {
+        const selector = c.annotation.target[0].selector || [];
+        for (let s of selector) {
+          if (s.type === 'RangeSelector') {
+            const { startContainer } = s;
+            const b = splitAtParent(startContainer);
+            if (!buckets[b]) {
+              buckets[b] = [];
+            }
+            buckets[b].push(c.annotation);
           }
-          buckets[startContainer].push(c.annotation);
         }
       }
     }
-  }
 
-  console.log(buckets);
+    // const selectorsAndIds = rootThread.children.map(c => {
+    //   if (c.annotation) {
+    //     const selector = c.annotation.target[0].selector || [];
+    //     for (let s of selector) {
+    //       if (s.type === 'RangeSelector') {
+    //         return { selector: s.startContainer, id: c.id };
+    //       }
+    //     }
+    //   }
+    // });
+
+    // console.log('selector and tags', selectorsAndIds);
+    console.log('buckets', buckets);
+
+    //bridge.call( evaluateXpathBatched, selectorsAndIds );
+  }, [rootThread.children]);
 
   // Store state values
   const store = useStoreProxy();
@@ -97,7 +131,6 @@ function TheRewriteView({
     // please see line 53 in index.js and src/annotator/index.js
     window.parent.postMessage({ type: 'theRewriteReady' }, '*');
   }, []);
-
 
   useEffect(() => {
     // as soon as the we connect in src/annotator/index.js
