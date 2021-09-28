@@ -9,15 +9,5 @@
       }
     }]
   ],
-  "plugins": [
-    "transform-async-to-promises",
-    [
-      "module-resolver", {
-        "alias": {
-            "react": "preact-compat",
-            "react-dom": "preact-compat"
-        }
-      }
-    ]
-  ]
+  "plugins": [ "transform-async-to-promises" ]
 }
