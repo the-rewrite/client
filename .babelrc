@@ -16,7 +16,17 @@
       }
     ]
   ],
-  "plugins": ["inject-args"],
+  "plugins": [
+    "inject-args",
+    [
+      "module-resolver", {
+        "alias": {
+            "react": "preact-compat",
+            "react-dom": "preact-compat"
+        }
+      }
+    ]
+  ],
   "ignore": ["**/vendor/*"],
   "env": {
     "development": {
