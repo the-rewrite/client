@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import useRootThread from '../../sidebar/components/hooks/use-root-thread';
 import { withServices } from '../../sidebar/service-context';
@@ -11,6 +11,7 @@ import LoginPromptPanel from '../../sidebar/components/LoginPromptPanel';
 import SelectionTabs from '../../sidebar/components/SelectionTabs';
 import SidebarContentError from '../../sidebar/components/SidebarContentError';
 import ThreadList from './ThreadList';
+import TheRewriteGrid from './TheRewriteGrid';
 
 /**
  * @typedef TheRewriteViewProps
@@ -36,9 +37,11 @@ function TheRewriteView({
   streamer,
 }) {
   const rootThread = useRootThread();
-  const buckets = {};
+
+  const [buckets, setBuckets] = useState({});
 
   useEffect(() => {
+    const localBuckets = {};
     // REVIEW temporary solution without
     // communication over bridge
     const splitAtParent = xpath => {
@@ -77,14 +80,16 @@ function TheRewriteView({
           if (s.type === 'RangeSelector') {
             const { startContainer } = s;
             const b = splitAtParent(startContainer);
-            if (!buckets[b]) {
-              buckets[b] = [];
+            if (!localBuckets[b]) {
+              localBuckets[b] = [];
             }
-            buckets[b].push(c.annotation);
+            localBuckets[b].push(c.annotation);
           }
         }
       }
     }
+
+    setBuckets(localBuckets);
 
     // const selectorsAndIds = rootThread.children.map(c => {
     //   if (c.annotation) {
@@ -98,7 +103,7 @@ function TheRewriteView({
     // });
 
     // console.log('selector and tags', selectorsAndIds);
-    console.log('buckets', buckets);
+    console.log('buckets', localBuckets);
 
     //bridge.call( evaluateXpathBatched, selectorsAndIds );
   }, [rootThread.children]);
@@ -299,7 +304,7 @@ function TheRewriteView({
         <SidebarContentError errorType="group" onLoginRequest={onLogin} />
       )}
       {showTabs && <SelectionTabs isLoading={isLoading} />}
-      <ThreadList threads={rootThread.children} />
+      <TheRewriteGrid buckets={buckets} />
       {showLoggedOutMessage && <LoggedOutMessage onLogin={onLogin} />}
     </div>
   );
