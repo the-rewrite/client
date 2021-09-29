@@ -1,17 +1,13 @@
-// use muuri react
-// where to build list of annotations? in guest or main context?
-// muuri needs a parent element for positionng and an inner element for visibility
-// probably we need an need item component
-
 //import MuuriComponent from 'muuri-react';
 
 // REVIEW please review this implementation and add some typedefs
 
 function GridItem({ annotation }) {
   return (
-    <div id="{key}" className="rewrite-grid-item outer">
+    <div id={annotation.id} className="rewrite-grid-item outer">
       <div className="inner">
-        <p>annotation: {annotation.id}</p>
+        <p>{annotation.text}</p>
+        <p>by {annotation.user}</p>
       </div>
     </div>
   );
@@ -23,8 +19,13 @@ function GridRow({ bucket }) {
 }
 
 function TheRewriteGrid({ buckets }) {
-  // So the incoming buckets
+  // So the incoming buckets is a map of xpath parent path -> [ annotations ]
+  // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
+  // so that we can iterate over the xpath expression
+  // and add a row for each xpath parent
+  // then we use the index to get the corresponding values
+  // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
     <GridRow key={b} bucket={bucketValues[i]} />
   ));
