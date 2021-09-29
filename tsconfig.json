@@ -2,9 +2,5 @@
   "references": [{ "path": "src/" }, { "path": "dev-server/" }],
   "files": [],
   "compilerOptions": {
-    "alias": {
-      "react": "preact-compat",
-      "react-dom": "preact-compat"
-    }
   }
 }

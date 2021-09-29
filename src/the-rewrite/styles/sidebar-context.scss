@@ -23,6 +23,7 @@
 .rewrite-grid-item p {
     text-align: justify;
     margin-bottom: 0;
+    white-space: pre-wrap;
 }
 
 .rewrite-grid-item p + p {
