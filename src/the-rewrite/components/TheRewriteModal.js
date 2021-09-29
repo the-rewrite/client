@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import classnames from 'classnames';
 
 import { createSidebarConfig } from '../../annotator/config/sidebar';
+import { enableLayout } from '../dom-utils';
 
 /**
  * @typedef NotebookIframeProps
@@ -28,6 +29,7 @@ function TheRewriteIframe({ config, groupId }) {
       className="TheRewriteIframe"
       // Enable media in annotations to be shown fullscreen
       allowFullScreen
+      frameBorder="0"
       src={theRewriteAppSrc}
     />
   );
@@ -87,6 +89,7 @@ export default function NotebookModal({ eventBus, config }) {
         setIsHidden(false);
         setIframeKey(iframeKey => iframeKey + 1);
         setGroupId(groupId);
+        enableLayout();
       }
     );
 
