@@ -3,33 +3,32 @@
 // muuri needs a parent element for positionng and an inner element for visibility
 // probably we need an need item component
 
-// TODO make one muuri component per bucket
-// so that we can then scroll each of these elements
-// in sync with the main content
+//import MuuriComponent from 'muuri-react';
 
-// REVIEW check if alias works in project but also in editor
-import { UseEffect } from 'react';
-import MuuriComponent from 'muuri-react';
+// REVIEW please review this implementation and add some typedefs
 
-function GridItem({ key, annotation }) {
+function GridItem({ annotation }) {
   return (
-    <div id="{key}" className="rewrite-annotation outer">
+    <div id="{key}" className="rewrite-grid-item outer">
       <div className="inner">
-        <p>fart: {annotation.id}</p>
+        <p>annotation: {annotation.id}</p>
       </div>
     </div>
   );
 }
 
 function GridRow({ bucket }) {
-  console.log(bucket);
-  const items = bucket.map(a => GridItem(a.id, a));
-  return <MuuriComponent>{items}</MuuriComponent>;
+  const items = bucket.map(a => <GridItem key={a.id} annotation={a} />);
+  return <div className="rewrite-grid-row">{items}</div>;
 }
 
 function TheRewriteGrid({ buckets }) {
-  const rows = buckets.map(b => GridRow(b));
-  return <div className="rewrite-grid">{rows}</div>;
+  // So the incoming buckets
+  const bucketValues = Object.values(buckets) || [];
+  const rows = (Object.keys(buckets) || []).map((b, i) => (
+    <GridRow key={b} bucket={bucketValues[i]} />
+  ));
+  return <div className="rewrite-grid-parent">{rows}</div>;
 }
 
 export default TheRewriteGrid;

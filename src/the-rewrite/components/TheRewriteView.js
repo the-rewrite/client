@@ -106,7 +106,7 @@ function TheRewriteView({
     console.log('buckets', localBuckets);
 
     //bridge.call( evaluateXpathBatched, selectorsAndIds );
-  }, [rootThread.children]);
+  }, [rootThread.children.length]); // REVIEW is this okay?
 
   // Store state values
   const store = useStoreProxy();
