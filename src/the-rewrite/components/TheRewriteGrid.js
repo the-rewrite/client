@@ -32,4 +32,6 @@ function TheRewriteGrid({ buckets }) {
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
 
+// TODO add wide annotations
+
 export default TheRewriteGrid;
