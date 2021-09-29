@@ -4,9 +4,10 @@
 
 function GridItem({ annotation }) {
   return (
-    <div id="{key}" className="rewrite-grid-item outer">
+    <div id={annotation.id} className="rewrite-grid-item outer">
       <div className="inner">
-        <p>annotation: {annotation.id}</p>
+        <p>{annotation.text}</p>
+        <p>by {annotation.user}</p>
       </div>
     </div>
   );
