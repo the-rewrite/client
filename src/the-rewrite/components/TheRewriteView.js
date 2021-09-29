@@ -24,6 +24,11 @@ import TheRewriteGrid from './TheRewriteGrid';
  */
 
 /**
+ * @typedef {import('../../types/api').Annotation} Annotation
+ * @typedef {{[key: string]:Annotation[]}} Bucket
+ * */
+
+/**
  * Render The Rewrite view and its components
  *
  * @param {TheRewriteViewProps} props
@@ -38,7 +43,7 @@ function TheRewriteView({
 }) {
   const rootThread = useRootThread();
 
-  const [buckets, setBuckets] = useState({});
+  const [buckets, setBuckets] = /** @type { useState<Bucket> } */ useState({});
 
   useEffect(() => {
     const localBuckets = {};
