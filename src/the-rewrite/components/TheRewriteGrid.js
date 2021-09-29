@@ -18,6 +18,16 @@ function GridRow({ bucket }) {
   return <div className="rewrite-grid-row">{items}</div>;
 }
 
+/**
+ * @typedef {import('./TheRewriteView').Bucket} Bucket
+ *
+ * @typedef TheRewriteGridProps
+ * @prop {Bucket} buckets
+ */
+
+/**
+ * @param {TheRewriteGridProps} props
+ */
 function TheRewriteGrid({ buckets }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below

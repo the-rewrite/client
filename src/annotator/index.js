@@ -87,6 +87,7 @@ function init() {
   const theRewrite = new TheRewrite(
     document.body,
     eventBus,
+    guest,
     getConfig('the-rewrite')
   );
 

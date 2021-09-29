@@ -1,6 +1,7 @@
 import { createShadowRoot } from '../annotator/util/shadow-root';
 import { render } from 'preact';
 import TheRewriteModal from './components/TheRewriteModal';
+import { observeMutations } from './dom-utils';
 
 /** @typedef {import('../types/annotator').Destroyable} Destroyable */
 
@@ -12,13 +13,20 @@ export default class TheRewrite {
    * @param {HTMLElement} element
    * @param {import('../annotator/util/emitter').EventBus} eventBus -
    *   Enables communication between components sharing the same eventBus
+   * @param {Guest} guest -
+   *   The `Guest` instance for the current frame. It is currently assumed that
+   *   it is always possible to annotate in the frame where the sidebar is
+   *   displayed.
    * @param {Record<string, any>} config
    */
-  constructor(element, eventBus, config = {}) {
+  constructor(element, eventBus, guest, config = {}) {
     /**
      * Un-styled shadow host for the notebook content.
      * This isolates the notebook from the page's styles.
      */
+    this.guest = guest;
+    this.guest._emitter.subscribe('loadAnnotations', console.log);
+    //observeMutations();
     this._outerContainer = document.createElement('hypothesis-the-rewrite');
     element.appendChild(this._outerContainer);
     this.shadowRoot = createShadowRoot(this._outerContainer);
