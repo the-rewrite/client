@@ -172,6 +172,8 @@ const cssBundles = [
 
   // Development tools
   './src/styles/ui-playground/ui-playground.scss',
+  // The rewrite
+  './src/the-rewrite/styles/TheRewrite.scss'
 ];
 
 gulp.task('build-css', () => {
@@ -190,7 +192,7 @@ gulp.task(
   'watch-css',
   gulp.series('build-css', function watchCSS() {
     const vendorCSS = cssBundles.filter(path => path.endsWith('.css'));
-    const styleFileGlobs = vendorCSS.concat('./src/styles/**/*.scss');
+    const styleFileGlobs = vendorCSS.concat('./src/**/*.scss');
     gulp.watch(styleFileGlobs, gulp.task('build-css'));
   })
 );
