@@ -1,0 +1,31 @@
+.rewrite-grid-parent,
+.rewrite-grid-row {
+    display: flex;
+}
+
+.rewrite-grid-parent {
+    flex-direction: column;
+}
+
+.rewrite-grid-row {
+    flex-direction: row;
+    gap: 30px;
+}
+
+.rewrite-grid-item {
+    flex: 0 0 200px;
+}
+
+.rewrite-grid-item + .rewirte-grid-item {
+    margin-top: 1.5rem;
+}
+
+.rewrite-grid-item p {
+    text-align: justify;
+    margin-bottom: 0;
+}
+
+.rewrite-grid-item p + p {
+    margin-top: 0.5em;
+    font-size: 0.8em;
+}
