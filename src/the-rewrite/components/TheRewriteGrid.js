@@ -55,17 +55,22 @@ function GridItem({ bridge, annotation }) {
 /**
  * @typedef GridRowProps
  * @prop {Bridge} bridge
+ * @prop {string} xpath
  * @prop {Annotation[]} bucket
  */
 
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ bridge, bucket }) {
+function GridRow({ xpath, bridge, bucket }) {
   const items = bucket.map(a => (
     <GridItem key={a.id} bridge={bridge} annotation={a} />
   ));
-  return <div className="rewrite-grid-row">{items}</div>;
+  return (
+    <div data-xpath={xpath} className="rewrite-grid-row">
+      {items}
+    </div>
+  );
 }
 
 /**
@@ -88,7 +93,7 @@ function TheRewriteGrid({ bridge, buckets }) {
   // then we use the index to get the corresponding values
   // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
-    <GridRow key={b} bridge={bridge} bucket={bucketValues[i]} />
+    <GridRow key={b} xpath={b} bridge={bridge} bucket={bucketValues[i]} />
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }

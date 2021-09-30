@@ -199,6 +199,19 @@ function TheRewriteView({
     bridge.on('the-rewrite-test-event', () =>
       console.log('hey im the rewrite i got a test event')
     );
+    bridge.on('theRewriteScrollToBucket', xpath => {
+      console.log('Scroll to bucket', xpath);
+      const e = document.querySelector(`[data-xpath="${xpath}"]`);
+      document
+        .querySelectorAll('.closest')
+        .forEach(e => e.classList.remove('closest'));
+      e?.classList.add('closest');
+      e?.scrollIntoView({
+        behavior: 'auto',
+        block: 'center',
+        inline: 'center',
+      });
+    });
   }, [bridge]);
 
   useEffect(() => {

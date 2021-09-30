@@ -31,7 +31,7 @@ export function normalizeXPath(xpath) {
  * Return an array of elements matching the xpath.
  *
  * @param {string} xpath
- * @returns {Element[]}
+ * @returns {HTMLElement[]}
  */
 export function getElementsFromXPath(xpath) {
   const result = document.evaluate(
@@ -47,7 +47,8 @@ export function getElementsFromXPath(xpath) {
     node = result.iterateNext();
     if (node !== null) {
       if (node.nodeType === Node.ELEMENT_NODE) {
-        elements.push(/** @type {Element} */ (node));
+        // FIXME: not sure I can cast it to HTMLElement.
+        elements.push(/** @type {HTMLElement} */ (node));
       }
     } else {
       break;
@@ -71,6 +72,7 @@ export function observeIntersections(xpaths, cb) {
   const o = new IntersectionObserver(cb, options);
   for (let xpath of xpaths) {
     const elements = getElementsFromXPath(normalizeXPath(xpath));
+    elements.forEach(e => (e.dataset.xpath = xpath));
     elements.forEach(e => o.observe(e));
   }
   return () => o.disconnect();

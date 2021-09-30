@@ -1,44 +1,48 @@
 .rewrite-grid-parent,
 .rewrite-grid-row {
-    display: flex;
+  display: flex;
 }
 
 .rewrite-grid-parent {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .rewrite-grid-row {
-    flex-direction: row;
-    gap: 30px;
+  flex-direction: row;
+  gap: 30px;
 }
 
 .rewrite-grid-row + .rewrite-grid-row {
-    padding-bottom: 5px;
-    border-bottom: 1px solid gray;
+  padding-bottom: 5px;
+  border-bottom: 1px solid gray;
 }
 
 .rewrite-grid-item {
-    flex: 0 0 200px;
+  flex: 0 0 200px;
 }
 
 .rewrite-grid-item.wide {
-    flex: 0 0 400px;
+  flex: 0 0 400px;
 }
 
 .rewrite-grid-item + .rewirte-grid-item {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .rewrite-grid-item p {
-    text-align: justify;
-    margin-bottom: 0;
-    white-space: pre-wrap;
-    word-break: break-word; // long strings can be broken
-    hyphens: auto; // on word break add hyphen
-    // PLEASE SEE Review comment in TheRewriteGrid.js, lang tag is needed for this to work
+  text-align: justify;
+  margin-bottom: 0;
+  white-space: pre-wrap;
+  word-break: break-word; // long strings can be broken
+  hyphens: auto; // on word break add hyphen
+  // PLEASE SEE Review comment in TheRewriteGrid.js, lang tag is needed for this to work
 }
 
 .rewrite-grid-item p + p {
-    margin-top: 0.5em;
-    font-size: 0.8em;
+  margin-top: 0.5em;
+  font-size: 0.8em;
+}
+
+.closest {
+  background: tomato;
 }

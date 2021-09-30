@@ -1,7 +1,6 @@
 import { createShadowRoot } from '../annotator/util/shadow-root';
 import { render } from 'preact';
 import TheRewriteModal from './components/TheRewriteModal';
-import useRootThread from '../sidebar/components/hooks/use-root-thread';
 import { observeIntersections } from './dom-utils';
 
 /** @typedef {import('./components/TheRewriteView').Bucket} Bucket*/
@@ -27,6 +26,8 @@ export default class TheRewrite {
      * This isolates the notebook from the page's styles.
      */
     this.guest = guest;
+    /** @type {HTMLElement[]}*/ this.visibleAnnotations = [];
+
     let disconnectObserver = () => {};
     this.guest.crossframe.on(
       'theRewriteBuckets',
@@ -35,13 +36,11 @@ export default class TheRewrite {
         disconnectObserver();
         disconnectObserver = observeIntersections(
           Object.keys(buckets),
-          this.onViewport
+          this.onViewport.bind(this)
         );
       }
     );
-    //this.guest._emitter.subscribe('loadAnnotations', console.log);
-    //const rootThread = useRootThread();
-    //observeMutations();
+
     this._outerContainer = document.createElement('hypothesis-the-rewrite');
     element.appendChild(this._outerContainer);
     this.shadowRoot = createShadowRoot(this._outerContainer);
@@ -57,6 +56,8 @@ export default class TheRewrite {
       })
     );
 
+    window.addEventListener('scroll', this.onScroll.bind(this));
+
     render(
       <TheRewriteModal eventBus={eventBus} config={config} />,
       this.shadowRoot
@@ -69,12 +70,42 @@ export default class TheRewrite {
    */
   onViewport(entries) {
     entries.forEach(e => {
-      console.log('in view', e);
+      const htmlElement = /** @type {HTMLElement} */ (e.target);
+      if (e.isIntersecting) {
+        this.visibleAnnotations.push(htmlElement);
+      } else {
+        const index = this.visibleAnnotations.indexOf(htmlElement);
+        this.visibleAnnotations.splice(index, 1);
+      }
     });
+  }
+
+  onScroll() {
+    const center = document.documentElement.clientHeight / 2;
+    let closestDistance = Infinity;
+    let /** @type {HTMLElement|undefined} */ closestElement;
+    for (let e of this.visibleAnnotations) {
+      const r = e.getBoundingClientRect();
+      const m = (r.top + r.bottom) / 2;
+      const d = Math.abs(m - center);
+      if (d < closestDistance) {
+        closestDistance = d;
+        closestElement = e;
+      }
+    }
+    document
+      .querySelectorAll('.closest')
+      .forEach(e => e.classList.remove('closest'));
+    if (closestElement) {
+      closestElement.classList.add('closest');
+      const xpath = closestElement.dataset.xpath;
+      this.guest.crossframe.call('theRewriteScrollToBucket', xpath);
+    }
   }
 
   destroy() {
     render(null, this.shadowRoot);
     this._outerContainer.remove();
+    window.removeEventListener('scroll', this.onScroll.bind(this));
   }
 }
