@@ -8,51 +8,70 @@ export function enableLayout() {
     `;
 }
 
-export function observeMutations() {
-  const element = document.body;
-  const options = {
-    childList: true, // listen to listen to children being added or removed
-    attributes: true, // listen to attributes changes
-    subtree: true, // omit or set to false to observe only changes to the parent node
-  };
-
-  const callback = (mutationList, observer) => {
-    mutationList.forEach(mutation => {
-      switch (mutation.type) {
-        case 'childList':
-          // check mutation.addedNodes or mutation.removedNodes
-          console.log('childlist', mutation);
-          break;
-        case 'attributes':
-          console.log('attributes', mutation);
-          /* An attribute value changed on the element in
-           mutation.target; the attribute name is in
-           mutation.attributeName and its previous value is in
-           mutation.oldValue */
-          break;
-      }
-    });
-  };
-
-  const observer = new MutationObserver(callback);
-  observer.observe(element, options);
-}
-
-export function observeIntersections() {
-  console.log('run observer');
-  let options = {
-    //root: document.getElementById(BODY_ID),
-    root: document.body,
-    rootMargin: '0px',
-    threshold: 1.0,
-  };
-
-  function callback(entries) {
-    entries.forEach(entry => {
-      console.log(entry);
-    });
+/**
+ * Normalize the xpath to work with html.
+ *
+ * @param {string} xpath
+ * @returns {string}
+ */
+export function normalizeXPath(xpath) {
+  if (!xpath.startsWith('/html/body')) {
+    xpath = '/html/body' + xpath;
   }
 
-  const o = new IntersectionObserver(callback, options);
-  document.querySelectorAll('.hypothesis-highlight').forEach(t => o.observe(t));
+  if (xpath.endsWith('/')) {
+    xpath = xpath.slice(0, -1);
+  }
+
+  return xpath;
+}
+
+/**
+ *
+ * Return an array of elements matching the xpath.
+ *
+ * @param {string} xpath
+ * @returns {Element[]}
+ */
+export function getElementsFromXPath(xpath) {
+  const result = document.evaluate(
+    xpath,
+    document,
+    null,
+    XPathResult.ANY_TYPE,
+    null
+  );
+  const elements = [];
+  let /** @type {Node|null} */ node;
+  while (true) {
+    node = result.iterateNext();
+    if (node !== null) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        elements.push(/** @type {Element} */ (node));
+      }
+    } else {
+      break;
+    }
+  }
+  return elements;
+}
+
+/**
+ * Run callback on element intersection with the main view.
+ * @param {string[]} xpaths - The xpaths to observe for intersections.
+ * @param {IntersectionObserverCallback} cb - Callback to call when an xpath is in the viewport
+ * @returns {() => void} - A function to stop observing intersections.
+ */
+export function observeIntersections(xpaths, cb) {
+  let options = {
+    rootMargin: '0px',
+    threshold: 1,
+  };
+
+  const o = new IntersectionObserver(cb, options);
+  for (let xpath of xpaths) {
+    const elements = getElementsFromXPath(normalizeXPath(xpath));
+    elements.forEach(e => o.observe(e));
+  }
+  return () => o.disconnect();
 }

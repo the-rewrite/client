@@ -1,8 +1,10 @@
 import { createShadowRoot } from '../annotator/util/shadow-root';
 import { render } from 'preact';
 import TheRewriteModal from './components/TheRewriteModal';
-import { observeMutations } from './dom-utils';
+import useRootThread from '../sidebar/components/hooks/use-root-thread';
+import { observeIntersections } from './dom-utils';
 
+/** @typedef {import('./components/TheRewriteView').Bucket} Bucket*/
 /** @typedef {import('../types/annotator').Destroyable} Destroyable */
 
 /** @implements Destroyable */
@@ -25,7 +27,20 @@ export default class TheRewrite {
      * This isolates the notebook from the page's styles.
      */
     this.guest = guest;
-    this.guest._emitter.subscribe('loadAnnotations', console.log);
+    let disconnectObserver = () => {};
+    this.guest.crossframe.on(
+      'theRewriteBuckets',
+      /** @type {(b: Bucket)=>void} */ buckets => {
+        console.log('observe', buckets);
+        disconnectObserver();
+        disconnectObserver = observeIntersections(
+          Object.keys(buckets),
+          this.onViewport
+        );
+      }
+    );
+    //this.guest._emitter.subscribe('loadAnnotations', console.log);
+    //const rootThread = useRootThread();
     //observeMutations();
     this._outerContainer = document.createElement('hypothesis-the-rewrite');
     element.appendChild(this._outerContainer);
@@ -46,6 +61,16 @@ export default class TheRewrite {
       <TheRewriteModal eventBus={eventBus} config={config} />,
       this.shadowRoot
     );
+  }
+
+  /**
+   *
+   * @param {IntersectionObserverEntry[]} entries
+   */
+  onViewport(entries) {
+    entries.forEach(e => {
+      console.log('in view', e);
+    });
   }
 
   destroy() {

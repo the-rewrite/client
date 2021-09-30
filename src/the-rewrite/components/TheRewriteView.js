@@ -95,6 +95,7 @@ function TheRewriteView({
       }
     }
 
+    bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
 
     // const selectorsAndIds = rootThread.children.map(c => {
@@ -109,7 +110,7 @@ function TheRewriteView({
     // });
 
     //bridge.call( evaluateXpathBatched, selectorsAndIds );
-  }, [rootThread.children.length]); // REVIEW it is okay for now
+  }, [bridge, rootThread.children.length]); // REVIEW it is okay for now
 
   // Store state values
   const store = useStoreProxy();
