@@ -10,7 +10,6 @@ import LoggedOutMessage from '../../sidebar/components/LoggedOutMessage';
 import LoginPromptPanel from '../../sidebar/components/LoginPromptPanel';
 import SelectionTabs from '../../sidebar/components/SelectionTabs';
 import SidebarContentError from '../../sidebar/components/SidebarContentError';
-import ThreadList from './ThreadList';
 import TheRewriteGrid from './TheRewriteGrid';
 
 /**
@@ -79,8 +78,31 @@ function TheRewriteView({
         return xpath.substring(0, index);
       };
 
-    for (let c of rootThread.children) {
+    const children = [...rootThread.children];
+
+    /**
+     * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
+     * @param {Thread} t
+     */
+    function getStartTextPosition(t) {
+      const annotation = t.annotation;
+      let start = 0;
+      if (annotation) {
+        const selector = annotation.target[0].selector || [];
+        for (let s of selector) {
+          if (s.type === 'TextPositionSelector') {
+            start = s.start;
+          }
+        }
+      }
+      return start;
+    }
+
+    children.sort((a, b) => getStartTextPosition(a) - getStartTextPosition(b));
+
+    for (let c of children) {
       if (c.annotation) {
+        console.log(c.annotation.$tag);
         const selector = c.annotation.target[0].selector || [];
         for (let s of selector) {
           if (s.type === 'RangeSelector') {
