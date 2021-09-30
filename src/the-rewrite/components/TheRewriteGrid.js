@@ -7,7 +7,7 @@ import { useState } from 'preact/hooks';
  *
  * @typedef GridItemProps
  * @prop {Annotation} annotation
- * */
+ */
 
 /**
  * @param {GridItemProps} props
@@ -34,11 +34,9 @@ function GridItem({ annotation }) {
 }
 
 /**
- * @typedef {import('../../types/api').Annotation} Annotation
- *
  * @typedef GridRowProps
  * @prop {Annotation[]} bucket
- * */
+ */
 
 /**
  * @param {GridRowProps} props
