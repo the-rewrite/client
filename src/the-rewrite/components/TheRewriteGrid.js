@@ -1,11 +1,31 @@
 //import MuuriComponent from 'muuri-react';
 
-// REVIEW please review this implementation and add some typedefs
+import { useState } from 'preact/hooks';
 
+/**
+ * @typedef {import('../../types/api').Annotation} Annotation
+ *
+ * @typedef GridItemProps
+ * @prop {Annotation} annotation
+ * */
+
+/**
+ * @param {GridItemProps} props
+ * */
 function GridItem({ annotation }) {
+  const [isWide, setIsWide] = useState(/** @type boolean */ (false));
+  if (annotation.text.length > 500) {
+    setIsWide(true);
+  }
+
+  // REVIEW: Lang attribute is set for correct hypentation, super important!!
+
   return (
-    <div id={annotation.id} className="rewrite-grid-item outer">
-      <div className="inner">
+    <div
+      id={annotation.id}
+      className={`rewrite-grid-item outer ${isWide ? 'wide' : ''}`}
+    >
+      <div className="inner" lang="en">
         <p>{annotation.text}</p>
         <p>by {annotation.user}</p>
       </div>
@@ -13,6 +33,16 @@ function GridItem({ annotation }) {
   );
 }
 
+/**
+ * @typedef {import('../../types/api').Annotation} Annotation
+ *
+ * @typedef GridRowProps
+ * @prop {Annotation[]} bucket
+ * */
+
+/**
+ * @param {GridRowProps} props
+ */
 function GridRow({ bucket }) {
   const items = bucket.map(a => <GridItem key={a.id} annotation={a} />);
   return <div className="rewrite-grid-row">{items}</div>;
@@ -41,5 +71,7 @@ function TheRewriteGrid({ buckets }) {
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
+
+// TODO add wide annotations
 
 export default TheRewriteGrid;
