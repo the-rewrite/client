@@ -13,17 +13,32 @@ import { useState } from 'preact/hooks';
  * @param {GridItemProps} props
  * */
 function GridItem({ annotation }) {
+  const [expand, setExpand] = useState(/** @type boolean */ (false));
   const isWide = annotation.text.length > 500;
+  const cropped = annotation.text.length > 1000;
+  const text = annotation.text.substring(0, 1000);
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
+  const lang = 'en';
+
+  const toggleExpand = () => {
+    setExpand(prev => !prev);
+  };
 
   return (
     <div
       id={annotation.id}
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''}`}
     >
-      <div className="inner" lang="en">
-        <p>{annotation.text}</p>
+      <div className="inner" lang={lang}>
+        <p>{expand ? annotation.text : text}</p>
+        {cropped && (
+          <p>
+            <button onClick={toggleExpand}>
+              {expand ? 'Collapse' : 'Read all'}
+            </button>
+          </p>
+        )}
         <p>by {annotation.user}</p>
       </div>
     </div>
