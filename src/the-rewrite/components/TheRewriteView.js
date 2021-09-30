@@ -330,7 +330,7 @@ function TheRewriteView({
         <SidebarContentError errorType="group" onLoginRequest={onLogin} />
       )}
       {showTabs && <SelectionTabs isLoading={isLoading} />}
-      <TheRewriteGrid buckets={buckets} />
+      <TheRewriteGrid bridge={bridge} buckets={buckets} />
       {showLoggedOutMessage && <LoggedOutMessage onLogin={onLogin} />}
     </div>
   );

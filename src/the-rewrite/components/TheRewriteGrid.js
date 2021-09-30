@@ -4,15 +4,17 @@ import { useState } from 'preact/hooks';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
+ * @typedef {import('../../shared/bridge').Bridge} Bridge
  *
  * @typedef GridItemProps
  * @prop {Annotation} annotation
+ * @prop {Bridge} bridge
  */
 
 /**
  * @param {GridItemProps} props
- * */
-function GridItem({ annotation }) {
+ */
+function GridItem({ bridge, annotation }) {
   const [expand, setExpand] = useState(/** @type boolean */ (false));
   const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
@@ -25,6 +27,10 @@ function GridItem({ annotation }) {
     setExpand(prev => !prev);
   };
 
+  const scrollToAnnotation = () => {
+    bridge.call('scrollToAnnotation', annotation.$tag);
+  };
+
   return (
     <div
       id={annotation.id}
@@ -32,13 +38,14 @@ function GridItem({ annotation }) {
     >
       <div className="inner" lang={lang}>
         <p>{expand ? annotation.text : text}</p>
-        {cropped && (
-          <p>
+        <p>
+          {cropped && (
             <button onClick={toggleExpand}>
               {expand ? 'Collapse' : 'Read all'}
             </button>
-          </p>
-        )}
+          )}
+          <button onClick={scrollToAnnotation}>Scroll to annotation</button>
+        </p>
         <p>by {annotation.user}</p>
       </div>
     </div>
@@ -47,14 +54,17 @@ function GridItem({ annotation }) {
 
 /**
  * @typedef GridRowProps
+ * @prop {Bridge} bridge
  * @prop {Annotation[]} bucket
  */
 
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ bucket }) {
-  const items = bucket.map(a => <GridItem key={a.id} annotation={a} />);
+function GridRow({ bridge, bucket }) {
+  const items = bucket.map(a => (
+    <GridItem key={a.id} bridge={bridge} annotation={a} />
+  ));
   return <div className="rewrite-grid-row">{items}</div>;
 }
 
@@ -62,13 +72,14 @@ function GridRow({ bucket }) {
  * @typedef {import('./TheRewriteView').Bucket} Bucket
  *
  * @typedef TheRewriteGridProps
+ * @prop {Bridge} bridge
  * @prop {Bucket} buckets
  */
 
 /**
  * @param {TheRewriteGridProps} props
  */
-function TheRewriteGrid({ buckets }) {
+function TheRewriteGrid({ bridge, buckets }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
@@ -77,7 +88,7 @@ function TheRewriteGrid({ buckets }) {
   // then we use the index to get the corresponding values
   // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
-    <GridRow key={b} bucket={bucketValues[i]} />
+    <GridRow key={b} bridge={bridge} bucket={bucketValues[i]} />
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
