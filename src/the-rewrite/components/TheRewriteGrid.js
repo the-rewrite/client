@@ -13,10 +13,7 @@ import { useState } from 'preact/hooks';
  * @param {GridItemProps} props
  * */
 function GridItem({ annotation }) {
-  const [isWide, setIsWide] = useState(/** @type boolean */ (false));
-  if (annotation.text.length > 500) {
-    setIsWide(true);
-  }
+  const isWide = annotation.text.length > 500;
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
 
