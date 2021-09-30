@@ -10,6 +10,8 @@
 .rewrite-grid-row {
     flex-direction: row;
     gap: 30px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid gray;
 }
 
 .rewrite-grid-item {
