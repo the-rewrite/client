@@ -14,15 +14,18 @@ import { useState } from 'preact/hooks';
  * */
 function GridItem({ annotation }) {
   const [isWide, setIsWide] = useState(/** @type boolean */ (false));
-  if (annotation.text.length > 200) {
+  if (annotation.text.length > 500) {
     setIsWide(true);
   }
+
+  // REVIEW: Lang attribute is set for correct hypentation, super important!!
+
   return (
     <div
       id={annotation.id}
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''}`}
     >
-      <div className="inner">
+      <div className="inner" lang="en">
         <p>{annotation.text}</p>
         <p>by {annotation.user}</p>
       </div>

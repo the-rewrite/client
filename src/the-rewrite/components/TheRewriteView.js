@@ -108,11 +108,8 @@ function TheRewriteView({
     //   }
     // });
 
-    // console.log('selector and tags', selectorsAndIds);
-    console.log('buckets', localBuckets);
-
     //bridge.call( evaluateXpathBatched, selectorsAndIds );
-  }, [rootThread.children.length]); // REVIEW is this okay?
+  }, [rootThread.children.length]); // REVIEW it is okay for now
 
   // Store state values
   const store = useStoreProxy();
