@@ -43,9 +43,6 @@
   font-size: 0.8em;
 }
 
-.closest {
-  background: tomato;
-}
 
 .definition {
   background: rgba(125, 255, 216, 0.74);
@@ -53,4 +50,16 @@
 
 .addition {
   background: rgba(255, 71, 130, 0.75);
+}
+
+.closest {
+  animation: fade 0.5s ease-in-out;
+  background: transparent;
+}
+
+@keyframes fade {
+  50% {
+    background: tomato;
+  }
+  0%, 100% { background: transparent; }
 }

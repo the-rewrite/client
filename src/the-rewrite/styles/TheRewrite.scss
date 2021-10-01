@@ -25,5 +25,13 @@
 /* GRID */
 
 .closest {
-  background: tomato;
+  animation: fade 0.5s ease-in-out;
+  background: transparent;
+}
+
+@keyframes fade {
+  50% {
+    background: tomato;
+  }
+  0%, 100% { background: transparent; }
 }
