@@ -99,7 +99,11 @@ export default class TheRewrite {
     if (closestElement) {
       closestElement.classList.add('closest');
       const xpath = closestElement.dataset.xpath;
-      this.guest.crossframe.call('theRewriteScrollToBucket', xpath);
+      this.guest.crossframe.call(
+        'theRewriteScrollToBucket',
+        xpath,
+        closestDistance
+      );
     }
   }
 
