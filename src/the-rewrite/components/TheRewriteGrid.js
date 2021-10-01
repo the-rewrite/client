@@ -11,6 +11,7 @@ import { useState } from 'preact/hooks';
  * @prop {Bridge} bridge
  */
 
+
 /**
  * @param {GridItemProps} props
  */
@@ -19,6 +20,11 @@ function GridItem({ bridge, annotation }) {
   const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
   const text = annotation.text.substring(0, 1000);
+  let tagClass = '';
+
+  if(annotation.tags.length !== 0) {
+    tagClass = annotation.tags[0].split(' ')[0].split(',')[0];
+  }
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
   const lang = 'en';
@@ -34,7 +40,7 @@ function GridItem({ bridge, annotation }) {
   return (
     <div
       id={annotation.id}
-      className={`rewrite-grid-item outer ${isWide ? 'wide' : ''}`}
+      className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${tagClass}`}
     >
       <div className="inner" lang={lang}>
         <p>{expand ? annotation.text : text}</p>
