@@ -184,7 +184,13 @@ function HypothesisApp({ auth, bridge, settings, session, toastMessenger }) {
           isSidebar={isSidebar}
         />
       )}
-      <div className="HypothesisApp__content">
+      <div
+        className={
+          route === 'the-rewrite'
+            ? 'TheRewriteApp__content'
+            : 'HypothesisApp__content'
+        }
+      >
         <ToastMessages />
         <HelpPanel auth={authState.status === 'logged-in' ? authState : {}} />
         <ShareAnnotationsPanel />
