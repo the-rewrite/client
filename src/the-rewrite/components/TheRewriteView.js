@@ -76,7 +76,6 @@ function TheRewriteView({
 
     for (let c of children) {
       if (c.annotation) {
-        console.log(c.annotation.$tag);
         const selector = c.annotation.target[0].selector || [];
         for (let s of selector) {
           if (s.type === 'RangeSelector') {
@@ -111,8 +110,6 @@ function TheRewriteView({
   // Store state values
   const store = useStoreProxy();
   const focusedGroupId = store.focusedGroupId();
-  console.log('group', focusedGroupId);
-  console.log('store', store);
   const hasAppliedFilter =
     store.hasAppliedFilter() || store.hasSelectedAnnotations();
   const isLoading = store.isLoading();
