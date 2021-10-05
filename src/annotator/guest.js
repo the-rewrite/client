@@ -16,6 +16,7 @@ import * as rangeUtil from './range-util';
 import { SelectionObserver } from './selection-observer';
 import { normalizeURI } from './util/url';
 import { ListenerCollection } from './util/listener-collection';
+import { tagsToSingleClass } from './../the-rewrite/annotation-utils';
 
 /**
  * @typedef {import('./util/emitter').EventBus} EventBus
@@ -371,6 +372,7 @@ export default class Guest {
    * @return {Promise<Anchor[]>}
    */
   async anchor(annotation) {
+    // TODO hack different colors into this, highlight range takes a class parameter
     /**
      * Resolve an annotation's selectors to a concrete range.
      *
@@ -411,15 +413,16 @@ export default class Guest {
      * Highlight the text range that `anchor` refers to.
      *
      * @param {Anchor} anchor
+     * @param {string} cssClass
      */
-    const highlight = anchor => {
+    const highlight = (anchor, cssClass) => {
       const range = resolveAnchor(anchor);
       if (!range) {
         return;
       }
 
       const highlights = /** @type {AnnotationHighlight[]} */ (
-        highlightRange(range)
+        highlightRange(range, `hypothesis-highlight ${cssClass}`)
       );
       highlights.forEach(h => {
         h._annotation = anchor.annotation;
@@ -439,8 +442,9 @@ export default class Guest {
       annotation.target = [];
     }
     const anchors = await Promise.all(annotation.target.map(locate));
+    const cssClass = tagsToSingleClass(annotation.tags);
     for (let anchor of anchors) {
-      highlight(anchor);
+      highlight(anchor, cssClass);
     }
 
     // Set flag indicating whether anchoring succeeded. For each target,

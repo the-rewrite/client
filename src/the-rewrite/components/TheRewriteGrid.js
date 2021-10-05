@@ -1,6 +1,7 @@
 //import MuuriComponent from 'muuri-react';
 
 import { useState } from 'preact/hooks';
+import { tagsToSingleClass } from './../annotation-utils';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
@@ -20,11 +21,7 @@ function GridItem({ bridge, annotation }) {
   const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
   const text = annotation.text.substring(0, 1000);
-  let tagClass = '';
-
-  if(annotation.tags.length !== 0) {
-    tagClass = annotation.tags[0].split(' ')[0].split(',')[0];
-  }
+  let tagClass = tagsToSingleClass(annotation.tags);
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
   const lang = 'en';

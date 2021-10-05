@@ -4,6 +4,8 @@ import bridgeEvents from '../../shared/bridge-events';
 import { isReply, isPublic } from '../helpers/annotation-metadata';
 import { watch } from '../util/watch';
 
+import { formatAnnotation } from './../../the-rewrite/annotation-utils';
+
 /**
  * Return a minimal representation of an annotation that can be sent from the
  * sidebar app to a connected frame.
@@ -96,7 +98,7 @@ export class FrameSyncService {
           // when they are added or removed in the sidebar, but not re-anchoring
           // annotations if their selectors are updated.
           if (added.length > 0) {
-            bridge.call('loadAnnotations', added.map(formatAnnot));
+            bridge.call('loadAnnotations', added.map(formatAnnotation));
             added.forEach(annot => {
               inFrame.add(annot.$tag);
             });
