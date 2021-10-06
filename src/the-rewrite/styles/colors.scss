@@ -1,2 +1,15 @@
 $definition-color:  rgba(125, 255, 216, 0.74);
 $addition-color:  rgba(255, 71, 130, 0.75);
+$default-color:  rgba(255, 242, 125, 1);
+
+@function one-color($color) {
+    @return linear-gradient(0deg, $color 20%, $color, 40%, #fff 40%);
+}
+
+@function two-color($colorA, $colorB) {
+    @return linear-gradient(0deg, $colorA 0%, $colorA 25%, $colorB 25%, $colorB 50%, #fff 50%);
+}
+
+@function three-color($colorA, $colorB, $colorC) {
+    @return linear-gradient(0deg, $colorA 0%, $colorA 30%, $colorB 30%, $colorB 60%, $colorC 60%, $colorC 90%, #fff 90%);
+}

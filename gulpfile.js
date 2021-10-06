@@ -217,7 +217,7 @@ gulp.task(
   })
 );
 
-const imageFiles = 'src/images/**/*';
+const imageFiles = ['src/images/**/*', 'src/the-rewrite/images/**/*'];
 gulp.task('build-images', () => {
   return gulp
     .src(imageFiles)

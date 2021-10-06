@@ -42,12 +42,47 @@
 }
 
 /* HIGHLIGHTS */
+.hypothesis-highlights-always-on {
+
+.hypothesis-highlight {
+  background-image: c.one-color(c.$default-color);
+  background-color: unset;
+}
+
+.hypothesis-highlight .hypothesis-highlight {
+  background-color: unset;
+}
+
+.hypothesis-highlight.addition .hypothesis-highlight.definiton {
+  background-image: c.two-color( c.$addition-color, c.$definition-color);
+}
+
+.hypothesis-highlight.addition .hypothesis-highlight.definition .hypothesis-highlight {
+  background-image: c.three-color(c.$addition-color, c.$definition-color, c.$default-color);
+}
+
+.hypothesis-highlight.definiton .hypothesis-highlight.addition,
+.hypothesis-highlight.definition .hypothesis-highlight.addition {
+  background-image: c.two-color( c.$definition-color, c.$addition-color );
+}
 
 .hypothesis-highlight.definiton,
 .hypothesis-highlight.definition {
-  background-color: c.$definition-color;
+  background-image: c.one-color(c.$definition-color);
+}
+
+.hypothesis-highlight.definiton .hypothesis-highlight,
+.hypothesis-highlight.definition .hypothesis-highlight {
+  background-image: c.two-color(c.$definition-color, c.$default-color);
 }
 
 .hypothesis-highlight.addition {
-  background-color: c.$addition-color;
+  background-image: c.one-color(c.$addition-color);
 }
+
+}
+/**
+background: linear-gradient(0deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1)
+                            33%, rgba(232,255,64,1) 33%, rgba(232,255,64,1) 66%,
+                            rgba(0,255,18,1) 66%, rgba(0,255,18,1) 100%);
+*/
