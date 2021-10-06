@@ -1,6 +1,7 @@
 //import MuuriComponent from 'muuri-react';
 
 import { useState } from 'preact/hooks';
+import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
 
 /**
@@ -36,7 +37,7 @@ function GridItemReplies({ children }) {
           c.annotation && (
             <li>
               <strong>Reply by {prettifyUser(c.annotation.user)}</strong>
-              <div>{c.annotation.text}</div>
+              <MarkdownView markdown={c.annotation.text} />
               <GridItemReplies children={c.children} />
             </li>
           )
@@ -79,7 +80,13 @@ function GridItem({ bridge, thread }) {
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${tagClass}`}
     >
       <div className="inner" lang={lang}>
-        <p>{expand ? annotation.text : text}</p>
+        <p>
+          {expand ? (
+            <MarkdownView markdown={annotation.text} />
+          ) : (
+            <MarkdownView markdown={text} />
+          )}
+        </p>
         <p>
           {cropped && (
             <button onClick={toggleExpand}>
