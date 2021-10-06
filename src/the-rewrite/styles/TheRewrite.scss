@@ -1,3 +1,5 @@
+@use './colors' as c;
+
 .TheRewriteModal__outer {
   position: relative;
   height: 100vh;
@@ -37,4 +39,15 @@
   100% {
     background: transparent;
   }
+}
+
+/* HIGHLIGHTS */
+
+.hypothesis-highlight.definiton,
+.hypothesis-highlight.definition {
+  background-color: c.$definition-color;
+}
+
+.hypothesis-highlight.addition {
+  background-color: c.$addition-color;
 }

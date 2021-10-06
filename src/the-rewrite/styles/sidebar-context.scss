@@ -1,3 +1,5 @@
+@use './colors' as c;
+
 .rewrite-grid-parent,
 .rewrite-grid-row {
   display: flex;
@@ -45,11 +47,11 @@
 }
 
 .definition {
-  background: rgba(125, 255, 216, 0.74);
+  background: c.$definition-color;
 }
 
 .addition {
-  background: rgba(255, 71, 130, 0.75);
+  background: c.$addition-color;
 }
 
 .closest {

@@ -421,6 +421,8 @@ export default class Guest {
         return;
       }
 
+      console.log(cssClass);
+
       const highlights = /** @type {AnnotationHighlight[]} */ (
         highlightRange(range, `hypothesis-highlight ${cssClass}`)
       );
