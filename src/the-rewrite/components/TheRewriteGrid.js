@@ -1,24 +1,60 @@
 //import MuuriComponent from 'muuri-react';
 
 import { useState } from 'preact/hooks';
+import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
+
+/**
+ *
+ * @param {string} s
+ * @returns
+ */
+function prettifyUser(s) {
+  return s.split(':')[1].split('@')[0];
+}
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
  * @typedef {import('../../shared/bridge').Bridge} Bridge
  * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
  *
- * @typedef GridItemProps
- * @prop {Thread} thread
- * @prop {Bridge} bridge
  */
 
 /**
+ * @typedef GridItemRepliesProps
+ * @prop {Thread[]} children
+ * @param {GridItemRepliesProps} props
+ */
+function GridItemReplies({ children }) {
+  if (children.length === 0) {
+    return null;
+  }
+
+  return (
+    <ul>
+      {children.map(
+        c =>
+          c.annotation && (
+            <li>
+              <strong>Reply by {prettifyUser(c.annotation.user)}</strong>
+              <MarkdownView markdown={c.annotation.text} />
+              <GridItemReplies children={c.children} />
+            </li>
+          )
+      )}
+    </ul>
+  );
+}
+
+/**
+ * @typedef GridItemProps
+ * @prop {Thread} thread
+ * @prop {Bridge} bridge
  * @param {GridItemProps} props
  */
 function GridItem({ bridge, thread }) {
   if (!thread.annotation) {
-    return <div></div>;
+    return null;
   }
   const annotation = thread.annotation;
   const [expand, setExpand] = useState(/** @type boolean */ (false));
@@ -44,7 +80,13 @@ function GridItem({ bridge, thread }) {
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${tagClass}`}
     >
       <div className="inner" lang={lang}>
-        <p>{expand ? annotation.text : text}</p>
+        <p>
+          {expand ? (
+            <MarkdownView markdown={annotation.text} />
+          ) : (
+            <MarkdownView markdown={text} />
+          )}
+        </p>
         <p>
           {cropped && (
             <button onClick={toggleExpand}>
@@ -53,8 +95,9 @@ function GridItem({ bridge, thread }) {
           )}
           <button onClick={scrollToAnnotation}>Scroll to annotation</button>
         </p>
-        <p>by {annotation.user}</p>
+        <p>by {prettifyUser(annotation.user)}</p>
       </div>
+      <GridItemReplies children={thread.children} />
     </div>
   );
 }
