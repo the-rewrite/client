@@ -1,22 +1,26 @@
 //import MuuriComponent from 'muuri-react';
 
 import { useState } from 'preact/hooks';
-import { tagsToSingleClass } from './../annotation-utils';
+import { tagsToSingleClass } from '../annotation-utils';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
  * @typedef {import('../../shared/bridge').Bridge} Bridge
+ * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
  *
  * @typedef GridItemProps
- * @prop {Annotation} annotation
+ * @prop {Thread} thread
  * @prop {Bridge} bridge
  */
-
 
 /**
  * @param {GridItemProps} props
  */
-function GridItem({ bridge, annotation }) {
+function GridItem({ bridge, thread }) {
+  if (!thread.annotation) {
+    return <div></div>;
+  }
+  const annotation = thread.annotation;
   const [expand, setExpand] = useState(/** @type boolean */ (false));
   const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
@@ -59,7 +63,7 @@ function GridItem({ bridge, annotation }) {
  * @typedef GridRowProps
  * @prop {Bridge} bridge
  * @prop {string} xpath
- * @prop {Annotation[]} bucket
+ * @prop {Thread[]} bucket
  */
 
 /**
@@ -67,7 +71,7 @@ function GridItem({ bridge, annotation }) {
  */
 function GridRow({ xpath, bridge, bucket }) {
   const items = bucket.map(a => (
-    <GridItem key={a.id} bridge={bridge} annotation={a} />
+    <GridItem key={a.id} bridge={bridge} thread={a} />
   ));
   return (
     <div data-xpath={xpath} className="rewrite-grid-row">

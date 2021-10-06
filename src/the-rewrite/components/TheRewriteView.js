@@ -24,7 +24,8 @@ import TheRewriteGrid from './TheRewriteGrid';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
- * @typedef {{[key: string]:Annotation[]}} Bucket
+ * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
+ * @typedef {{[key: string]:Thread[]}} Bucket
  * */
 
 /**
@@ -55,7 +56,6 @@ function TheRewriteView({
     const children = [...rootThread.children];
 
     /**
-     * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
      * @param {Thread} t
      */
     function getStartTextPosition(t) {
@@ -84,7 +84,7 @@ function TheRewriteView({
             if (!localBuckets[b]) {
               localBuckets[b] = [];
             }
-            localBuckets[b].push(c.annotation);
+            localBuckets[b].push(c);
           }
         }
       }
