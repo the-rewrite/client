@@ -247,6 +247,8 @@ export function highlightRange(range, cssClass = 'hypothesis-highlight') {
 
     /** @type {HighlightElement} */
     const highlightEl = document.createElement('hypothesis-highlight');
+    const highlightBox = document.createElement('rewrite-highlight');
+    highlightEl.appendChild(highlightBox);
     highlightEl.className = cssClass;
 
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);
