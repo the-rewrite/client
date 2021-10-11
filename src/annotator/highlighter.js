@@ -306,7 +306,9 @@ export function removeAllHighlights(root) {
 export function removeHighlights(highlights) {
   for (let h of highlights) {
     if (h.parentNode) {
-      const children = Array.from(h.childNodes);
+      // Only replace the children with text nodes and not the the custom
+      // rewrite highlight node
+      const children = Array.from(h.childNodes).filter( n => n.nodeType === Node.TEXT_NODE );
       replaceWith(h, children);
     }
 

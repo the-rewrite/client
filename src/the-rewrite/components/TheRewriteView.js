@@ -93,6 +93,8 @@ function TheRewriteView({
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
 
+    bridge.call('testLoaded', rootThread.children);
+
     // const selectorsAndIds = rootThread.children.map(c => {
     //   if (c.annotation) {
     //     const selector = c.annotation.target[0].selector || [];
