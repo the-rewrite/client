@@ -1,7 +1,7 @@
 import { createShadowRoot } from '../annotator/util/shadow-root';
 import { render } from 'preact';
 import TheRewriteModal from './components/TheRewriteModal';
-import { observeIntersections } from './dom-utils';
+import Scroller from './components/Scroller';
 
 /** @typedef {import('./components/TheRewriteView').Bucket} Bucket*/
 /** @typedef {import('../types/annotator').Destroyable} Destroyable */
@@ -21,25 +21,11 @@ export default class TheRewrite {
    * @param {Record<string, any>} config
    */
   constructor(element, eventBus, guest, config = {}) {
+    this.scroller = new Scroller(guest.crossframe._bridge);
     /**
      * Un-styled shadow host for the notebook content.
      * This isolates the notebook from the page's styles.
      */
-    this.guest = guest;
-    /** @type {HTMLElement[]}*/ this.visibleAnnotations = [];
-
-    let disconnectObserver = () => {};
-    this.guest.crossframe.on(
-      'theRewriteBuckets',
-      /** @type {(b: Bucket)=>void} */ buckets => {
-        console.log('observe', buckets);
-        disconnectObserver();
-        disconnectObserver = observeIntersections(
-          Object.keys(buckets),
-          this.onViewport.bind(this)
-        );
-      }
-    );
 
     this._outerContainer = document.createElement('hypothesis-the-rewrite');
     element.appendChild(this._outerContainer);
@@ -56,60 +42,15 @@ export default class TheRewrite {
       })
     );
 
-    window.addEventListener('scroll', this.onScroll.bind(this));
-
     render(
       <TheRewriteModal eventBus={eventBus} config={config} />,
       this.shadowRoot
     );
   }
 
-  /**
-   *
-   * @param {IntersectionObserverEntry[]} entries
-   */
-  onViewport(entries) {
-    entries.forEach(e => {
-      const htmlElement = /** @type {HTMLElement} */ (e.target);
-      if (e.isIntersecting) {
-        this.visibleAnnotations.push(htmlElement);
-      } else {
-        const index = this.visibleAnnotations.indexOf(htmlElement);
-        this.visibleAnnotations.splice(index, 1);
-      }
-    });
-  }
-
-  onScroll() {
-    const center = document.documentElement.clientHeight / 2;
-    let closestDistance = Infinity;
-    let /** @type {HTMLElement|undefined} */ closestElement;
-    for (let e of this.visibleAnnotations) {
-      const r = e.getBoundingClientRect();
-      const m = (r.top + r.bottom) / 2;
-      const d = Math.abs(m - center);
-      if (d < closestDistance) {
-        closestDistance = d;
-        closestElement = e;
-      }
-    }
-    document
-      .querySelectorAll('.closest')
-      .forEach(e => e.classList.remove('closest'));
-    if (closestElement) {
-      closestElement.classList.add('closest');
-      const xpath = closestElement.dataset.xpath;
-      this.guest.crossframe.call(
-        'theRewriteScrollToBucket',
-        xpath,
-        closestDistance
-      );
-    }
-  }
-
   destroy() {
+    this.scroller.destroy();
     render(null, this.shadowRoot);
     this._outerContainer.remove();
-    window.removeEventListener('scroll', this.onScroll.bind(this));
   }
 }

@@ -1,5 +1,9 @@
 @use './colors' as c;
 
+html.the-rewrite {
+  height: auto;
+}
+
 .rewrite-grid-parent,
 .rewrite-grid-row {
   display: flex;
