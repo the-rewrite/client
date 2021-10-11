@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 
 import useRootThread from '../../sidebar/components/hooks/use-root-thread';
 import { withServices } from '../../sidebar/service-context';
@@ -11,6 +11,7 @@ import LoginPromptPanel from '../../sidebar/components/LoginPromptPanel';
 import SelectionTabs from '../../sidebar/components/SelectionTabs';
 import SidebarContentError from '../../sidebar/components/SidebarContentError';
 import TheRewriteGrid from './TheRewriteGrid';
+import Scroller from './Scroller';
 
 /**
  * @typedef TheRewriteViewProps
@@ -42,8 +43,21 @@ function TheRewriteView({
   streamer,
 }) {
   const rootThread = useRootThread();
-
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
+  const [scroller, setScroller] = useState(/** @type {Scroller|null} */ (null));
+
+  useEffect(() => {
+    setScroller(new Scroller(bridge, 'antani'));
+  }, [bridge]);
+
+  useEffect(() => {
+    if (scroller) {
+      scroller.onBuckets(buckets);
+    }
+  }, [scroller, buckets]);
+
+  //// Add `the-rewrite` class to the HTML root element
+  document.documentElement.classList.add('the-rewrite');
 
   useEffect(() => {
     const /** @type {Bucket} */ localBuckets = {};
@@ -164,43 +178,6 @@ function TheRewriteView({
       const port = e.ports[0];
       bridge.createChannel(port);
     });
-
-    // this is a test event, please us the _bridge
-    // on the window to test it
-    bridge.on('the-rewrite-test-event', () =>
-      console.log('hey im the rewrite i got a test event')
-    );
-    bridge.on(
-      'theRewriteScrollToBucket',
-      /** @type {(xpath: string, distance: number)=>void} */ (
-        xpath,
-        distance
-      ) => {
-        console.log('Scroll to bucket', xpath);
-        const e = document.querySelector(`[data-xpath="${xpath}"]`);
-        document
-          .querySelectorAll('.closest')
-          .forEach(e => e.classList.remove('closest'));
-        if (e) {
-          e.classList.add('closest');
-          /*
-          const y =
-            e.getBoundingClientRect().top +
-            window.pageYOffset -
-            window.innerHeight / 2 -
-            distance;
-          console.log(y);
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        */
-
-          e.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-            inline: 'center',
-          });
-        }
-      }
-    );
   }, [bridge]);
 
   useEffect(() => {

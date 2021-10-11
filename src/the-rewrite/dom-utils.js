@@ -33,7 +33,7 @@ export function normalizeXPath(xpath) {
  * @param {string} xpath
  * @returns {HTMLElement[]}
  */
-export function getElementsFromXPath(xpath) {
+export function getElementsByXPathAndMarkThem(xpath) {
   const result = document.evaluate(
     xpath,
     document,
@@ -48,32 +48,65 @@ export function getElementsFromXPath(xpath) {
     if (node !== null) {
       if (node.nodeType === Node.ELEMENT_NODE) {
         // FIXME: not sure I can cast it to HTMLElement.
-        elements.push(/** @type {HTMLElement} */ (node));
+        const htmlElement = /** @type {HTMLElement} */ (node);
+        elements.push(htmlElement);
       }
     } else {
       break;
     }
   }
+  // FIXME: manually removing `/html/body`.
+  elements.forEach(e => (e.dataset.xpath = xpath.substr(10)));
   return elements;
 }
 
 /**
+ *
+ * Return an array of elements matching an array of xpaths.
+ *
+ * @param {string[]} xpaths
+ * @returns {HTMLElement[]}
+ */
+export function getAllElementsByXpaths(xpaths) {
+  let all = [];
+  for (let xpath of xpaths) {
+    const elements = getElementsByXPathAndMarkThem(normalizeXPath(xpath));
+    all = [...all, ...elements];
+  }
+  return all;
+}
+
+/**
+ *
+ * Return an array of elements that have `data-xpath` matching the array of
+ * xpaths.
+ *
+ * @param {string[]} xpaths
+ * @returns {HTMLElement[]}
+ */
+export function getAllElementsWithXpaths(xpaths) {
+  let all = [];
+  for (let xpath of xpaths) {
+    const elements = document.querySelectorAll(`[data-xpath="${xpath}"]`);
+    all = [...all, ...elements];
+  }
+  return all;
+}
+
+/**
  * Run callback on element intersection with the main view.
- * @param {string[]} xpaths - The xpaths to observe for intersections.
+ * @param {HTMLElement[]} elements - The xpaths to observe for intersections.
  * @param {IntersectionObserverCallback} cb - Callback to call when an xpath is in the viewport
+ * @param {Element|null} root - Callback to call when an xpath is in the viewport
  * @returns {() => void} - A function to stop observing intersections.
  */
-export function observeIntersections(xpaths, cb) {
+export function observeIntersections(elements, cb, root = null) {
   let options = {
+    root,
     rootMargin: '0px',
-    threshold: 1,
+    threshold: 0.5,
   };
-
   const o = new IntersectionObserver(cb, options);
-  for (let xpath of xpaths) {
-    const elements = getElementsFromXPath(normalizeXPath(xpath));
-    elements.forEach(e => (e.dataset.xpath = xpath));
-    elements.forEach(e => o.observe(e));
-  }
+  elements.forEach(e => o.observe(e));
   return () => o.disconnect();
 }
