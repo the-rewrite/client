@@ -291,10 +291,12 @@ export default class Guest {
       annotations.map(annotation => this.anchor(annotation));
     });
 
-    this.crossframe.on('testLoaded', annotations => {
+    this.crossframe.on('correctAnnotations', annotations => {
       removeAllHighlights(this.element);
       annotations.forEach(annotation => {
-        //this.anchor(annotation.annotation);
+        if (annotation.annotation) {
+          this.anchor(annotation.annotation);
+        }
       });
     });
   }

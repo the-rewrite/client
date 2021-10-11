@@ -93,7 +93,7 @@ function TheRewriteView({
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
 
-    bridge.call('testLoaded', rootThread.children);
+    bridge.call('correctAnnotations', rootThread.children);
 
     // const selectorsAndIds = rootThread.children.map(c => {
     //   if (c.annotation) {

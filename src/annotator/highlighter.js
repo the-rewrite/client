@@ -286,6 +286,7 @@ function replaceWith(node, replacements) {
   const parent = /** @type {Node} */ (node.parentNode);
   replacements.forEach(r => parent.insertBefore(r, node));
   node.remove();
+  parent.normalize(); // unclutter textNodes
 }
 
 /**

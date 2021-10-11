@@ -124,6 +124,10 @@ const reducers = {
     const updated = [];
     let nextTag = state.nextTag;
 
+    if(state.annotations.length === 0) {
+      console.log("empty store but counter is ", state.nextTag);
+    }
+
     action.annotations.forEach(annot => {
       let existing;
       if (annot.id) {
