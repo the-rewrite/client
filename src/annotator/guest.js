@@ -290,6 +290,13 @@ export default class Guest {
     this._emitter.subscribe('annotationsLoaded', annotations => {
       annotations.map(annotation => this.anchor(annotation));
     });
+
+    this.crossframe.on('testLoaded', annotations => {
+      removeAllHighlights(this.element);
+      annotations.forEach(annotation => {
+        //this.anchor(annotation.annotation);
+      });
+    });
   }
 
   _connectSidebarEvents() {
@@ -372,7 +379,6 @@ export default class Guest {
    * @return {Promise<Anchor[]>}
    */
   async anchor(annotation) {
-    // TODO hack different colors into this, highlight range takes a class parameter
     /**
      * Resolve an annotation's selectors to a concrete range.
      *
@@ -420,9 +426,6 @@ export default class Guest {
       if (!range) {
         return;
       }
-
-      console.log(cssClass);
-
       const highlights = /** @type {AnnotationHighlight[]} */ (
         highlightRange(range, `hypothesis-highlight ${cssClass}`)
       );

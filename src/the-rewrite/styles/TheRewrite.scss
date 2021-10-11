@@ -44,45 +44,40 @@
 /* HIGHLIGHTS */
 .hypothesis-highlights-always-on {
 
-.hypothesis-highlight {
-  background-image: c.one-color(c.$default-color);
-  background-color: unset;
-}
+  .hypothesis-highlight {
+    background-color: unset;
+    position: relative;
+  }
 
-.hypothesis-highlight .hypothesis-highlight {
-  background-color: unset;
-}
+  .hypothesis-highlight .hypothesis-highlight {
+    background-color: unset;
+  }
 
-.hypothesis-highlight.addition .hypothesis-highlight.definiton {
-  background-image: c.two-color( c.$addition-color, c.$definition-color);
-}
+  rewrite-highlight {
+    display: inline;
+    position: absolute;
+    width: 100%;
+    height: 40%;
+    bottom: 0;
+    z-index: -1;
+    background-color: c.$default-color;
+  }
 
-.hypothesis-highlight.addition .hypothesis-highlight.definition .hypothesis-highlight {
-  background-image: c.three-color(c.$addition-color, c.$definition-color, c.$default-color);
-}
 
-.hypothesis-highlight.definiton .hypothesis-highlight.addition,
-.hypothesis-highlight.definition .hypothesis-highlight.addition {
-  background-image: c.two-color( c.$definition-color, c.$addition-color );
-}
+  .hypothesis-highlight.definition > rewrite-highlight {
+    background-color: c.$definition-color;
+  }
 
-.hypothesis-highlight.definiton,
-.hypothesis-highlight.definition {
-  background-image: c.one-color(c.$definition-color);
-}
+  .hypothesis-highlight.addition > rewrite-highlight {
+    background-color: c.$addition-color;
+  }
 
-.hypothesis-highlight.definiton .hypothesis-highlight,
-.hypothesis-highlight.definition .hypothesis-highlight {
-  background-image: c.two-color(c.$definition-color, c.$default-color);
-}
 
-.hypothesis-highlight.addition {
-  background-image: c.one-color(c.$addition-color);
-}
+  .hypothesis-highlight > .hypothesis-highlight > rewrite-highlight {
+    bottom: 40%;
+  }
 
+  .hypothesis-highlight > .hypothesis-highlight > .hypothesis-highlight > rewrite-highlight {
+    bottom: 80%;
+  }
 }
-/**
-background: linear-gradient(0deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1)
-                            33%, rgba(232,255,64,1) 33%, rgba(232,255,64,1) 66%,
-                            rgba(0,255,18,1) 66%, rgba(0,255,18,1) 100%);
-*/

@@ -247,6 +247,8 @@ export function highlightRange(range, cssClass = 'hypothesis-highlight') {
 
     /** @type {HighlightElement} */
     const highlightEl = document.createElement('hypothesis-highlight');
+    const highlightBox = document.createElement('rewrite-highlight');
+    highlightEl.appendChild(highlightBox);
     highlightEl.className = cssClass;
 
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);
@@ -304,7 +306,9 @@ export function removeAllHighlights(root) {
 export function removeHighlights(highlights) {
   for (let h of highlights) {
     if (h.parentNode) {
-      const children = Array.from(h.childNodes);
+      // Only replace the children with text nodes and not the the custom
+      // rewrite highlight node
+      const children = Array.from(h.childNodes).filter( n => n.nodeType === Node.TEXT_NODE );
       replaceWith(h, children);
     }
 
