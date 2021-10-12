@@ -290,6 +290,13 @@ export default class Guest {
     this._emitter.subscribe('annotationsLoaded', annotations => {
       annotations.map(annotation => this.anchor(annotation));
     });
+
+    this.crossframe.on('updateSuperscripts', /** @type {string[]} */superscripts => {
+      const nodes = Array.from(document.querySelectorAll('[data-id]'));
+      nodes.forEach( /** type {HTMLElement} */ n => {
+        n.dataset.sup = superscripts.indexOf(n.dataset.id);
+      });
+    });
   }
 
   _connectSidebarEvents() {
@@ -420,7 +427,7 @@ export default class Guest {
         return;
       }
       const highlights = /** @type {AnnotationHighlight[]} */ (
-        highlightRange(range, `hypothesis-highlight ${cssClass}`, annotation.superscript)
+        highlightRange(range, `hypothesis-highlight ${cssClass}`, annotation.id)
       );
       highlights.forEach(h => {
         h._annotation = anchor.annotation;

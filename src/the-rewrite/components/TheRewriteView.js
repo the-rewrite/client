@@ -107,6 +107,10 @@ function TheRewriteView({
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
 
+    // REVIEW: Take ids and sort them to create the superscript numbers
+    const superscripts = children.map(a => a.id).sort();
+    bridge.call('updateSuperscripts', superscripts);
+
     //bridge.call('correctAnnotations', children);
 
     // const selectorsAndIds = rootThread.children.map(c => {

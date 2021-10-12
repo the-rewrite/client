@@ -211,7 +211,7 @@ function wholeTextNodesInRange(range) {
 export function highlightRange(
   range,
   cssClass = 'hypothesis-highlight',
-  superscript = ''
+  id = null
 ) {
   const textNodes = wholeTextNodesInRange(range);
 
@@ -256,7 +256,8 @@ export function highlightRange(
     highlightEl.appendChild(highlightBox);
     highlightEl.className = cssClass;
 
-    highlightEl.dataset.sup = superscript;
+    // Add annotation id to element for later superscript addition
+    if (id) highlightEl.dataset.id = id;
 
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);
     nodes.forEach(node => highlightEl.appendChild(node));
