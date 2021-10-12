@@ -40,6 +40,7 @@ html.the-rewrite {
   text-align: justify;
   margin-bottom: 0;
   white-space: pre-wrap;
+  margin-top: 0;
   word-break: break-word; // long strings can be broken
   hyphens: auto; // on word break add hyphen
   // PLEASE SEE Review comment in TheRewriteGrid.js, lang tag is needed for this to work

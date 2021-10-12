@@ -61,7 +61,8 @@ function GridItem({ bridge, thread }) {
   const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
   const text = annotation.text.substring(0, 1000);
-  let tagClass = tagsToSingleClass(annotation.tags);
+  const tagClass = tagsToSingleClass(annotation.tags);
+  const superscript = annotation.$tag.split('t')[1];
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
   const lang = 'en';
@@ -80,6 +81,9 @@ function GridItem({ bridge, thread }) {
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${tagClass}`}
     >
       <div className="inner" lang={lang}>
+        <sup>
+          {superscript}
+        </sup>
         <p>
           {expand ? (
             <MarkdownView markdown={annotation.text} />
