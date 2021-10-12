@@ -1,8 +1,7 @@
 /**
- * Vanilla scrollTo implementation (smoothly scroll/"jump" to an element)
- * @author github.com/andreasvirkus
+ * Inspired by: Vanilla scrollTo implementation (smoothly scroll/"jump" to an
+ * element) by github.com/andreasvirkus
  * Source: https://gist.github.com/andreasvirkus/e50ff1c8a3ffd63d9acdf4e8a0133283
- * Note: the code has been modified to accomodate our use case.
  *
  * Default easing is:
  *  Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
@@ -38,7 +37,9 @@ export default function jump(target, options = {}) {
    * @param {number} time
    */
   function loop(time) {
-    if (!run) return;
+    if (!run) {
+      return;
+    }
     timeElapsed = time - timeStart;
     window.scrollTo(0, opt.easing(timeElapsed, start, distance, duration));
     if (timeElapsed < duration) requestAnimationFrame(loop);
@@ -47,7 +48,7 @@ export default function jump(target, options = {}) {
 
   function end() {
     window.scrollTo(0, start + distance);
-    if (typeof opt.callback === 'function') opt.callback();
+    if (typeof opt.callback === 'function') requestAnimationFrame(opt.callback);
   }
 
   /**

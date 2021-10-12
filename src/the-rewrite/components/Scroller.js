@@ -65,13 +65,11 @@ export default class Scroller {
     if (e) {
       e.classList.add('closest');
       this.isScrolling = true;
-      console.log(this.tag, 'set scrolling true');
       this.stopScrolling = jump(e, { callback: this.onScrollEnd.bind(this) });
     }
   }
 
   onScrollEnd() {
-    console.log(this.tag, 'set scrolling false');
     this.isScrolling = false;
   }
 
