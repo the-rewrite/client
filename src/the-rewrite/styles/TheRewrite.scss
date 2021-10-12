@@ -53,6 +53,18 @@
     background-color: unset;
   }
 
+  .hypothesis-highlight::after {
+    content: attr(data-sup);
+    vertical-align: super;
+    font-size: 0.65em;
+    margin-left: 0.1em;
+    position: static;
+    width: auto;
+    height: auto;
+    clip: unset;
+    overflow: auto;
+  }
+
   rewrite-highlight {
     display: inline;
     position: absolute;

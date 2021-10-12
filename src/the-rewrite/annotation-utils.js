@@ -10,6 +10,7 @@ import { formatAnnot } from './../sidebar/services/frame-sync';
  *  @prop {string} document.title
  * @prop {Target[]} target
  * @prop {string} uri
+ * @prop {string} superscript
  * @prop {string[]} tags
  */
 
@@ -26,6 +27,7 @@ import { formatAnnot } from './../sidebar/services/frame-sync';
 export function formatAnnotation(annotation) {
   const message = formatAnnot(annotation);
   message.msg.tags = annotation.tags;
+  message.msg.superscript = annotation.$tag.split('t')[1];
   return /** @type { AnnotationMessage } */ message;
 }
 

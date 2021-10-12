@@ -1,5 +1,6 @@
 import { isInPlaceholder } from './anchoring/placeholder';
 import { isNodeInRange } from './range-util';
+import { addSuperscript } from './../the-rewrite/annotation-utils';
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
@@ -207,7 +208,11 @@ function wholeTextNodesInRange(range) {
  * @param {string} cssClass - A CSS class to use for the highlight
  * @return {HighlightElement[]} - Elements wrapping text in `normedRange` to add a highlight effect
  */
-export function highlightRange(range, cssClass = 'hypothesis-highlight') {
+export function highlightRange(
+  range,
+  cssClass = 'hypothesis-highlight',
+  superscript = ''
+) {
   const textNodes = wholeTextNodesInRange(range);
 
   // Check if this range refers to a placeholder for not-yet-rendered content in
@@ -251,6 +256,8 @@ export function highlightRange(range, cssClass = 'hypothesis-highlight') {
     highlightEl.appendChild(highlightBox);
     highlightEl.className = cssClass;
 
+    highlightEl.dataset.sup = superscript;
+
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);
     nodes.forEach(node => highlightEl.appendChild(node));
 
@@ -286,7 +293,6 @@ function replaceWith(node, replacements) {
   const parent = /** @type {Node} */ (node.parentNode);
   replacements.forEach(r => parent.insertBefore(r, node));
   node.remove();
-  parent.normalize(); // unclutter textNodes
 }
 
 /**
@@ -309,8 +315,12 @@ export function removeHighlights(highlights) {
     if (h.parentNode) {
       // Only replace the children with text nodes and not the the custom
       // rewrite highlight node
-      const children = Array.from(h.childNodes).filter( n => n.nodeType === Node.TEXT_NODE );
+      const p = h.parentNode;
+      const children = Array.from(h.childNodes).filter(
+        n => n.nodeName !== 'REWRITE-HIGHLIGHT'
+      );
       replaceWith(h, children);
+      p.normalize();
     }
 
     if (h.svgHighlight) {

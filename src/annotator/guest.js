@@ -290,15 +290,6 @@ export default class Guest {
     this._emitter.subscribe('annotationsLoaded', annotations => {
       annotations.map(annotation => this.anchor(annotation));
     });
-
-    this.crossframe.on('correctAnnotations', annotations => {
-      removeAllHighlights(this.element);
-      annotations.forEach(annotation => {
-        if (annotation.annotation) {
-          this.anchor(annotation.annotation);
-        }
-      });
-    });
   }
 
   _connectSidebarEvents() {
@@ -429,7 +420,7 @@ export default class Guest {
         return;
       }
       const highlights = /** @type {AnnotationHighlight[]} */ (
-        highlightRange(range, `hypothesis-highlight ${cssClass}`)
+        highlightRange(range, `hypothesis-highlight ${cssClass}`, annotation.superscript)
       );
       highlights.forEach(h => {
         h._annotation = anchor.annotation;
