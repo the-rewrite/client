@@ -45,6 +45,7 @@ function TheRewriteView({
   const rootThread = useRootThread();
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
   const [scroller, setScroller] = useState(/** @type {Scroller|null} */ (null));
+  const [sortedIds, setSortedIds] = useState(/** @type {string[]} */ ([]));
 
   useEffect(() => {
     setScroller(new Scroller(bridge, 'antani'));
@@ -107,10 +108,6 @@ function TheRewriteView({
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
 
-    // REVIEW: Take ids and sort them to create the superscript numbers
-    const superscripts = children.map(a => a.id).sort();
-    bridge.call('updateSuperscripts', superscripts);
-
     //bridge.call('correctAnnotations', children);
 
     // const selectorsAndIds = rootThread.children.map(c => {
@@ -126,6 +123,14 @@ function TheRewriteView({
 
     //bridge.call( evaluateXpathBatched, selectorsAndIds );
   }, [bridge, rootThread.children.length]); // REVIEW it is okay for now
+
+  // REVIEW correct use of setState?
+  useEffect(() => {
+    // REVIEW: Take ids and sort them to create the superscript numbers
+    const superscripts = rootThread.children.map(a => a.id).sort();
+    bridge.call('updateSuperscripts', superscripts);
+    setSortedIds(superscripts);
+  }, [rootThread.children.length]);
 
   // Store state values
   const store = useStoreProxy();
@@ -315,7 +320,7 @@ function TheRewriteView({
         <SidebarContentError errorType="group" onLoginRequest={onLogin} />
       )}
       {showTabs && <SelectionTabs isLoading={isLoading} />}
-      <TheRewriteGrid bridge={bridge} buckets={buckets} />
+      <TheRewriteGrid sortedIds={sortedIds} bridge={bridge} buckets={buckets} />
       {showLoggedOutMessage && <LoggedOutMessage onLogin={onLogin} />}
     </div>
   );

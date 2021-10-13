@@ -51,8 +51,9 @@ function GridItemReplies({ children }) {
  * @prop {Thread} thread
  * @prop {Bridge} bridge
  * @param {GridItemProps} props
+ * @param {string[]} sortedIds
  */
-function GridItem({ bridge, thread }) {
+function GridItem({ bridge, thread, sortedIds }) {
   if (!thread.annotation) {
     return null;
   }
@@ -62,7 +63,7 @@ function GridItem({ bridge, thread }) {
   const cropped = annotation.text.length > 1000;
   const text = annotation.text.substring(0, 1000);
   const tagClass = tagsToSingleClass(annotation.tags);
-  const superscript = annotation.$tag.split('t')[1];
+  const superscript = sortedIds.indexOf(thread.annotation.id);
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
   const lang = 'en';
@@ -111,14 +112,15 @@ function GridItem({ bridge, thread }) {
  * @prop {Bridge} bridge
  * @prop {string} xpath
  * @prop {Thread[]} bucket
+ * @prop {string[]} sortedIds
  */
 
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ xpath, bridge, bucket }) {
+function GridRow({ xpath, bridge, bucket, sortedIds }) {
   const items = bucket.map(a => (
-    <GridItem key={a.id} bridge={bridge} thread={a} />
+    <GridItem key={a.id} bridge={bridge} thread={a} sortedIds={sortedIds} />
   ));
   return (
     <div data-xpath={xpath} className="rewrite-grid-row">
@@ -133,12 +135,13 @@ function GridRow({ xpath, bridge, bucket }) {
  * @typedef TheRewriteGridProps
  * @prop {Bridge} bridge
  * @prop {Bucket} buckets
+ * @prop {string[]} sortedIds
  */
 
 /**
  * @param {TheRewriteGridProps} props
  */
-function TheRewriteGrid({ bridge, buckets }) {
+function TheRewriteGrid({ bridge, buckets, sortedIds }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
@@ -147,11 +150,9 @@ function TheRewriteGrid({ bridge, buckets }) {
   // then we use the index to get the corresponding values
   // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
-    <GridRow key={b} xpath={b} bridge={bridge} bucket={bucketValues[i]} />
+    <GridRow key={b} sortedIds={sortedIds} xpath={b} bridge={bridge} bucket={bucketValues[i]} />
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
-
-// TODO add wide annotations
 
 export default TheRewriteGrid;
