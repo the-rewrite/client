@@ -30,6 +30,7 @@ async function compileSass({ input, minify, output }) {
     includePaths: [path.dirname(input), 'node_modules'],
     outputStyle: minify ? 'compressed' : 'expanded',
     sourceMap: sourcemapPath,
+    sourceMapEmbed: true
   });
 
   // Rewrite font URLs to look for fonts in 'build/fonts' instead of

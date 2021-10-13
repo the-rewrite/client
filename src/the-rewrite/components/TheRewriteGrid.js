@@ -77,33 +77,31 @@ function GridItem({ bridge, thread, sortedIds }) {
   };
 
   return (
-    <div
+    <article
       id={annotation.id}
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${tagClass}`}
     >
       <div className="inner" lang={lang}>
-        <sup>
-          {superscript}
-        </sup>
-        <p>
+        <p className="number">{superscript}</p>
+        <section>
           {expand ? (
-            <MarkdownView markdown={annotation.text} />
+            <MarkdownView lang={lang} markdown={annotation.text} />
           ) : (
-            <MarkdownView markdown={text} />
+            <MarkdownView lang={lang} markdown={text} />
           )}
-        </p>
-        <p>
-          {cropped && (
-            <button onClick={toggleExpand}>
-              {expand ? 'Collapse' : 'Read all'}
-            </button>
-          )}
-          <button onClick={scrollToAnnotation}>Scroll to annotation</button>
-        </p>
-        <p>by {prettifyUser(annotation.user)}</p>
+          <p>
+            {cropped && (
+              <button onClick={toggleExpand}>
+                {expand ? 'Collapse' : 'Read all'}
+              </button>
+            )}
+            <button onClick={scrollToAnnotation}>Scroll to annotation</button>
+          </p>
+          <p>by {prettifyUser(annotation.user)}</p>
+          <GridItemReplies children={thread.children} />
+        </section>
       </div>
-      <GridItemReplies children={thread.children} />
-    </div>
+    </article>
   );
 }
 
@@ -150,7 +148,13 @@ function TheRewriteGrid({ bridge, buckets, sortedIds }) {
   // then we use the index to get the corresponding values
   // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
-    <GridRow key={b} sortedIds={sortedIds} xpath={b} bridge={bridge} bucket={bucketValues[i]} />
+    <GridRow
+      key={b}
+      sortedIds={sortedIds}
+      xpath={b}
+      bridge={bridge}
+      bucket={bucketValues[i]}
+    />
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
