@@ -1,10 +1,6 @@
 @use './colors' as c;
 
-html.the-rewrite {
-  height: auto;
-}
-
-.HypothesisApp {
+html.the-rewrite .HypothesisApp {
   overflow: unset;
 }
 
