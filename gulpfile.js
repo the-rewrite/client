@@ -201,6 +201,7 @@ const fontFiles = [
   'src/styles/vendor/fonts/*.woff',
   'node_modules/katex/dist/fonts/*.woff',
   'node_modules/katex/dist/fonts/*.woff2',
+  'src/the-rewrite/fonts/*'
 ];
 
 gulp.task('build-fonts', () => {
@@ -233,7 +234,7 @@ gulp.task(
 );
 
 const MANIFEST_SOURCE_FILES =
-  'build/@(fonts|images|scripts|styles)/*.@(js|css|woff|jpg|png|svg)';
+  'build/@(fonts|images|scripts|styles)/*.@(js|css|woff2|woff|jpg|png|svg)';
 
 let isFirstBuild = true;
 

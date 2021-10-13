@@ -1,7 +1,9 @@
 @use './colors' as c;
+@use './fonts' as f;
 
 html.the-rewrite {
   height: auto;
+  font-family: 'crimson-text', serif;
 }
 
 .HypothesisApp {
@@ -30,6 +32,9 @@ html.the-rewrite {
 .rewrite-grid-item {
   flex: 0 0 200px;
   padding: 10px;
+  font-family: 'crimson-text', 'Crimson Text', serif;
+  line-height: 1.168;
+  font-size: 11x;
 }
 
 .rewrite-grid-item.wide {
@@ -40,19 +45,19 @@ html.the-rewrite {
   margin-top: 1.5rem;
 }
 
-.rewrite-grid-item p {
+.rewrite-grid-item p,
+.rewrite-grid-item .MarkdownView p {
+  margin: 0;
   text-align: justify;
-  margin-bottom: 0;
   white-space: pre-wrap;
-  margin-top: 0;
   word-break: break-word; // long strings can be broken
   hyphens: auto; // on word break add hyphen
   // PLEASE SEE Review comment in TheRewriteGrid.js, lang tag is needed for this to work
 }
 
-.rewrite-grid-item p + p {
+.rewrite-grid-item p + p,
+.rewrite-grid-item .MarkdownView p + p {
   margin-top: 0.5em;
-  font-size: 0.8em;
 }
 
 .definition {

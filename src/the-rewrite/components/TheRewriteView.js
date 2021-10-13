@@ -124,7 +124,6 @@ function TheRewriteView({
     //bridge.call( evaluateXpathBatched, selectorsAndIds );
   }, [bridge, rootThread.children.length]); // REVIEW it is okay for now
 
-  // REVIEW correct use of setState?
   useEffect(() => {
     // REVIEW: Take ids and sort them to create the superscript numbers
     const superscripts = rootThread.children.map(a => a.id).sort();

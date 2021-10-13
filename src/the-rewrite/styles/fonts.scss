@@ -1,0 +1,13 @@
+@font-face {
+	font-family: 'crimson-text';
+	src: url('../fonts/CrimsonText-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+	font-family: 'space-grotesk';
+	src: url('../fonts/SpaceGrotesk-Medium.woff2') format('woff2');
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text&family=Space+Grotesk:wght@500&display=swap');
