@@ -1,12 +1,7 @@
 @use './colors' as c;
 @use './fonts' as f;
 
-html.the-rewrite {
-  height: auto;
-  font-family: 'crimson-text', serif;
-}
-
-.HypothesisApp {
+html.the-rewrite .HypothesisApp {
   overflow: unset;
 }
 
