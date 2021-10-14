@@ -3,6 +3,8 @@
 
 html.the-rewrite .HypothesisApp {
   overflow: unset;
+  height: auto;
+  padding: 49px 0 0 0;
 }
 
 .rewrite-grid-parent,
@@ -16,7 +18,6 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-row {
   flex-direction: row;
-  gap: 30px;
 }
 
 .rewrite-grid-row + .rewrite-grid-row {

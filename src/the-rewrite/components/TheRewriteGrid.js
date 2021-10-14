@@ -1,6 +1,7 @@
 //import MuuriComponent from 'muuri-react';
 
 import { useState } from 'preact/hooks';
+import { Fragment } from 'preact';
 import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
 
@@ -11,6 +12,72 @@ import { tagsToSingleClass } from '../annotation-utils';
  */
 function prettifyUser(s) {
   return s.split(':')[1].split('@')[0];
+}
+const dateFormater = new Intl.DateTimeFormat({
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+});
+
+/**
+ * @typedef GridItemMetaProps
+ * @prop {Annotation} annotation
+ * @prop {Bridge} bridge
+ * @param {GridItemMetaProps} props */
+function GridItemMeta({ bridge, annotation }) {
+  const showAnnotationsByUser = userId => {
+    return event => {
+      event.preventDefault();
+      // REVIEW add bridge call
+      console.log(`bridge.call ${userId}`);
+    };
+  };
+
+  console.log('br', bridge);
+
+  const scrollToAnnotation = event => {
+    event.preventDefault();
+    bridge.call('scrollToAnnotation', annotation.$tag);
+  };
+
+  const replyTo = event => {
+    event.preventDefault();
+    // REVIEW add bridge call
+    console.log('bridge call, reply');
+  };
+
+  const permaLink = event => {
+    event.preventDefault();
+    // REVIEW add copy to clipboard
+    console.log('copy to clipboard', annotation.links.html);
+  };
+
+  const output = dateFormater.format(new Date(annotation.created));
+
+  return (
+    <Fragment>
+      <p>
+        A <span>reply</span> by{' '}
+        <a
+          onClick={showAnnotationsByUser(annotation.user)}
+          href="localhost/123"
+        >
+          {prettifyUser(annotation.user)}
+        </a>{' '}
+        on {output}
+      </p>
+      <p>
+        <a href={annotation.links.incontext} onClick={scrollToAnnotation}>
+          jump to
+        </a>{' '}
+        ·{' '}
+        <a href="invalid/url" onClick={replyTo}>
+          reply
+        </a>{' '}
+        · <a href={annotation.links.html}>permalink</a>
+      </p>
+    </Fragment>
+  );
 }
 
 /**
@@ -72,10 +139,6 @@ function GridItem({ bridge, thread, sortedIds }) {
     setExpand(prev => !prev);
   };
 
-  const scrollToAnnotation = () => {
-    bridge.call('scrollToAnnotation', annotation.$tag);
-  };
-
   return (
     <article
       id={annotation.id}
@@ -95,9 +158,8 @@ function GridItem({ bridge, thread, sortedIds }) {
                 {expand ? 'Collapse' : 'Read all'}
               </button>
             )}
-            <button onClick={scrollToAnnotation}>Scroll to annotation</button>
           </p>
-          <p>by {prettifyUser(annotation.user)}</p>
+          <GridItemMeta bridge={bridge} annotation={annotation} />
           <GridItemReplies children={thread.children} />
         </section>
       </div>
