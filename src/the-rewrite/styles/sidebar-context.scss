@@ -5,6 +5,7 @@ html.the-rewrite .HypothesisApp {
   overflow: unset;
   height: auto;
   padding: 49px 0 0 0;
+  background: #fff;
 }
 
 .rewrite-grid-parent,
@@ -22,7 +23,6 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-row + .rewrite-grid-row {
   padding-bottom: 5px;
-  border-bottom: 1px solid gray;
 }
 
 .rewrite-grid-item {
@@ -37,6 +37,7 @@ html.the-rewrite .HypothesisApp {
   line-height: 1.168;
   font-size: 11px;
   width: 20px;
+  flex: 0 0 20px;
   text-align: right;
 }
 
@@ -44,11 +45,13 @@ html.the-rewrite .HypothesisApp {
   flex: 0 0 400px;
 }
 
-.rewrite-grid-item section p,
-.rewrite-grid-item section .MarkdownView p {
+.rewrite-grid-item section p {
   margin: 0;
   line-height: 1.168;
   font-size: 12px;
+}
+
+.rewrite-grid-item section .MarkdownView p {
   text-align: justify;
   white-space: pre-wrap;
   word-break: break-word; // long strings can be broken
@@ -56,7 +59,6 @@ html.the-rewrite .HypothesisApp {
   // PLEASE SEE Review comment in TheRewriteGrid.js, lang tag is needed for this to work
 }
 
-.rewrite-grid-item section p + p,
 .rewrite-grid-item section .MarkdownView p + p {
   margin-top: 0.5em;
 }

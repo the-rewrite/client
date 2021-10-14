@@ -13,7 +13,8 @@ import { tagsToSingleClass } from '../annotation-utils';
 function prettifyUser(s) {
   return s.split(':')[1].split('@')[0];
 }
-const dateFormater = new Intl.DateTimeFormat({
+
+const dateFormatter = new Intl.DateTimeFormat({
   day: 'numeric',
   month: 'numeric',
   year: 'numeric',
@@ -25,6 +26,8 @@ const dateFormater = new Intl.DateTimeFormat({
  * @prop {Bridge} bridge
  * @param {GridItemMetaProps} props */
 function GridItemMeta({ bridge, annotation }) {
+  const tagClass = tagsToSingleClass(annotation.tags);
+
   const showAnnotationsByUser = userId => {
     return event => {
       event.preventDefault();
@@ -32,8 +35,6 @@ function GridItemMeta({ bridge, annotation }) {
       console.log(`bridge.call ${userId}`);
     };
   };
-
-  console.log('br', bridge);
 
   const scrollToAnnotation = event => {
     event.preventDefault();
@@ -52,12 +53,12 @@ function GridItemMeta({ bridge, annotation }) {
     console.log('copy to clipboard', annotation.links.html);
   };
 
-  const output = dateFormater.format(new Date(annotation.created));
+  const output = dateFormatter.format(new Date(annotation.created));
 
   return (
     <Fragment>
       <p>
-        A <span>reply</span> by{' '}
+        A <span className={tagClass}>{tagClass}</span> by{' '}
         <a
           onClick={showAnnotationsByUser(annotation.user)}
           href="localhost/123"
@@ -74,7 +75,10 @@ function GridItemMeta({ bridge, annotation }) {
         <a href="invalid/url" onClick={replyTo}>
           reply
         </a>{' '}
-        · <a href={annotation.links.html}>permalink</a>
+        ·{' '}
+        <a href={annotation.links.html} onClick={permaLink}>
+          permalink
+        </a>
       </p>
     </Fragment>
   );
@@ -129,7 +133,6 @@ function GridItem({ bridge, thread, sortedIds }) {
   const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
   const text = annotation.text.substring(0, 1000);
-  const tagClass = tagsToSingleClass(annotation.tags);
   const superscript = sortedIds.indexOf(thread.annotation.id);
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
@@ -142,7 +145,7 @@ function GridItem({ bridge, thread, sortedIds }) {
   return (
     <article
       id={annotation.id}
-      className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${tagClass}`}
+      className={`rewrite-grid-item outer ${isWide ? 'wide' : ''}`}
     >
       <div className="inner" lang={lang}>
         <p className="number">{superscript}</p>
@@ -152,13 +155,13 @@ function GridItem({ bridge, thread, sortedIds }) {
           ) : (
             <MarkdownView lang={lang} markdown={text} />
           )}
-          <p>
-            {cropped && (
+          {cropped && (
+            <p>
               <button onClick={toggleExpand}>
                 {expand ? 'Collapse' : 'Read all'}
               </button>
-            )}
-          </p>
+            </p>
+          )}
           <GridItemMeta bridge={bridge} annotation={annotation} />
           <GridItemReplies children={thread.children} />
         </section>
