@@ -107,7 +107,7 @@ function GridItemReplies({ children }) {
         c =>
           c.annotation && (
             <li>
-              <strong>Reply by {prettifyUser(c.annotation.user)}</strong>
+              <p>↝ Reply by {prettifyUser(c.annotation.user)}</p>
               <MarkdownView markdown={c.annotation.text} />
               <GridItemReplies children={c.children} />
             </li>
@@ -158,7 +158,7 @@ function GridItem({ bridge, thread, sortedIds }) {
           {cropped && (
             <p>
               <button onClick={toggleExpand}>
-                {expand ? 'Collapse' : 'Read all'}
+                {expand ? '↑ Collapse' : '↓ Read all'}
               </button>
             </p>
           )}

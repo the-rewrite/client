@@ -22,19 +22,20 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-row + .rewrite-grid-row {
-  padding-bottom: 5px;
+  margin-top: (f.$base * f.$multp * f.$multp);
 }
 
+
 .rewrite-grid-item {
-  flex: 0 0 200px;
-  padding: 10px 10px 10px 5px;
+  flex: 0 0 (200px + f.$base + (f.$base/f.$multp) + 25px);
+  padding: 0 f.$base 0 (f.$base/f.$multp);
   font-family: 'crimson-text', 'Crimson Text', serif;
 }
 
 .rewrite-grid-item .number {
   font-family: 'Space Grotesk', sans-serif;
   margin: 0 5px 0 0;
-  line-height: 1.168;
+  line-height: 1.618;
   font-size: 11px;
   width: 20px;
   flex: 0 0 20px;
@@ -47,8 +48,8 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-item section p {
   margin: 0;
-  line-height: 1.168;
-  font-size: 12px;
+  line-height: f.$multp;
+  font-size: f.$base;
 }
 
 .rewrite-grid-item section .MarkdownView p {
@@ -61,6 +62,33 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-item section .MarkdownView p + p {
   margin-top: 0.5em;
+}
+
+.rewrite-grid-item section .MarkdownView blockquote {
+  margin: (12px / 1.618) 0;
+  font-style: unset;
+  letter-spacing: auto;
+}
+
+.rewrite-grid-item section .MarkdownView blockquote,
+.rewrite-grid-item section .MarkdownView blockquote p {
+  font-family: 'crimson-text', 'Crimson Text', serif;
+  line-height: 1.618;
+}
+
+.rewrite-grid-item .MarkdownView + p {
+  margin-top: calc(12px * 1.618);
+}
+
+.rewrite-grid-item section p a {
+  color: rgb(32, 32, 32);
+  text-decoration: underline;
+}
+
+.rewrite-grid-item section ul {
+  margin-top: calc(12px * 1.618);
+  width: 80%;
+  margin-left: 20%;
 }
 
 .rewrite-grid-item .inner {
