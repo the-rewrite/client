@@ -427,7 +427,7 @@ export default class Guest {
         return;
       }
       const highlights = /** @type {AnnotationHighlight[]} */ (
-        highlightRange(range, `hypothesis-highlight ${cssClass}`, annotation.id)
+        highlightRange(range, `hypothesis-highlight ${cssClass}`, annotation.$tag.split('t')[1])
       );
       highlights.forEach(h => {
         h._annotation = anchor.annotation;
