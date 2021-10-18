@@ -65,7 +65,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-item section .MarkdownView blockquote {
-  margin: (12px / 1.618) 0;
+  margin: (f.$base / f.$multp) 0;
   font-style: unset;
   letter-spacing: auto;
 }
@@ -73,11 +73,11 @@ html.the-rewrite .HypothesisApp {
 .rewrite-grid-item section .MarkdownView blockquote,
 .rewrite-grid-item section .MarkdownView blockquote p {
   font-family: 'crimson-text', 'Crimson Text', serif;
-  line-height: 1.618;
+  line-height: f.$multp;
 }
 
 .rewrite-grid-item .MarkdownView + p {
-  margin-top: calc(12px * 1.618);
+  margin-top: calc(f.$base * f.$multp);
 }
 
 .rewrite-grid-item section p a {
@@ -86,7 +86,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-item section ul {
-  margin-top: calc(12px * 1.618);
+  margin-top: calc(f.$base * f.$multp);
   width: 80%;
   margin-left: 20%;
 }

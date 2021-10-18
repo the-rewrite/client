@@ -48,6 +48,10 @@
   .hypothesis-highlight {
     background-color: unset;
     position: relative;
+    background-image: linear-gradient(to right top,c.$default-color 0,c.$default-color 100%);
+    background-size: 100% 20%;
+    background-repeat: repeat-x;
+    background-position: bottom;
   }
 
   .hypothesis-highlight .hypothesis-highlight {
@@ -73,24 +77,27 @@
     height: 40%;
     bottom: 0;
     z-index: -1;
-    background-color: c.$default-color;
+    //background-color: c.$default-color;
   }
 
 
-  .hypothesis-highlight.definition > rewrite-highlight {
-    background-color: c.$definition-color;
+  .hypothesis-highlight.definition {
+    //background-color: c.$definition-color;
+    background-image: linear-gradient(to right top,c.$definition-color 0,c.$definition-color 100%);
+
   }
 
-  .hypothesis-highlight.addition > rewrite-highlight {
-    background-color: c.$addition-color;
+  .hypothesis-highlight.addition {
+    //background-color: c.$addition-color;
+    background-image: linear-gradient(to right top,c.$addition-color 0,c.$addition-color 100%);
   }
 
 
-  .hypothesis-highlight > .hypothesis-highlight > rewrite-highlight {
-    bottom: 40%;
+  .hypothesis-highlight > .hypothesis-highlight {
+    background-position: left 0 bottom 20%;
   }
 
-  .hypothesis-highlight > .hypothesis-highlight > .hypothesis-highlight > rewrite-highlight {
-    bottom: 80%;
+  .hypothesis-highlight > .hypothesis-highlight > .hypothesis-highlight {
+    background-position: left 0 bottom 40%;
   }
 }
