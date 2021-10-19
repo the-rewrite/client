@@ -27,30 +27,30 @@ export default class TheRewrite {
      * This isolates the notebook from the page's styles.
      */
 
-    this._outerContainer = document.createElement('hypothesis-the-rewrite');
-    element.appendChild(this._outerContainer);
-    this.shadowRoot = createShadowRoot(this._outerContainer);
-    this.ready = /** @type {Promise<void>} */ (
-      new Promise(resolve => {
-        window.addEventListener('message', event => {
-          console.log('[TheRewrite] got message:', event.data);
-          if (event.data.type === 'theRewriteReady') {
-            this.iframe = this.shadowRoot.querySelector('iframe');
-            resolve();
-          }
-        });
-      })
-    );
+    //this._outerContainer = document.createElement('hypothesis-the-rewrite');
+    //element.appendChild(this._outerContainer);
+    //this.shadowRoot = createShadowRoot(this._outerContainer);
+    //this.ready = /** @type {Promise<void>} */ (
+    //  new Promise(resolve => {
+    //    window.addEventListener('message', event => {
+    //      console.log('[TheRewrite] got message:', event.data);
+    //      if (event.data.type === 'theRewriteReady') {
+    //        this.iframe = this.shadowRoot.querySelector('iframe');
+    //        resolve();
+    //      }
+    //    });
+    //  })
+    //);
 
-    render(
-      <TheRewriteModal eventBus={eventBus} config={config} />,
-      this.shadowRoot
-    );
+    //render(
+    //  <TheRewriteModal eventBus={eventBus} config={config} />,
+    //  this.shadowRoot
+    //);
   }
 
   destroy() {
     this.scroller.destroy();
-    render(null, this.shadowRoot);
-    this._outerContainer.remove();
+    //render(null, this.shadowRoot);
+    //this._outerContainer.remove();
   }
 }

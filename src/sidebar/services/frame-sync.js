@@ -1,6 +1,7 @@
 import debounce from 'lodash.debounce';
 
 import bridgeEvents from '../../shared/bridge-events';
+import Scroller from '../../the-rewrite/components/Scroller';
 import { isReply, isPublic } from '../helpers/annotation-metadata';
 import { watch } from '../util/watch';
 
@@ -211,6 +212,10 @@ export class FrameSyncService {
       bridge.on('setVisibleHighlights', state => {
         bridge.call('setVisibleHighlights', state);
       });
+
+      // FIXME: put this into a store
+      // @ts-ignore
+      window.SCROLLER = new Scroller(bridge);
     };
   }
 

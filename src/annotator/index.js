@@ -91,12 +91,14 @@ function init() {
     getConfig('the-rewrite')
   );
 
+  /*
   // FIXME: check types
   // @ts-ignore
   window_.__hypothesis.theRewriteWindow = theRewrite.ready.then(
     // @ts-ignore
     () => theRewrite.iframe.contentWindow
   );
+  */
 
   // Set up communication between this host/guest frame and the sidebar frame.
   let sidebarWindow = window_.__hypothesis.sidebarWindow;
@@ -125,6 +127,7 @@ Guest frames can only connect to sidebars in their same-origin parent frame.`
     );
   }
 
+  /*
   let theRewriteWindow = window_.__hypothesis.theRewriteWindow;
   if (theRewriteWindow) {
     const theRewriteOrigin = new URL(theRewriteLinkElement.href).origin;
@@ -132,6 +135,7 @@ Guest frames can only connect to sidebars in their same-origin parent frame.`
       guest.crossframe.connectToSidebar(frame, theRewriteOrigin)
     );
   }
+  */
 
   sidebarLinkElement.addEventListener('destroy', () => {
     delete window_.__hypothesis;

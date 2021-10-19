@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import useRootThread from './hooks/use-root-thread';
 import { withServices } from '../service-context';
@@ -11,11 +11,18 @@ import LoginPromptPanel from './LoginPromptPanel';
 import SelectionTabs from './SelectionTabs';
 import SidebarContentError from './SidebarContentError';
 import ThreadList from './ThreadList';
+import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
+
+/**
+ * @typedef {import('./Thread').Thread} Thread
+ * @typedef {{[key: string]:Thread[]}} Bucket
+ */
 
 /**
  * @typedef SidebarViewProps
  * @prop {() => any} onLogin
  * @prop {() => any} onSignUp
+ * @prop {import('../../shared/bridge').Bridge} bridge
  * @prop {import('../services/frame-sync').FrameSyncService} frameSync
  * @prop {import('../services/load-annotations').LoadAnnotationsService} loadAnnotationsService
  * @prop {import('../services/streamer').StreamerService} streamer
@@ -27,6 +34,7 @@ import ThreadList from './ThreadList';
  * @param {SidebarViewProps} props
  */
 function SidebarView({
+  bridge,
   frameSync,
   onLogin,
   onSignUp,
@@ -34,6 +42,65 @@ function SidebarView({
   streamer,
 }) {
   const rootThread = useRootThread();
+
+  const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
+  useEffect(() => {
+    const /** @type {Bucket} */ localBuckets = {};
+    // REVIEW temporary solution without
+    // communication over bridge
+    const /** @type {(s: string)=>string} */ splitAtParent = xpath => {
+        return xpath.split('/').slice(0, 4).join('/');
+      };
+
+    const children = [...rootThread.children];
+
+    /**
+     * @param {Thread} t
+     */
+    function getStartTextPosition(t) {
+      const annotation = t.annotation;
+      let start = 0;
+      if (annotation) {
+        const selector = annotation.target[0].selector || [];
+        for (let s of selector) {
+          if (s.type === 'TextPositionSelector') {
+            start = s.start;
+          }
+        }
+      }
+      return start;
+    }
+
+    children.sort((a, b) => getStartTextPosition(a) - getStartTextPosition(b));
+
+    for (let c of children) {
+      if (c.annotation) {
+        const selector = c.annotation.target[0].selector || [];
+        for (let s of selector) {
+          if (s.type === 'RangeSelector') {
+            const { startContainer } = s;
+            const b = splitAtParent(startContainer);
+            if (!localBuckets[b]) {
+              localBuckets[b] = [];
+            }
+            localBuckets[b].push(c);
+          }
+        }
+      }
+    }
+
+    bridge.call('theRewriteBuckets', localBuckets);
+    setBuckets(localBuckets);
+    console.log('localbuckets are', localBuckets);
+  }, [bridge, rootThread.children.length]); // REVIEW it is okay for now
+
+  useEffect(() => {
+    // @ts-ignore
+    if (window.SCROLLER) {
+      // @ts-ignore
+      window.SCROLLER.onBuckets(buckets);
+    }
+  }, [buckets]);
 
   // Store state values
   const store = useStoreProxy();
@@ -151,13 +218,17 @@ function SidebarView({
         <SidebarContentError errorType="group" onLoginRequest={onLogin} />
       )}
       {showTabs && <SelectionTabs isLoading={isLoading} />}
-      <ThreadList threads={rootThread.children} />
+      <TheRewriteView threads={rootThread.children} buckets={buckets} />
+      {
+        //<ThreadList threads={rootThread.children} />
+      }
       {showLoggedOutMessage && <LoggedOutMessage onLogin={onLogin} />}
     </div>
   );
 }
 
 export default withServices(SidebarView, [
+  'bridge',
   'frameSync',
   'loadAnnotationsService',
   'streamer',
