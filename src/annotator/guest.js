@@ -17,6 +17,7 @@ import { SelectionObserver } from './selection-observer';
 import { normalizeURI } from './util/url';
 import { ListenerCollection } from './util/listener-collection';
 import { tagsToSingleClass } from './../the-rewrite/annotation-utils';
+import { disableLayout, enableLayout } from '../the-rewrite/dom-utils';
 
 /**
  * @typedef {import('./util/emitter').EventBus} EventBus
@@ -201,6 +202,9 @@ export default class Guest {
     // the document content.
     /** @param {Element} element */
     const maybeCloseSidebar = element => {
+      if (this.isTheRewriteOpen) {
+        return;
+      }
       if (this._sideBySideActive) {
         // Don't hide the sidebar if event was disabled because the sidebar
         // doesn't overlap the content.
@@ -291,12 +295,17 @@ export default class Guest {
       annotations.map(annotation => this.anchor(annotation));
     });
 
-    this.crossframe.on('updateSuperscripts', /** @type {string[]} */superscripts => {
-      const nodes = Array.from(document.querySelectorAll('[data-id]'));
-      nodes.forEach( /** type {HTMLElement} */ n => {
-        n.dataset.sup = superscripts.indexOf(n.dataset.id);
-      });
-    });
+    this.crossframe.on(
+      'updateSuperscripts',
+      /** @type {string[]} */ superscripts => {
+        const nodes = Array.from(document.querySelectorAll('[data-id]'));
+        nodes.forEach(
+          /** type {HTMLElement} */ n => {
+            n.dataset.sup = superscripts.indexOf(n.dataset.id);
+          }
+        );
+      }
+    );
   }
 
   _connectSidebarEvents() {
@@ -349,6 +358,15 @@ export default class Guest {
     // Handler for controls on the sidebar
     this.crossframe.on('setVisibleHighlights', showHighlights => {
       this.setVisibleHighlights(showHighlights);
+    });
+
+    this.crossframe.on('theRewriteOpened', () => {
+      enableLayout();
+      this.isTheRewriteOpen = true;
+    });
+    this.crossframe.on('theRewriteClosed', () => {
+      disableLayout();
+      this.isTheRewriteOpen = false;
     });
   }
 
@@ -427,7 +445,11 @@ export default class Guest {
         return;
       }
       const highlights = /** @type {AnnotationHighlight[]} */ (
-        highlightRange(range, `hypothesis-highlight ${cssClass}`, annotation.$tag.split('t')[1])
+        highlightRange(
+          range,
+          `hypothesis-highlight ${cssClass}`,
+          annotation.$tag.split('t')[1]
+        )
       );
       highlights.forEach(h => {
         h._annotation = anchor.annotation;

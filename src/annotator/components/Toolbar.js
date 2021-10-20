@@ -104,11 +104,6 @@ export default function Toolbar({
       {!useMinimalControls && (
         <div className="Toolbar__buttonbar">
           <ToolbarButton
-            label="The Rewrite"
-            icon="the-rewrite"
-            onClick={openTheRewrite}
-          />
-          <ToolbarButton
             label="Show highlights"
             icon={showHighlights ? 'show' : 'hide'}
             selected={showHighlights}
