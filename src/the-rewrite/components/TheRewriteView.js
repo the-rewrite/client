@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { withServices } from '../../sidebar/service-context';
 
 import TheRewriteGrid from './TheRewriteGrid';
+import TheRewriteFilterWidget from './TheRewriteFilterWidget';
 import Scroller from './Scroller';
 
 /**
@@ -63,6 +64,7 @@ function TheRewriteView({ threads, buckets, bridge }) {
 
   return (
     <div className="TheRewriteView">
+      <TheRewriteFilterWidget />
       <TheRewriteGrid bridge={bridge} buckets={buckets} />
     </div>
   );

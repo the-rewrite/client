@@ -1,5 +1,6 @@
 @use './colors' as c;
 @use './fonts' as f;
+@use './filterWidget';
 
 html.the-rewrite .HypothesisApp {
   overflow: unset;
