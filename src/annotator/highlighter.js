@@ -254,7 +254,8 @@ export function highlightRange(
     const highlightEl = document.createElement('hypothesis-highlight');
     highlightEl.className = cssClass;
 
-    // Add annotation id to element for later superscript addition
+    // Add superscript number to dataset for later display
+    // via css
     if (sup) highlightEl.dataset.sup = sup;
 
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);

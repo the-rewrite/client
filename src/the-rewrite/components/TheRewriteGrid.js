@@ -122,9 +122,8 @@ function GridItemReplies({ children }) {
  * @prop {Thread} thread
  * @prop {Bridge} bridge
  * @param {GridItemProps} props
- * @param {string[]} sortedIds
  */
-function GridItem({ bridge, thread, sortedIds }) {
+function GridItem({ bridge, thread }) {
   if (!thread.annotation) {
     return null;
   }
@@ -133,7 +132,7 @@ function GridItem({ bridge, thread, sortedIds }) {
   const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
   const text = annotation.text.substring(0, 1000);
-  const superscript = sortedIds.indexOf(thread.annotation.id);
+  const superscript = annotation.$tag.split('t')[1];
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
   const lang = 'en';
@@ -175,15 +174,14 @@ function GridItem({ bridge, thread, sortedIds }) {
  * @prop {Bridge} bridge
  * @prop {string} xpath
  * @prop {Thread[]} bucket
- * @prop {string[]} sortedIds
  */
 
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ xpath, bridge, bucket, sortedIds }) {
+function GridRow({ xpath, bridge, bucket }) {
   const items = bucket.map(a => (
-    <GridItem key={a.id} bridge={bridge} thread={a} sortedIds={sortedIds} />
+    <GridItem key={a.id} bridge={bridge} thread={a} />
   ));
   return (
     <div data-xpath={xpath} className="rewrite-grid-row">
@@ -198,13 +196,12 @@ function GridRow({ xpath, bridge, bucket, sortedIds }) {
  * @typedef TheRewriteGridProps
  * @prop {Bridge} bridge
  * @prop {Bucket} buckets
- * @prop {string[]} sortedIds
  */
 
 /**
  * @param {TheRewriteGridProps} props
  */
-function TheRewriteGrid({ bridge, buckets, sortedIds }) {
+function TheRewriteGrid({ bridge, buckets }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
@@ -213,13 +210,7 @@ function TheRewriteGrid({ bridge, buckets, sortedIds }) {
   // then we use the index to get the corresponding values
   // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
-    <GridRow
-      key={b}
-      sortedIds={sortedIds}
-      xpath={b}
-      bridge={bridge}
-      bucket={bucketValues[i]}
-    />
+    <GridRow key={b} xpath={b} bridge={bridge} bucket={bucketValues[i]} />
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
