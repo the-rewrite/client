@@ -12,7 +12,6 @@ import { withServices } from '../service-context';
 
 import AnnotationView from './AnnotationView';
 import SidebarView from './SidebarView';
-import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
 import StreamView from './StreamView';
 
 import HelpPanel from './HelpPanel';
@@ -199,9 +198,6 @@ function HypothesisApp({ auth, bridge, settings, session, toastMessenger }) {
           <main>
             {route === 'annotation' && <AnnotationView onLogin={login} />}
             {route === 'notebook' && <NotebookView />}
-            {route === 'the-rewrite' && (
-              <TheRewriteView onLogin={login} onSignUp={signUp} />
-            )}
             {route === 'stream' && <StreamView />}
             {route === 'sidebar' && (
               <SidebarView onLogin={login} onSignUp={signUp} />

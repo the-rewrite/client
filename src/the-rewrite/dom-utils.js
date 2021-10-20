@@ -1,11 +1,58 @@
 const BODY_ID = 'theRewrite--body-container';
 
 export function enableLayout() {
+  // Change the style of the main document
   document.body.style.cssText = `
       max-width: 100%;
       margin-right: 50%;
-      padding: 20px;
+      padding: 50px;
     `;
+
+  // Change the style of the shadow root containing the sidebar
+  const shadowRoot = document.querySelector('hypothesis-sidebar')?.shadowRoot;
+  if (shadowRoot) {
+    const annotatorFrame = shadowRoot.querySelector('.annotator-frame');
+    if (annotatorFrame) {
+      /** @type{HTMLElement} */ (annotatorFrame).style.cssText = `
+        width: 50%;
+        margin-left: -50%;
+      `;
+    }
+  }
+}
+
+export function disableLayout() {
+  // Change the style of the main document
+  document.body.style.cssText = ``;
+
+  // Change the style of the shadow root containing the sidebar
+  const shadowRoot = document.querySelector('hypothesis-sidebar')?.shadowRoot;
+  if (shadowRoot) {
+    const annotatorFrame = shadowRoot.querySelector('.annotator-frame');
+    if (annotatorFrame) {
+      /** @type{HTMLElement} */ (annotatorFrame).style.cssText = ``;
+    }
+  }
+}
+
+export function enableLayoutInSidebar() {
+  document.documentElement.style.cssText = `height: auto`;
+  const content = document.querySelector('.HypothesisApp__content');
+  if (content) {
+    /** @type{HTMLElement} */ (content).style.cssText = `
+      max-width: 100%;
+      margin-right: 50%;
+      padding: 50px;
+    `;
+  }
+}
+
+export function disableLayoutInSidebar() {
+  document.documentElement.style.cssText = ``;
+  const content = document.querySelector('.HypothesisApp__content');
+  if (content) {
+    /** @type{HTMLElement} */ (content).style.cssText = ``;
+  }
 }
 
 /**

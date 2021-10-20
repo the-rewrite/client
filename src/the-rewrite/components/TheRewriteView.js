@@ -4,6 +4,7 @@ import { withServices } from '../../sidebar/service-context';
 
 import TheRewriteGrid from './TheRewriteGrid';
 import Scroller from './Scroller';
+import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
@@ -31,7 +32,7 @@ function TheRewriteView({ threads, buckets, bridge }) {
   //}, [bridge]);
 
   // Add `the-rewrite` class to the HTML root element
-  document.documentElement.classList.add('the-rewrite');
+  // document.documentElement.classList.add('the-rewrite');
 
   // REVIEW correct use of setState?
   useEffect(() => {
@@ -41,33 +42,16 @@ function TheRewriteView({ threads, buckets, bridge }) {
     setSortedIds(superscripts);
   }, [threads]);
 
-  // The following two blocks are used to setup communication
-  // between this view, that is run in the its own iframe context,
-  // and the code that is run in the context of the annotated text.
   useEffect(() => {
-    // first we signal to our parent that the view is ready
-    // please see line 53 in index.js and src/annotator/index.js
-    window.parent.postMessage({ type: 'theRewriteReady' }, '*');
+    console.log('mount', bridge);
+    enableLayoutInSidebar();
+    bridge.call('theRewriteOpened');
+    return () => {
+      console.log('unmount');
+      disableLayoutInSidebar();
+      bridge.call('theRewriteClosed');
+    };
   }, []);
-
-  useEffect(() => {
-    // as soon as the we connect in src/annotator/index.js
-    // the bridge is going to post a 'hypothesisGuestReady'
-    // message and finish the connection here
-    window.addEventListener('message', e => {
-      if (e.data?.type !== 'hypothesisGuestReady') {
-        return;
-      }
-      if (e.ports.length === 0) {
-        console.warn(
-          'Ignoring `hypothesisGuestReady` message without a MessagePort'
-        );
-        return;
-      }
-      const port = e.ports[0];
-      bridge.createChannel(port);
-    });
-  }, [bridge]);
 
   return (
     <div className="TheRewriteView">

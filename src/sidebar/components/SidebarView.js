@@ -12,6 +12,7 @@ import SelectionTabs from './SelectionTabs';
 import SidebarContentError from './SidebarContentError';
 import ThreadList from './ThreadList';
 import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
+import { enableLayout } from '../../the-rewrite/dom-utils';
 
 /**
  * @typedef {import('./Thread').Thread} Thread
@@ -42,6 +43,11 @@ function SidebarView({
   streamer,
 }) {
   const rootThread = useRootThread();
+  const [enableTheRewrite, setEnableTheRewrite] = useState(false);
+
+  const handleEnableTheRewrite = () => {
+    setEnableTheRewrite(!enableTheRewrite);
+  };
 
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
   useEffect(() => {
@@ -218,10 +224,19 @@ function SidebarView({
         <SidebarContentError errorType="group" onLoginRequest={onLogin} />
       )}
       {showTabs && <SelectionTabs isLoading={isLoading} />}
-      <TheRewriteView threads={rootThread.children} buckets={buckets} />
-      {
-        //<ThreadList threads={rootThread.children} />
-      }
+      <label>
+        The Rewrite{' '}
+        <input
+          checked={enableTheRewrite}
+          onChange={handleEnableTheRewrite}
+          type="checkbox"
+        />
+      </label>
+      {enableTheRewrite ? (
+        <TheRewriteView threads={rootThread.children} buckets={buckets} />
+      ) : (
+        <ThreadList threads={rootThread.children} />
+      )}
       {showLoggedOutMessage && <LoggedOutMessage onLogin={onLogin} />}
     </div>
   );
