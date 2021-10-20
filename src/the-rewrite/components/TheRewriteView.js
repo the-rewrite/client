@@ -24,7 +24,6 @@ import Scroller from './Scroller';
  * @param {TheRewriteViewProps} props
  */
 function TheRewriteView({ threads, buckets, bridge }) {
-  const [sortedIds, setSortedIds] = useState(/** @type {string[]} */ ([]));
 
   //useEffect(() => {
   //  setScroller(new Scroller(bridge, 'antani'));
@@ -33,13 +32,6 @@ function TheRewriteView({ threads, buckets, bridge }) {
   // Add `the-rewrite` class to the HTML root element
   document.documentElement.classList.add('the-rewrite');
 
-  // REVIEW correct use of setState?
-  useEffect(() => {
-    // REVIEW: Take ids and sort them to create the superscript numbers
-    const superscripts = threads.map(a => a.id).sort();
-    bridge.call('updateSuperscripts', superscripts);
-    setSortedIds(superscripts);
-  }, [threads]);
 
   // The following two blocks are used to setup communication
   // between this view, that is run in the its own iframe context,
@@ -71,7 +63,7 @@ function TheRewriteView({ threads, buckets, bridge }) {
 
   return (
     <div className="TheRewriteView">
-      <TheRewriteGrid sortedIds={sortedIds} bridge={bridge} buckets={buckets} />
+      <TheRewriteGrid bridge={bridge} buckets={buckets} />
     </div>
   );
 }
