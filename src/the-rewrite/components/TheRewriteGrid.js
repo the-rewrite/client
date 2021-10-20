@@ -174,13 +174,12 @@ function GridItem({ bridge, thread }) {
  * @prop {Bridge} bridge
  * @prop {string} xpath
  * @prop {Thread[]} bucket
- * @prop {string[]} sortedIds
  */
 
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ xpath, bridge, bucket, sortedIds }) {
+function GridRow({ xpath, bridge, bucket }) {
   const items = bucket.map(a => (
     <GridItem key={a.id} bridge={bridge} thread={a} />
   ));
@@ -197,7 +196,6 @@ function GridRow({ xpath, bridge, bucket, sortedIds }) {
  * @typedef TheRewriteGridProps
  * @prop {Bridge} bridge
  * @prop {Bucket} buckets
- * @prop {string[]} sortedIds
  */
 
 /**
