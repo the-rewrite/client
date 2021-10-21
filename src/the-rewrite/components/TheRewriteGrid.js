@@ -189,20 +189,30 @@ function GridRow({ xpath, bridge, bucket }) {
   //const [grid, setGrid] = useState(null);
 
   useEffect(() => {
-    console.log('gridEl is', gridEl);
     if (!gridEl) {
       return;
     }
-    console.log('render row');
     const grid = new Muuri(gridEl.current, {
       layout: {
         fillGaps: true,
         horizontal: true,
       },
     });
+    grid.on('layoutEnd', items => {
+      let max = 0;
+      for (let item of items) {
+        const y = item._top + item._height;
+        if (y > max) {
+          max = y;
+        }
+      }
+      // @ts-ignore
+      // Add a bit of slack to avoid redraw
+      gridEl.current.style.height = `${max + 10}px`;
+    });
+    grid.layout(true);
 
     return () => {
-      console.log('destroy row');
       grid.destroy();
     };
   }, [gridEl, bucket]);
