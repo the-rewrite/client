@@ -2,10 +2,62 @@
 @use './fonts' as f;
 
 section#filter-widget {
-  position: sticky; // make it sticky
-  top: 10px;
+  position: sticky;
+  top: 20px;
   background: rgba(221, 221, 221, 0.75);
   backdrop-filter: blur(4px);
   font-family: 'Space Grotesk';
   z-index: 10;
+  border-radius: 2px;
+  padding: 0 f.$base;
+}
+
+section#filter-widget button {
+  font-size: f.$base;
+  line-height: f.$multp;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-radius: (f.$base * 0.25);
+  background-color: c.$white;
+  border: 1px solid c.$gray;
+  padding: 0 (f.$base * 0.5);
+  transition: all .5s linear;
+}
+
+section#filter-widget section {
+  padding: (f.$base * 0.5) 0;
+}
+
+section#filter-widget section button + button {
+  margin-left: (f.$base * 0.5);
+}
+
+section#filter-widget section div.circle {
+  width: (f.$base * f.$multp * 0.5);
+  height: (f.$base * f.$multp * 0.5);
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: f.$base * 0.25;
+}
+
+section#filter-widget section div.circle.red {
+  background-color: c.$addition-color;
+}
+
+section#filter-widget section div.circle.green {
+  background-color: c.$definition-color;
+}
+
+section#filter-widget section div.circle.yellow {
+  background-color: c.$default-color;
+}
+
+section#filter-widget button[data-state="0"] div.circle {
+  background-color: c.$gray;
+}
+
+section#filter-widget button[data-state="1"] {
+  background-color: c.$active;
+  border-color: c.$active;
+  color: c.$white;
 }

@@ -9,19 +9,19 @@ function TheRewriteFilterWidget() {
   const categoriesColors = [
     [
       'Additions',
-      CircleSymbol('green'),
+      <CircleSymbol color="green"/>,
       () => log('toggle filter Additions'),
       1,
     ],
     [
       'Definitions',
-      CircleSymbol('red'),
+      <CircleSymbol color="red"/>,
       () => log('toggle filter Definitions'),
       1,
     ],
     [
       'Corrections',
-      CircleSymbol('yellow'),
+      <CircleSymbol color="yellow"/>,
       () => log('toggle filter Corrections'),
       1,
     ],
