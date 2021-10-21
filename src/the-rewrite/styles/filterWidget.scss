@@ -1,0 +1,9 @@
+@use './colors' as c;
+@use './fonts' as f;
+
+section#filter-widget {
+  position: fixed;
+  background: rgba(221, 221, 221, 0.75);
+  backdrop-filter: blur(4px);
+  font-family: 'Space Grotesk';
+}
