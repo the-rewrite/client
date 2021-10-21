@@ -2,8 +2,10 @@
 @use './fonts' as f;
 
 section#filter-widget {
-  position: fixed;
+  position: sticky; // make it sticky
+  top: 10px;
   background: rgba(221, 221, 221, 0.75);
   backdrop-filter: blur(4px);
   font-family: 'Space Grotesk';
+  z-index: 10;
 }

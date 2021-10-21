@@ -84,7 +84,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-item .MarkdownView + p {
-  margin-top: calc(f.$base * f.$multp);
+  margin-top: (f.$base * f.$multp);
 }
 
 .rewrite-grid-item section p a {

@@ -37,11 +37,19 @@ export function disableLayout() {
 
 export function enableLayoutInSidebar() {
   document.documentElement.style.cssText = `height: auto`;
+  const outer = document.querySelector('.HypothesisApp');
+  if (outer) {
+    /** @type(HTMLElement) */ (outer).style.cssText = `
+      height: auto;
+     overflow: unset;
+    `;
+  }
+
   const content = document.querySelector('.HypothesisApp__content');
   if (content) {
     /** @type{HTMLElement} */ (content).style.cssText = `
       max-width: 100%;
-      padding: 50px;
+      padding: 10px;
     `;
   }
 }
@@ -51,6 +59,10 @@ export function disableLayoutInSidebar() {
   const content = document.querySelector('.HypothesisApp__content');
   if (content) {
     /** @type{HTMLElement} */ (content).style.cssText = ``;
+  }
+  const outer = document.querySelector('.HypothesisApp');
+  if (outer) {
+    /** @type(HTMLElement) */ (outer).style.cssText = ``;
   }
 }
 
