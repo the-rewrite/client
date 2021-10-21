@@ -10,24 +10,30 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-parent,
 .rewrite-grid-row {
-  display: flex;
+  // display: flex;
 }
 
 .rewrite-grid-parent {
+  display: flex;
   flex-direction: column;
 }
 
 .rewrite-grid-row {
-  flex-direction: row;
+  border: 1px solid magenta;
+  position: relative;
+  height: 800px;
+  //flex-direction: row;
 }
 
 .rewrite-grid-row + .rewrite-grid-row {
   margin-top: (f.$base * f.$multp * f.$multp);
 }
 
-
 .rewrite-grid-item {
-  flex: 0 0 (200px + f.$base + (f.$base/f.$multp) + 25px);
+  position: absolute;
+  width: 300px;
+  border: 1px solid purple;
+  // flex: 0 0 (200px + f.$base + (f.$base/f.$multp) + 25px);
   padding: 0 f.$base 0 (f.$base/f.$multp);
   font-family: 'crimson-text', 'Crimson Text', serif;
 }
@@ -38,12 +44,12 @@ html.the-rewrite .HypothesisApp {
   line-height: 1.618;
   font-size: 11px;
   width: 20px;
-  flex: 0 0 20px;
+  //flex: 0 0 20px;
   text-align: right;
 }
 
 .rewrite-grid-item.wide {
-  flex: 0 0 400px;
+  //flex: 0 0 400px;
 }
 
 .rewrite-grid-item section p {

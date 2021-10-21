@@ -41,7 +41,6 @@ export function enableLayoutInSidebar() {
   if (content) {
     /** @type{HTMLElement} */ (content).style.cssText = `
       max-width: 100%;
-      margin-right: 50%;
       padding: 50px;
     `;
   }

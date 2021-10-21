@@ -1,9 +1,10 @@
 //import MuuriComponent from 'muuri-react';
 
-import { useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { Fragment } from 'preact';
 import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
+import Muuri from 'muuri';
 
 /**
  *
@@ -183,8 +184,31 @@ function GridRow({ xpath, bridge, bucket }) {
   const items = bucket.map(a => (
     <GridItem key={a.id} bridge={bridge} thread={a} />
   ));
+
+  const gridEl = useRef(null);
+  //const [grid, setGrid] = useState(null);
+
+  useEffect(() => {
+    console.log('gridEl is', gridEl);
+    if (!gridEl) {
+      return;
+    }
+    console.log('render row');
+    const grid = new Muuri(gridEl.current, {
+      layout: {
+        fillGaps: true,
+        horizontal: true,
+      },
+    });
+
+    return () => {
+      console.log('destroy row');
+      grid.destroy();
+    };
+  }, [gridEl, bucket]);
+
   return (
-    <div data-xpath={xpath} className="rewrite-grid-row">
+    <div ref={gridEl} data-xpath={xpath} className="rewrite-grid-row">
       {items}
     </div>
   );
