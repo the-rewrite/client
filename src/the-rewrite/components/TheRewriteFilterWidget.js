@@ -56,13 +56,14 @@ function TheRewriteFilterWidget() {
           initalState={0}
         />
       </section>
-      <section className="ordering">
-        <FilterButton
-          text="By date"
-          initalState={1}
-          action={() => log('toggle by date')}
-        />
-      </section>
+      {/*/ FIXME: Add Dropdown buttons here */}
+      {/* <section className="ordering"> */}
+      {/*   <FilterButton */}
+      {/*     text="By date" */}
+      {/*     initalState={1} */}
+      {/*     action={() => log('toggle by date')} */}
+      {/*   /> */}
+      {/* </section> */}
     </section>
   );
 }
