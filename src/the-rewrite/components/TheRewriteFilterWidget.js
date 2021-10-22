@@ -52,7 +52,7 @@ function TheRewriteFilterWidget({ filterChange }) {
         />
         <FilterButton
           text="Page Notes"
-          action={() => log('toggle page notes')}
+          action={() => filterChange('ShowHidePageNotes')}
           initalState={0}
         />
       </section>

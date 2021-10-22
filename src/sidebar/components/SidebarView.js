@@ -43,6 +43,7 @@ function SidebarView({
   streamer,
 }) {
   const rootThread = useRootThread();
+  const store = useStoreProxy();
   const [enableTheRewrite, setEnableTheRewrite] = useState(false);
 
   const handleEnableTheRewrite = () => {
@@ -52,6 +53,7 @@ function SidebarView({
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
   const [filters, setFilters] = useState([false, false, false]); // FIXME add typedefs for functions list
   const [hideReplies, setHideReplies] = useState(false);
+  const [showPageNotes, setPageNotes] = useState(false);
 
   useEffect(() => {
     const /** @type {Bucket} */ localBuckets = {};
@@ -75,7 +77,14 @@ function SidebarView({
       }
       return include;
     });
-    console.log(filters, children.length);
+    console.log(
+      filters,
+      children.length,
+      rootThread.annotation,
+      store.getFilterValues()
+    );
+
+    console.log('rt c', rootThread.children);
 
     /**
      * @param {Thread} t
@@ -125,7 +134,6 @@ function SidebarView({
   }, [buckets]);
 
   // Store state values
-  const store = useStoreProxy();
   const focusedGroupId = store.focusedGroupId();
   const hasAppliedFilter =
     store.hasAppliedFilter() || store.hasSelectedAnnotations();
@@ -234,7 +242,7 @@ function SidebarView({
         setHideReplies(!hideReplies);
         break;
       case 'ShowHidePageNotes':
-        console.log('pn');
+        setPageNotes(!showPageNotes);
         break;
       default:
         throw new Error('No matching case branch for ' + action);
