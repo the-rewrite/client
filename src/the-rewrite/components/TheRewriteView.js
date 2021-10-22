@@ -18,6 +18,8 @@ import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
  * @prop {Thread[]} threads
  * @prop {Bucket} buckets
  * @prop {import('../../shared/bridge').Bridge} bridge
+ * @prop {function} filterCharge
+ * @prop {boolean} hideReplies
  */
 
 /**
@@ -25,7 +27,7 @@ import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
  *
  * @param {TheRewriteViewProps} props
  */
-function TheRewriteView({ threads, buckets, bridge }) {
+function TheRewriteView({ threads, buckets, bridge, filterChange, hideReplies }) {
 
   //useEffect(() => {
   //  setScroller(new Scroller(bridge, 'antani'));
@@ -48,8 +50,8 @@ function TheRewriteView({ threads, buckets, bridge }) {
 
   return (
     <div className="TheRewriteView">
-      <TheRewriteFilterWidget />
-      <TheRewriteGrid bridge={bridge} buckets={buckets} />
+      <TheRewriteFilterWidget filterChange={filterChange}/>
+      <TheRewriteGrid bridge={bridge} buckets={buckets} hideReplies={hideReplies}/>
     </div>
   );
 }

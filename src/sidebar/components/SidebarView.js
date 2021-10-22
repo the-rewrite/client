@@ -50,6 +50,9 @@ function SidebarView({
   };
 
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
+  const [filters, setFilters] = useState([false, false, false]); // FIXME add typedefs for functions list
+  const [hideReplies, setHideReplies] = useState(false);
+
   useEffect(() => {
     const /** @type {Bucket} */ localBuckets = {};
     // REVIEW temporary solution without
@@ -58,7 +61,21 @@ function SidebarView({
         return xpath.split('/').slice(0, 4).join('/');
       };
 
-    const children = [...rootThread.children];
+    // filter has to happen here
+    const children = [...rootThread.children].filter(child => {
+      let include = true;
+      if (filters[0]) {
+        include = !child.annotation?.tags.includes('annotation');
+      }
+      if (filters[1]) {
+        include = !child.annotation?.tags.includes('definition');
+      }
+      if (filters[2]) {
+        include = !child.annotation?.tags.includes('correction');
+      }
+      return include;
+    });
+    console.log(filters, children.length);
 
     /**
      * @param {Thread} t
@@ -97,8 +114,7 @@ function SidebarView({
 
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
-    console.log('localbuckets are', localBuckets);
-  }, [bridge, rootThread.children.length]); // REVIEW it is okay for now
+  }, [bridge, rootThread.children.length, filters]);
 
   useEffect(() => {
     // @ts-ignore
@@ -200,6 +216,33 @@ function SidebarView({
     store,
   ]);
 
+  const filterChange = action => {
+    console.log('filterChange: ', action);
+
+    const localFilters = [...filters];
+    switch (action) {
+      case 'AdditionsToggle':
+        localFilters[0] = !localFilters[0];
+        break;
+      case 'DefinitionsToggle':
+        localFilters[1] = !localFilters[1];
+        break;
+      case 'CorrectionsToggle':
+        localFilters[2] = !localFilters[2];
+        break;
+      case 'ShowHideReplies':
+        setHideReplies(!hideReplies);
+        break;
+      case 'ShowHidePageNotes':
+        console.log('pn');
+        break;
+      default:
+        throw new Error('No matching case branch for ' + action);
+    }
+
+    setFilters(localFilters);
+  };
+
   // Connect to the streamer when the sidebar has opened or if user is logged in
   const hasFetchedProfile = store.hasFetchedProfile();
   useEffect(() => {
@@ -233,7 +276,12 @@ function SidebarView({
         />
       </label>
       {enableTheRewrite ? (
-        <TheRewriteView threads={rootThread.children} buckets={buckets} />
+        <TheRewriteView
+          threads={rootThread.children}
+          buckets={buckets}
+          filterChange={filterChange}
+          hideReplies={hideReplies}
+        />
       ) : (
         <ThreadList threads={rootThread.children} />
       )}
