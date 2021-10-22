@@ -57,8 +57,6 @@ function SidebarView({
 
   useEffect(() => {
     const /** @type {Bucket} */ localBuckets = {};
-    // REVIEW temporary solution without
-    // communication over bridge
     const /** @type {(s: string)=>string} */ splitAtParent = xpath => {
         return xpath.split('/').slice(0, 4).join('/');
       };
@@ -77,14 +75,6 @@ function SidebarView({
       }
       return include;
     });
-    console.log(
-      filters,
-      children.length,
-      rootThread.annotation,
-      store.getFilterValues()
-    );
-
-    console.log('rt c', rootThread.children);
 
     /**
      * @param {Thread} t
@@ -120,6 +110,14 @@ function SidebarView({
         }
       }
     }
+
+    localBuckets.aaa = store.allAnnotations().filter(a => {
+      return (
+        !a.target[0].hasOwnProperty('selector') &&
+        a.group === store.focusedGroupId() &&
+        a.$orphan === false
+      );
+    });
 
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
@@ -225,8 +223,6 @@ function SidebarView({
   ]);
 
   const filterChange = action => {
-    console.log('filterChange: ', action);
-
     const localFilters = [...filters];
     switch (action) {
       case 'AdditionsToggle':
