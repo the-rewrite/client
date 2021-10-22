@@ -223,7 +223,7 @@ function SidebarView({
       {hasDirectLinkedGroupError && (
         <SidebarContentError errorType="group" onLoginRequest={onLogin} />
       )}
-      {showTabs && <SelectionTabs isLoading={isLoading} />}
+      {!enableTheRewrite && showTabs && <SelectionTabs isLoading={isLoading} />}
       <label>
         The Rewrite{' '}
         <input
