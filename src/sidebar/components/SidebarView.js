@@ -51,6 +51,7 @@ function SidebarView({
 
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
   const [filters, setFilters] = useState([false, false, false]); // FIXME add typedefs for functions list
+  const [hideReplies, setHideReplies] = useState(false);
 
   useEffect(() => {
     const /** @type {Bucket} */ localBuckets = {};
@@ -230,7 +231,7 @@ function SidebarView({
         localFilters[2] = !localFilters[2];
         break;
       case 'ShowHideReplies':
-        console.log('r');
+        setHideReplies(!hideReplies);
         break;
       case 'ShowHidePageNotes':
         console.log('pn');
@@ -279,6 +280,7 @@ function SidebarView({
           threads={rootThread.children}
           buckets={buckets}
           filterChange={filterChange}
+          hideReplies={hideReplies}
         />
       ) : (
         <ThreadList threads={rootThread.children} />

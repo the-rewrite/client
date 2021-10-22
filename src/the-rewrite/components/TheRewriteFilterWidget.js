@@ -47,7 +47,7 @@ function TheRewriteFilterWidget({ filterChange }) {
         {catButtons}
         <FilterButton
           text="Hide Replies"
-          action={() => log('toggle replies')}
+          action={() => filterChange('ShowHideReplies')}
           initalState={0}
         />
         <FilterButton

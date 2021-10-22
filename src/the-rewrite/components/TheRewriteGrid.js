@@ -122,9 +122,10 @@ function GridItemReplies({ children }) {
  * @typedef GridItemProps
  * @prop {Thread} thread
  * @prop {Bridge} bridge
+ * @prop {boolean} hideReplies
  * @param {GridItemProps} props
  */
-function GridItem({ bridge, thread }) {
+function GridItem({ bridge, thread, hideReplies }) {
   if (!thread.annotation) {
     return null;
   }
@@ -163,7 +164,7 @@ function GridItem({ bridge, thread }) {
             </p>
           )}
           <GridItemMeta bridge={bridge} annotation={annotation} />
-          <GridItemReplies children={thread.children} />
+          {!hideReplies && <GridItemReplies children={thread.children} />}
         </section>
       </div>
     </article>
@@ -175,14 +176,15 @@ function GridItem({ bridge, thread }) {
  * @prop {Bridge} bridge
  * @prop {string} xpath
  * @prop {Thread[]} bucket
+ * @prop {boolean} hideReplies
  */
 
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ xpath, bridge, bucket }) {
+function GridRow({ xpath, bridge, bucket, hideReplies }) {
   const items = bucket.map(a => (
-    <GridItem key={a.id} bridge={bridge} thread={a} />
+    <GridItem key={a.id} bridge={bridge} thread={a} hideReplies={hideReplies} />
   ));
 
   const gridEl = useRef(null);
@@ -230,12 +232,13 @@ function GridRow({ xpath, bridge, bucket }) {
  * @typedef TheRewriteGridProps
  * @prop {Bridge} bridge
  * @prop {Bucket} buckets
+ * @prop {boolean} hideReplies
  */
 
 /**
  * @param {TheRewriteGridProps} props
  */
-function TheRewriteGrid({ bridge, buckets }) {
+function TheRewriteGrid({ bridge, buckets, hideReplies }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
@@ -244,7 +247,7 @@ function TheRewriteGrid({ bridge, buckets }) {
   // then we use the index to get the corresponding values
   // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
-    <GridRow key={b} xpath={b} bridge={bridge} bucket={bucketValues[i]} />
+    <GridRow key={b} xpath={b} bridge={bridge} bucket={bucketValues[i]} hideReplies={hideReplies}/>
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
