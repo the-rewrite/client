@@ -25,7 +25,7 @@ import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
  *
  * @param {TheRewriteViewProps} props
  */
-function TheRewriteView({ threads, buckets, bridge }) {
+function TheRewriteView({ threads, buckets, bridge, filterChange }) {
 
   //useEffect(() => {
   //  setScroller(new Scroller(bridge, 'antani'));
@@ -48,7 +48,7 @@ function TheRewriteView({ threads, buckets, bridge }) {
 
   return (
     <div className="TheRewriteView">
-      <TheRewriteFilterWidget />
+      <TheRewriteFilterWidget filterChange={filterChange}/>
       <TheRewriteGrid bridge={bridge} buckets={buckets} />
     </div>
   );

@@ -4,25 +4,25 @@ function log(...args) {
   console.log(window.location.protocol, ...args);
 }
 
-function TheRewriteFilterWidget() {
+function TheRewriteFilterWidget({ filterChange }) {
   // REVIEW: Get these values from somewhere
   const categoriesColors = [
     [
       'Additions',
-      <CircleSymbol color="green"/>,
-      () => log('toggle filter Additions'),
+      <CircleSymbol color="green" />,
+      () => filterChange('AdditionsToggle'),
       1,
     ],
     [
       'Definitions',
-      <CircleSymbol color="red"/>,
-      () => log('toggle filter Definitions'),
+      <CircleSymbol color="red" />,
+      () => filterChange('DefinitionsToggle'),
       1,
     ],
     [
       'Corrections',
-      <CircleSymbol color="yellow"/>,
-      () => log('toggle filter Corrections'),
+      <CircleSymbol color="yellow" />,
+      () => filterChange('CorrectionsToggle'),
       1,
     ],
   ];
