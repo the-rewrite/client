@@ -50,7 +50,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-item.wide {
-  //flex: 0 0 400px;
+  width: (400px + f.$base + (f.$base/f.$multp) + (20px + f.$base));
 }
 
 .rewrite-grid-item section p {
