@@ -6,6 +6,7 @@ import TheRewriteGrid from './TheRewriteGrid';
 import TheRewriteFilterWidget from './TheRewriteFilterWidget';
 import Scroller from './Scroller';
 import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
+import { dragToScroll } from '../scroll-utils';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
@@ -27,31 +28,38 @@ import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
  *
  * @param {TheRewriteViewProps} props
  */
-function TheRewriteView({ threads, buckets, bridge, filterChange, hideReplies }) {
-
-  //useEffect(() => {
-  //  setScroller(new Scroller(bridge, 'antani'));
-  //}, [bridge]);
-
+function TheRewriteView({
+  threads,
+  buckets,
+  bridge,
+  filterChange,
+  hideReplies,
+}) {
   // Add `the-rewrite` class to the HTML root element
   // document.documentElement.classList.add('the-rewrite');
-
 
   useEffect(() => {
     console.log('mount', bridge);
     enableLayoutInSidebar();
+    //@ts-ignore
+    const unsubscribe = dragToScroll(document.documentElement);
     bridge.call('theRewriteOpened');
     return () => {
       console.log('unmount');
       disableLayoutInSidebar();
       bridge.call('theRewriteClosed');
+      unsubscribe();
     };
   }, []);
 
   return (
     <div className="TheRewriteView">
-      <TheRewriteFilterWidget filterChange={filterChange}/>
-      <TheRewriteGrid bridge={bridge} buckets={buckets} hideReplies={hideReplies}/>
+      <TheRewriteFilterWidget filterChange={filterChange} />
+      <TheRewriteGrid
+        bridge={bridge}
+        buckets={buckets}
+        hideReplies={hideReplies}
+      />
     </div>
   );
 }

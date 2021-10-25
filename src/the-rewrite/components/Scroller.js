@@ -14,17 +14,17 @@ export default class Scroller {
    * @typedef {import('../../shared/bridge').Bridge} Bridge
    *
    * @param {Bridge} bridge -
-   * @param {string} tag -
+   * @param {boolean} passive -
    */
-  constructor(bridge, tag = '') {
+  constructor(bridge, passive = false) {
     /**
      * Un-styled shadow host for the notebook content.
      * This isolates the notebook from the page's styles.
      */
     this.bridge = bridge;
+    this.passive = passive;
     this.isScrolling = false;
     this.stopScrolling = () => {};
-    this.tag = tag;
 
     /** @type {HTMLElement[]}*/
     this.visibleAnnotations = [];
@@ -35,11 +35,16 @@ export default class Scroller {
       this.onScrollToBucket.bind(this)
     );
 
-    window.addEventListener('scroll', this.onScroll.bind(this));
+    if (!passive) {
+      window.addEventListener('scroll', this.onScroll.bind(this));
+    }
   }
 
   /** @param {Bucket} buckets */
   onBuckets(buckets) {
+    if (this.passive) {
+      return;
+    }
     const xpaths = Object.keys(buckets);
     this.disconnectObserver();
     this.disconnectObserver = observeIntersections(
@@ -118,7 +123,9 @@ export default class Scroller {
   }
 
   destroy() {
-    this.disconnectObserver();
-    window.removeEventListener('scroll', this.onScroll.bind(this));
+    if (!passive) {
+      this.disconnectObserver();
+      window.removeEventListener('scroll', this.onScroll.bind(this));
+    }
   }
 }

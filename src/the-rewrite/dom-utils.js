@@ -40,7 +40,6 @@ export function enableLayoutInSidebar() {
   const outer = document.querySelector('.HypothesisApp');
   if (outer) {
     /** @type(HTMLElement) */ (outer).style.cssText = `
-      height: auto;
      overflow: unset;
     `;
   }

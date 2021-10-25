@@ -71,3 +71,52 @@ export default function jump(target, options = {}) {
     run = false;
   };
 }
+
+/**
+ * @param {HTMLElement} element
+ */
+export function dragToScroll(element) {
+  element.style.cursor = 'grab';
+
+  let pos = { top: 0, left: 0, x: 0, y: 0 };
+
+  const mouseDownHandler = function (e) {
+    console.log('mousedown', e);
+    element.style.cursor = 'grabbing';
+    element.style.userSelect = 'none';
+
+    pos = {
+      left: element.scrollLeft,
+      top: element.scrollTop,
+      // Get the current mouse position
+      x: e.clientX,
+      y: e.clientY,
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  };
+
+  const mouseMoveHandler = function (e) {
+    // How far the mouse has been moved
+    const dx = e.clientX - pos.x;
+    const dy = e.clientY - pos.y;
+
+    // Scroll the element
+    element.scrollTop = pos.top - dy;
+    element.scrollLeft = pos.left - dx;
+  };
+
+  const mouseUpHandler = function () {
+    console.log('mouseup');
+    element.style.cursor = 'grab';
+    element.style.removeProperty('user-select');
+
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+
+  // Attach the handler
+  element.addEventListener('mousedown', mouseDownHandler);
+  return () => element.removeEventListener('mousedown', mouseDownHandler);
+}

@@ -215,7 +215,7 @@ export class FrameSyncService {
 
       // FIXME: put this into a store
       // @ts-ignore
-      window.SCROLLER = new Scroller(bridge);
+      window.SCROLLER = new Scroller(bridge, true);
     };
   }
 
