@@ -36,6 +36,10 @@ html.the-rewrite .HypothesisApp {
   font-family: 'crimson-text', 'Crimson Text', serif;
 }
 
+.rewrite-hide-item {
+  opacity: 0.5;
+}
+
 .rewrite-grid-item .number {
   font-family: 'Space Grotesk', sans-serif;
   margin: 0 f.$base 0 0;

@@ -62,7 +62,7 @@ function SidebarView({
       };
 
     // filter has to happen here
-    const children = [...rootThread.children].filter(child => {
+    const children = [...rootThread.children].map(child => {
       let include = true;
       if (filters[0]) {
         include = !child.annotation?.tags.includes('annotation');
@@ -73,7 +73,10 @@ function SidebarView({
       if (filters[2]) {
         include = !child.annotation?.tags.includes('correction');
       }
-      return include;
+      //@ts-ignore
+      child.include = include;
+      return child;
+      //return include;
     });
 
     /**

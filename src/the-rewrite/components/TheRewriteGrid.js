@@ -146,7 +146,9 @@ function GridItem({ bridge, thread, hideReplies }) {
   return (
     <article
       id={annotation.id}
-      className={`rewrite-grid-item outer ${isWide ? 'wide' : ''}`}
+      className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${
+        thread.include ? '' : 'rewrite-hide-item'
+      }`}
     >
       <div className="inner" lang={lang}>
         <p className="number">{superscript}</p>
@@ -247,7 +249,13 @@ function TheRewriteGrid({ bridge, buckets, hideReplies }) {
   // then we use the index to get the corresponding values
   // from the bucketValues and pass these as a prop down
   const rows = (Object.keys(buckets) || []).map((b, i) => (
-    <GridRow key={b} xpath={b} bridge={bridge} bucket={bucketValues[i]} hideReplies={hideReplies}/>
+    <GridRow
+      key={b}
+      xpath={b}
+      bridge={bridge}
+      bucket={bucketValues[i]}
+      hideReplies={hideReplies}
+    />
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
