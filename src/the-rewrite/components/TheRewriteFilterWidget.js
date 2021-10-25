@@ -50,11 +50,12 @@ function TheRewriteFilterWidget({ filterChange }) {
           action={() => filterChange('ShowHideReplies')}
           initalState={0}
         />
-        <FilterButton
-          text="Page Notes"
-          action={() => filterChange('ShowHidePageNotes')}
-          initalState={0}
-        />
+        { /* FIXME: Add PAGENOTES button */ }
+        {/* <FilterButton */}
+        {/*   text="Page Notes" */}
+        {/*   action={() => filterChange('ShowHidePageNotes')} */}
+        {/*   initalState={0} */}
+        {/* /> */}
       </section>
       {/*/ FIXME: Add Dropdown buttons here */}
       {/* <section className="ordering"> */}

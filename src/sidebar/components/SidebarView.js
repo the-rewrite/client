@@ -111,13 +111,14 @@ function SidebarView({
       }
     }
 
-    localBuckets.aaa = store.allAnnotations().filter(a => {
-      return (
-        !a.target[0].hasOwnProperty('selector') &&
-        a.group === store.focusedGroupId() &&
-        a.$orphan === false
-      );
-    });
+    // FIXME: PAGENOTES
+    // localBuckets.aaa = store.allAnnotations().filter(a => {
+    //   return (
+    //     !a.target[0].hasOwnProperty('selector') &&
+    //     a.group === store.focusedGroupId() &&
+    //     a.$orphan === false
+    //   );
+    // });
 
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
@@ -237,9 +238,9 @@ function SidebarView({
       case 'ShowHideReplies':
         setHideReplies(!hideReplies);
         break;
-      case 'ShowHidePageNotes':
-        setPageNotes(!showPageNotes);
-        break;
+      // case 'ShowHidePageNotes':
+      //   setPageNotes(!showPageNotes);
+      //   break;
       default:
         throw new Error('No matching case branch for ' + action);
     }
