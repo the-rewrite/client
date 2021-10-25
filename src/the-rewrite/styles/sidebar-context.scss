@@ -20,10 +20,8 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-row {
-  border: 1px solid magenta;
   position: relative;
   height: 800px;
-  //flex-direction: row;
 }
 
 .rewrite-grid-row + .rewrite-grid-row {
@@ -32,20 +30,18 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-item {
   position: absolute;
-  width: 300px;
-  border: 1px solid purple;
-  // flex: 0 0 (200px + f.$base + (f.$base/f.$multp) + 25px);
+  width: (200px + f.$base + (f.$base/f.$multp) + (20px + f.$base));
+  margin: 0 (f.$base * f.$multp) (f.$base * f.$multp) 0;
   padding: 0 f.$base 0 (f.$base/f.$multp);
   font-family: 'crimson-text', 'Crimson Text', serif;
 }
 
 .rewrite-grid-item .number {
   font-family: 'Space Grotesk', sans-serif;
-  margin: 0 5px 0 0;
+  margin: 0 f.$base 0 0;
   line-height: 1.618;
   font-size: 11px;
-  width: 20px;
-  //flex: 0 0 20px;
+  flex: 0 0 20px;
   text-align: right;
 }
 
@@ -68,7 +64,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-item section .MarkdownView p + p {
-  margin-top: 0.5em;
+  margin-top: (f.$base * f.$multp) * 0.5;
 }
 
 .rewrite-grid-item section .MarkdownView blockquote {
@@ -84,7 +80,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-item .MarkdownView + p {
-  margin-top: (f.$base * f.$multp);
+  margin-top: (f.$base * f.$multp) * 0.5;
 }
 
 .rewrite-grid-item section p a {
@@ -93,9 +89,13 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-item section ul {
-  margin-top: calc(f.$base * f.$multp);
-  width: 80%;
-  margin-left: 20%;
+  margin-top: (f.$base * f.$multp) * 0.5;
+  width: 85%;
+  margin-left: 15%;
+}
+
+.rewrite-grid-item section ul li + li {
+  margin-top: (f.$base * f.$multp) * 0.5;
 }
 
 .rewrite-grid-item .inner {
