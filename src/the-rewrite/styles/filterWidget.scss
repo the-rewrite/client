@@ -7,7 +7,7 @@ section#filter-widget {
   background: rgba(221, 221, 221, 0.75);
   backdrop-filter: blur(4px);
   font-family: 'Space Grotesk';
-  z-index: 10;
+  z-index: 4;
   border-radius: (f.$base * 0.25);
   padding: 0 f.$base;
 }
@@ -21,14 +21,14 @@ section#filter-widget button {
   background-color: c.$white;
   border: 1px solid c.$gray;
   padding: 2px (f.$base * 0.5) 0 (f.$base * 0.5);
-  transition: color 0.15s linear, all .3s linear;
+  transition: color 0.15s linear, all 0.3s linear;
 }
 
-section#filter-widget button.with-symbol[data-state="0"] {
+section#filter-widget button.with-symbol[data-state='0'] {
   color: c.$gray;
 }
 
-section#filter-widget button.with-symbol[data-state="1"] {
+section#filter-widget button.with-symbol[data-state='1'] {
   background-color: c.$white;
   border-color: c.$gray;
   color: #000;
@@ -53,7 +53,7 @@ section#filter-widget section div.circle {
   border-radius: 50%;
   display: inline-block;
   margin-right: f.$base * 0.25;
-  transition: all .3s linear;
+  transition: all 0.3s linear;
 }
 
 section#filter-widget section div.circle.red {
@@ -68,11 +68,11 @@ section#filter-widget section div.circle.yellow {
   background-color: c.$default-color;
 }
 
-section#filter-widget button[data-state="0"] div.circle {
+section#filter-widget button[data-state='0'] div.circle {
   background-color: c.$gray;
 }
 
-section#filter-widget button[data-state="1"] {
+section#filter-widget button[data-state='1'] {
   background-color: c.$active;
   border-color: c.$active;
   color: c.$white;
