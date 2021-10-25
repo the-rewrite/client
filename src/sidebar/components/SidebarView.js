@@ -13,6 +13,7 @@ import SidebarContentError from './SidebarContentError';
 import ThreadList from './ThreadList';
 import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
 import { enableLayout } from '../../the-rewrite/dom-utils';
+import { tagsToSingleClass } from '../../the-rewrite/annotation-utils';
 
 /**
  * @typedef {import('./Thread').Thread} Thread
@@ -65,13 +66,13 @@ function SidebarView({
     const children = [...rootThread.children].map(child => {
       let include = true;
       if (filters[0]) {
-        include = !child.annotation?.tags.includes('annotation');
+        include = !(tagsToSingleClass(child.annotation.tags) === 'addition');
       }
       if (filters[1]) {
-        include = !child.annotation?.tags.includes('definition');
+        include &&= !(tagsToSingleClass(child.annotation.tags) === 'definition');
       }
       if (filters[2]) {
-        include = !child.annotation?.tags.includes('correction');
+        include &&= !(tagsToSingleClass(child.annotation.tags) === 'correction');
       }
       //@ts-ignore
       child.include = include;
