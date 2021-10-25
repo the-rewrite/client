@@ -34,7 +34,7 @@
 
 @keyframes fade {
   50% {
-    background: tomato;
+    background: #c6e4fd;
   }
   0%,
   100% {
@@ -44,11 +44,14 @@
 
 /* HIGHLIGHTS */
 .hypothesis-highlights-always-on {
-
   .hypothesis-highlight {
     background-color: unset;
     position: relative;
-    background-image: linear-gradient(to right top,c.$default-color 0,c.$default-color 100%);
+    background-image: linear-gradient(
+      to right top,
+      c.$default-color 0,
+      c.$default-color 100%
+    );
     background-size: 100% 20%;
     background-repeat: repeat-x;
     background-position: bottom;
@@ -71,14 +74,20 @@
   }
 
   .hypothesis-highlight.definition {
-    background-image: linear-gradient(to right top,c.$definition-color 0,c.$definition-color 100%);
-
+    background-image: linear-gradient(
+      to right top,
+      c.$definition-color 0,
+      c.$definition-color 100%
+    );
   }
 
   .hypothesis-highlight.addition {
-    background-image: linear-gradient(to right top,c.$addition-color 0,c.$addition-color 100%);
+    background-image: linear-gradient(
+      to right top,
+      c.$addition-color 0,
+      c.$addition-color 100%
+    );
   }
-
 
   .hypothesis-highlight > .hypothesis-highlight {
     background-position: left 0 bottom 20%;

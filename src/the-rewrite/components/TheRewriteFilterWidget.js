@@ -9,13 +9,13 @@ function TheRewriteFilterWidget({ filterChange }) {
   const categoriesColors = [
     [
       'Additions',
-      <CircleSymbol color="green" />,
+      <CircleSymbol color="red" />,
       () => filterChange('AdditionsToggle'),
       1,
     ],
     [
       'Definitions',
-      <CircleSymbol color="red" />,
+      <CircleSymbol color="green" />,
       () => filterChange('DefinitionsToggle'),
       1,
     ],
@@ -50,7 +50,7 @@ function TheRewriteFilterWidget({ filterChange }) {
           action={() => filterChange('ShowHideReplies')}
           initalState={0}
         />
-        { /* FIXME: Add PAGENOTES button */ }
+        {/* FIXME: Add PAGENOTES button */}
         {/* <FilterButton */}
         {/*   text="Page Notes" */}
         {/*   action={() => filterChange('ShowHidePageNotes')} */}

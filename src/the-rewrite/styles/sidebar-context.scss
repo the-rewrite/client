@@ -25,7 +25,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-grid-row + .rewrite-grid-row {
-  margin-top: (f.$base * f.$multp * f.$multp);
+  margin-top: (f.$base * f.$multp * f.$multp) * 5;
 }
 
 .rewrite-grid-item {
@@ -37,7 +37,7 @@ html.the-rewrite .HypothesisApp {
 }
 
 .rewrite-hide-item {
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .rewrite-grid-item .number {
@@ -124,7 +124,7 @@ html.the-rewrite .HypothesisApp {
 
 @keyframes fade {
   50% {
-    background: tomato;
+    background: #c6e4fd;
   }
   0%,
   100% {

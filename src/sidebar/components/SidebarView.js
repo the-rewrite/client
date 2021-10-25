@@ -65,13 +65,13 @@ function SidebarView({
     const children = [...rootThread.children].map(child => {
       let include = true;
       if (filters[0]) {
-        include = !child.annotation?.tags.includes('annotation');
+        include = !child.annotation?.tags.includes('addition');
       }
       if (filters[1]) {
-        include = !child.annotation?.tags.includes('definition');
+        include &&= !child.annotation?.tags.includes('definition');
       }
       if (filters[2]) {
-        include = !child.annotation?.tags.includes('correction');
+        include &&= !child.annotation?.tags.includes('correction');
       }
       //@ts-ignore
       child.include = include;

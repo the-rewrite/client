@@ -41,6 +41,7 @@ export function enableLayoutInSidebar() {
   if (outer) {
     /** @type(HTMLElement) */ (outer).style.cssText = `
      overflow: unset;
+     background: unset;
     `;
   }
 
