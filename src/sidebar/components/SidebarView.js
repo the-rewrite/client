@@ -43,6 +43,7 @@ function SidebarView({
   streamer,
 }) {
   const rootThread = useRootThread();
+  const store = useStoreProxy();
   const [enableTheRewrite, setEnableTheRewrite] = useState(false);
 
   const handleEnableTheRewrite = () => {
@@ -52,11 +53,10 @@ function SidebarView({
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
   const [filters, setFilters] = useState([false, false, false]); // FIXME add typedefs for functions list
   const [hideReplies, setHideReplies] = useState(false);
+  const [showPageNotes, setPageNotes] = useState(false);
 
   useEffect(() => {
     const /** @type {Bucket} */ localBuckets = {};
-    // REVIEW temporary solution without
-    // communication over bridge
     const /** @type {(s: string)=>string} */ splitAtParent = xpath => {
         return xpath.split('/').slice(0, 4).join('/');
       };
@@ -75,7 +75,6 @@ function SidebarView({
       }
       return include;
     });
-    console.log(filters, children.length);
 
     /**
      * @param {Thread} t
@@ -112,6 +111,14 @@ function SidebarView({
       }
     }
 
+    localBuckets.aaa = store.allAnnotations().filter(a => {
+      return (
+        !a.target[0].hasOwnProperty('selector') &&
+        a.group === store.focusedGroupId() &&
+        a.$orphan === false
+      );
+    });
+
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
   }, [bridge, rootThread.children.length, filters]);
@@ -125,7 +132,6 @@ function SidebarView({
   }, [buckets]);
 
   // Store state values
-  const store = useStoreProxy();
   const focusedGroupId = store.focusedGroupId();
   const hasAppliedFilter =
     store.hasAppliedFilter() || store.hasSelectedAnnotations();
@@ -217,8 +223,6 @@ function SidebarView({
   ]);
 
   const filterChange = action => {
-    console.log('filterChange: ', action);
-
     const localFilters = [...filters];
     switch (action) {
       case 'AdditionsToggle':
@@ -234,7 +238,7 @@ function SidebarView({
         setHideReplies(!hideReplies);
         break;
       case 'ShowHidePageNotes':
-        console.log('pn');
+        setPageNotes(!showPageNotes);
         break;
       default:
         throw new Error('No matching case branch for ' + action);
