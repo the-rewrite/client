@@ -31,7 +31,7 @@ html.the-rewrite .HypothesisApp {
 .rewrite-grid-item {
   position: absolute;
   width: (200px + f.$base + (f.$base/f.$multp) + (20px + f.$base));
-  margin: 0 (f.$base * f.$multp) (f.$base * f.$multp) 0;
+  margin: 0 (f.$base * f.$multp * 1.5) (f.$base * f.$multp) 0;
   padding: 0 f.$base 0 (f.$base/f.$multp);
   font-family: 'crimson-text', 'Crimson Text', serif;
 }
