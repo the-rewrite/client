@@ -80,7 +80,23 @@ export function dragToScroll(element) {
 
   let pos = { top: 0, left: 0, x: 0, y: 0 };
 
+  /**
+   *
+   * @param {KeyboardEvent} e
+   */
+  const keyUpHandler = function (e) {
+    if (!e.ctrlKey) {
+      mouseUpHandler();
+    }
+  };
+
+  /**
+   * @param {MouseEvent} e
+   */
   const mouseDownHandler = function (e) {
+    if (!e.ctrlKey) {
+      return;
+    }
     console.log('mousedown', e);
     element.style.cursor = 'grabbing';
     element.style.userSelect = 'none';
@@ -93,6 +109,7 @@ export function dragToScroll(element) {
       y: e.clientY,
     };
 
+    document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   };
@@ -114,6 +131,7 @@ export function dragToScroll(element) {
 
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
+    document.removeEventListener('keyup', keyUpHandler);
   };
 
   // Attach the handler
