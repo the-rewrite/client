@@ -14,7 +14,6 @@
 // Custom button styling for the application
 @use './buttons';
 
-@use '../../the-rewrite/styles/sidebar-context.scss';
 
 // Components
 // ----------
@@ -64,6 +63,11 @@
 // Make the shared package utility styles available
 @use '@hypothesis/frontend-shared/styles/util' as hyp-u;
 
+
+// the rewrite
+
+@use '../../the-rewrite/styles/sidebar-context.scss';
+
 // Top-level styles
 // ----------------
 
@@ -76,3 +80,5 @@ body {
   font-family: var.$sans-font-family;
   font-weight: normal;
 }
+
+
