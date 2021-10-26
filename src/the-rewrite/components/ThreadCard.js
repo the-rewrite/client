@@ -2,8 +2,8 @@ import classnames from 'classnames';
 import debounce from 'lodash.debounce';
 import { useCallback, useMemo } from 'preact/hooks';
 
-import { useStoreProxy } from '../store/use-store';
-import { withServices } from '../service-context';
+import { useStoreProxy } from './../../sidebar/store/use-store';
+import { withServices } from './../../sidebar/service-context';
 
 import Thread from './Thread';
 

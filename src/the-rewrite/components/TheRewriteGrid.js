@@ -5,7 +5,7 @@ import { Fragment } from 'preact';
 import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
 import Muuri from 'muuri';
-import ThreadCard from '../../sidebar/components/ThreadCard';
+import ThreadCard from './ThreadCard';
 
 /**
  *

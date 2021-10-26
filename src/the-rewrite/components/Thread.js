@@ -2,13 +2,13 @@ import { IconButton, LabeledButton } from '@hypothesis/frontend-shared';
 import classnames from 'classnames';
 import { useCallback, useMemo } from 'preact/hooks';
 
-import { useStoreProxy } from '../store/use-store';
-import { withServices } from '../service-context';
-import { countHidden, countVisible } from '../helpers/thread';
+import { useStoreProxy } from  './../../sidebar/store/use-store';
+import { withServices } from './../../sidebar/service-context';
+import { countHidden, countVisible } from './../../sidebar/helpers/thread';
 
-import Annotation from './Annotation';
-import AnnotationHeader from './Annotation/AnnotationHeader';
-import ModerationBanner from './ModerationBanner';
+import Annotation from './../../sidebar/components/Annotation';
+import AnnotationHeader from './../../sidebar/components/Annotation/AnnotationHeader';
+import ModerationBanner from './../../sidebar/components/ModerationBanner';
 
 /** @typedef {import('../helpers/build-thread').Thread} Thread */
 
