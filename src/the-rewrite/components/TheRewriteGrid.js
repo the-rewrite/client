@@ -5,6 +5,7 @@ import { Fragment } from 'preact';
 import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
 import Muuri from 'muuri';
+import ThreadCard from '../../sidebar/components/ThreadCard';
 
 /**
  *
@@ -152,6 +153,10 @@ function GridItem({ bridge, thread, hideReplies }) {
     >
       <div className="inner" lang={lang}>
         <p className="number">{superscript}</p>
+
+        <ThreadCard thread={thread} />
+
+        {/*
         <section>
           {expand ? (
             <MarkdownView lang={lang} markdown={annotation.text} />
@@ -168,6 +173,7 @@ function GridItem({ bridge, thread, hideReplies }) {
           <GridItemMeta bridge={bridge} annotation={annotation} />
           {!hideReplies && <GridItemReplies children={thread.children} />}
         </section>
+*/}
       </div>
     </article>
   );
