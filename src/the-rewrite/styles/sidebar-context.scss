@@ -139,6 +139,7 @@ html.the-rewrite .HypothesisApp {
   border: unset;
   box-shadow: unset;
   padding: 0;
+  flex-grow: 1;
 }
 
 .ThreadCard .Thread__content .Annotation {
@@ -146,7 +147,6 @@ html.the-rewrite .HypothesisApp {
   flex-direction: column;
 }
 
-.Annotation > * + *:not([class*=SvgIcon--inline]),
 .ThreadCard .AnnotationBody {
   margin-top: 0 !important;
 }
@@ -157,6 +157,13 @@ html.the-rewrite .HypothesisApp {
 }
 .ThreadCard .AnnotationHeader {
   order: 3;
+}
+
+.ThreadCard {
+  h1, h2, h3, h4, a {
+    font-size: f.$base;
+    line-height: f.$multp;
+  }
 }
 
 
