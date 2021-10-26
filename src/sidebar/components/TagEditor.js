@@ -225,6 +225,19 @@ function TagEditor({
   };
 
   /**
+   *
+   * @param {Event} e
+   */
+  const handleOnChange = e => {
+    // @ts-ignore
+    const value = e.target.value;
+    console.log(value);
+    if (value) {
+      addTag(value);
+    }
+  };
+
+  /**
    * Callback for formatting a suggested tag item. Use selective bolding
    * to help delineate which part of the entered tag text matches the
    * suggestion.
@@ -309,6 +322,16 @@ function TagEditor({
         aria-owns={`${tagEditorId}-AutocompleteList`}
         aria-haspopup="listbox"
       >
+        <select onChange={handleOnChange}>
+          <option selected disabled>
+            Add category
+          </option>
+
+          <option value="definition">Definition</option>
+          <option value="addition">Addition</option>
+          <option value="deletion">Deletion</option>
+        </select>
+
         <input
           onInput={handleOnInput}
           onKeyDown={handleKeyDown}
