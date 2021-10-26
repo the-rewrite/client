@@ -106,7 +106,6 @@ html.the-rewrite .HypothesisApp {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  align-items: baseline;
 }
 
 .definition {
@@ -130,4 +129,35 @@ html.the-rewrite .HypothesisApp {
   100% {
     background: transparent;
   }
+}
+
+.TheRewriteView {
+
+.ThreadCard,
+.ThreadCard:hover,
+.ThreadCard.is-focused {
+  border: unset;
+  box-shadow: unset;
+  padding: 0;
+}
+
+.ThreadCard .Thread__content .Annotation {
+  display: flex;
+  flex-direction: column;
+}
+
+.Annotation > * + *:not([class*=SvgIcon--inline]),
+.ThreadCard .AnnotationBody {
+  margin-top: 0 !important;
+}
+
+.ThreadCard .AnnotationQuote,
+.ThreadCard .AnnotationShareInfo {
+  display: none;
+}
+.ThreadCard .AnnotationHeader {
+  order: 3;
+}
+
+
 }
