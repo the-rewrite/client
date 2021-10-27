@@ -14,6 +14,7 @@ import ThreadList from './ThreadList';
 import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
 import { enableLayout } from '../../the-rewrite/dom-utils';
 import { tagsToSingleClass } from '../../the-rewrite/annotation-utils';
+import { getCategories } from '../../the-rewrite/categories';
 
 /**
  * @typedef {import('./Thread').Thread} Thread
@@ -52,7 +53,7 @@ function SidebarView({
   };
 
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
-  const [filters, setFilters] = useState([false, false, false]); // FIXME add typedefs for functions list
+  const [filters, setFilters] = useState([]); // FIXME add typedefs for functions list
   const [hideReplies, setHideReplies] = useState(false);
   const [showPageNotes, setPageNotes] = useState(false);
 
@@ -62,22 +63,18 @@ function SidebarView({
         return xpath.split('/').slice(0, 4).join('/');
       };
 
+    const categories = getCategories();
     // filter has to happen here
     const children = [...rootThread.children].map(child => {
       let include = true;
-      if (filters[0]) {
-        include = !(tagsToSingleClass(child.annotation.tags) === 'addition');
-      }
-      if (filters[1]) {
-        include &&= !(
-          tagsToSingleClass(child.annotation.tags) === 'definition'
-        );
-      }
-      if (filters[2]) {
-        include &&= !(
-          tagsToSingleClass(child.annotation.tags) === 'correction'
-        );
-      }
+
+      Object.keys(categories).forEach((c, i) => {
+        if (filters[i]) {
+          include &&= !(
+            tagsToSingleClass(child.annotation.tags) === c.toLowerCase()
+          );
+        }
+      });
       //@ts-ignore
       child.include = include;
       return child;
@@ -231,17 +228,11 @@ function SidebarView({
     store,
   ]);
 
-  const filterChange = action => {
+  const filterChange = (action, index) => {
     const localFilters = [...filters];
     switch (action) {
-      case 'AdditionsToggle':
-        localFilters[0] = !localFilters[0];
-        break;
-      case 'DefinitionsToggle':
-        localFilters[1] = !localFilters[1];
-        break;
-      case 'CorrectionsToggle':
-        localFilters[2] = !localFilters[2];
+      case 'toggleCategory':
+        localFilters[index] = !localFilters[index];
         break;
       case 'ShowHideReplies':
         setHideReplies(!hideReplies);

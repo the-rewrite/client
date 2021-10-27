@@ -6,6 +6,7 @@ import {
 import { useRef, useState } from 'preact/hooks';
 
 import { withServices } from '../service-context';
+import { getCategories } from '../../the-rewrite/categories';
 
 import AutocompleteList from './AutocompleteList';
 
@@ -46,6 +47,8 @@ function TagEditor({
     ++tagEditorIdCounter;
     return `TagEditor-${tagEditorIdCounter}`;
   });
+
+  const categories = getCategories();
 
   // Set up callback to monitor outside click events to close the AutocompleteList
   const closeWrapperRef = useRef(/** @type {HTMLElement|null} */ (null));
@@ -326,10 +329,9 @@ function TagEditor({
           <option selected disabled>
             Add category
           </option>
-
-          <option value="definition">Definition</option>
-          <option value="addition">Addition</option>
-          <option value="deletion">Deletion</option>
+          {Object.keys(categories).map(c => (
+            <option value={c.toLowerCase()}>{c}</option>
+          ))}
         </select>
 
         <input

@@ -4,7 +4,6 @@ import { withServices } from '../../sidebar/service-context';
 
 import TheRewriteGrid from './TheRewriteGrid';
 import TheRewriteFilterWidget from './TheRewriteFilterWidget';
-import Scroller from './Scroller';
 import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
 import { dragToScroll } from '../scroll-utils';
 
