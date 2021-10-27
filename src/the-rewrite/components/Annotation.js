@@ -85,6 +85,13 @@ function Annotation({
     frameSync.scrollToAnnotation(annotation.$tag);
   };
 
+  const onFlag = event => {
+    event.preventDefault();
+    annotationsService
+      .flag(annotation)
+      .catch(() => toastMessenger.error('Flagging annotation failed'));
+  };
+
   return (
     <article
       className={classnames('Annotation', {
@@ -133,12 +140,7 @@ function Annotation({
             )}
             {isSaving && <div className="Annotation__actions">Saving...</div>}
             {annotation && showActions && (
-              <div className="u-layout-row--justify-right u-stretch">
-                <AnnotationActionBar
-                  annotation={annotation}
-                  onReply={onReply}
-                />
-
+              <div className="u-layout-row u-stretch">
                 <p>
                   <a
                     href={annotation.links.incontext}
@@ -158,6 +160,10 @@ function Annotation({
                   ·{' '}
                   <a href={annotation.links.html} onClick={onEdit}>
                     edit
+                  </a>
+                  ·{' '}
+                  <a href={annotation.links.html} onClick={onFlag}>
+                    flag
                   </a>
                 </p>
               </div>

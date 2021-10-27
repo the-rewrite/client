@@ -147,7 +147,8 @@ html.the-rewrite .HypothesisApp {
   flex-direction: column;
 }
 
-.ThreadCard .AnnotationBody {
+.ThreadCard .AnnotationBody,
+.Annotation__footer {
   margin-top: 0 !important;
 }
 
@@ -155,9 +156,6 @@ html.the-rewrite .HypothesisApp {
 .ThreadCard .AnnotationShareInfo,
 .TagList {
   display: none;
-}
-.ThreadCard .AnnotationHeader {
-  order: 3;
 }
 
 .ThreadCard {
