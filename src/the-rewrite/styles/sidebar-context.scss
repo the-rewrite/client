@@ -31,7 +31,7 @@ html.the-rewrite .HypothesisApp {
 .rewrite-grid-item {
   position: absolute;
   width: (200px + f.$base + (f.$base/f.$multp) + (20px + f.$base));
-  margin: 0 (f.$base * f.$multp * 1.5) (f.$base * f.$multp) 0;
+  margin: 0 0 (f.$base * f.$multp * 1.5) 0;
   padding: 0 f.$base 0 (f.$base/f.$multp);
   font-family: 'crimson-text', 'Crimson Text', serif;
 }
@@ -152,7 +152,8 @@ html.the-rewrite .HypothesisApp {
 }
 
 .ThreadCard .AnnotationQuote,
-.ThreadCard .AnnotationShareInfo {
+.ThreadCard .AnnotationShareInfo,
+.TagList {
   display: none;
 }
 .ThreadCard .AnnotationHeader {
@@ -164,7 +165,19 @@ html.the-rewrite .HypothesisApp {
     font-size: f.$base;
     line-height: f.$multp;
   }
+  .AnnotationUser__user-name {
+    font-weight: normal;
+  }
 }
 
+.u-font--xlarge,
+.Hyp-IconButton,
+.Hyp-LinkButton,
+.AnnotationTimestamps__edited,
+.AnnotationTimestamps__timestamp {
+  font-size: f.$base;
+  line-height: f.$multp;
+  color: #202020;
+}
 
 }
