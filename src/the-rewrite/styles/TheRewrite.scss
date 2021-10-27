@@ -73,6 +73,7 @@
     overflow: auto;
   }
 
+  /*
   .hypothesis-highlight.definition {
     background-image: linear-gradient(
       to right top,
@@ -88,6 +89,7 @@
       c.$addition-color 100%
     );
   }
+  */
 
   .hypothesis-highlight > .hypothesis-highlight {
     background-position: left 0 bottom 20%;
@@ -97,5 +99,3 @@
     background-position: left 0 bottom 40%;
   }
 }
-
-
