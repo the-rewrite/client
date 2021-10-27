@@ -7,3 +7,19 @@ export function getCategories() {
     Speculation: '#fbc168',
   };
 }
+
+export function injectCategoriesStyle() {
+  const style = document.createElement('style');
+  const categories = getCategories();
+  const classes = Object.keys(categories).map(
+    c => `.hypothesis-highlight.${c.toLowerCase()} {
+    background-image: linear-gradient(
+      to right top,
+      ${categories[c]} 0,
+      ${categories[c]} 100%
+    );
+  }`
+  );
+  style.innerHTML = classes.join('\n\n');
+  document.getElementsByTagName('head')[0].appendChild(style);
+}
