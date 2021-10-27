@@ -123,7 +123,7 @@ export default class Scroller {
   }
 
   destroy() {
-    if (!passive) {
+    if (!this.passive) {
       this.disconnectObserver();
       window.removeEventListener('scroll', this.onScroll.bind(this));
     }
