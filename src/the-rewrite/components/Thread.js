@@ -6,7 +6,7 @@ import { useStoreProxy } from  './../../sidebar/store/use-store';
 import { withServices } from './../../sidebar/service-context';
 import { countHidden, countVisible } from './../../sidebar/helpers/thread';
 
-import Annotation from './../../sidebar/components/Annotation';
+import Annotation from './Annotation';
 import AnnotationHeader from './../../sidebar/components/Annotation/AnnotationHeader';
 import ModerationBanner from './../../sidebar/components/ModerationBanner';
 
