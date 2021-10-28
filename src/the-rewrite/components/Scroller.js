@@ -82,7 +82,7 @@ export default class Scroller {
       e.classList.add('closest');
       this.isScrolling = true;
       this.stopScrolling = jump(e, {
-        offset: distance,
+        //offset: distance,
         callback: this.onScrollEnd.bind(this),
       });
     }
@@ -144,7 +144,6 @@ export default class Scroller {
     if (closestElement && closestRect) {
       closestElement.classList.add('closest');
       const xpath = closestElement.dataset.xpath;
-      const perc = (readingHeight - closestRect.top) / closestRect.height;
       this.bridge.call('theRewriteScrollToBucket', xpath, closestDistance);
     }
   }
