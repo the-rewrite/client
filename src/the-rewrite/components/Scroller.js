@@ -17,10 +17,6 @@ export default class Scroller {
    * @param {boolean} passive -
    */
   constructor(bridge, passive = false) {
-    /**
-     * Un-styled shadow host for the notebook content.
-     * This isolates the notebook from the page's styles.
-     */
     this.bridge = bridge;
     this.passive = passive;
     this.isScrolling = false;
@@ -37,7 +33,22 @@ export default class Scroller {
 
     if (!passive) {
       window.addEventListener('scroll', this.onScroll.bind(this));
+      this.createReadingIndex();
     }
+  }
+
+  createReadingIndex() {
+    this.readingIndex = document.createElement('span');
+    this.readingIndex.id = 'the-rewrite-reading-index';
+    this.readingIndex.innerText = '👉';
+    this.readingIndex.style.cssText = `
+      font-size: 30px;
+      position: fixed;
+      left:0;
+      top:50%;
+    `;
+
+    document.body.appendChild(this.readingIndex);
   }
 
   /** @param {Bucket} buckets */
@@ -70,7 +81,10 @@ export default class Scroller {
     if (e) {
       e.classList.add('closest');
       this.isScrolling = true;
-      this.stopScrolling = jump(e, { callback: this.onScrollEnd.bind(this) });
+      this.stopScrolling = jump(e, {
+        //offset: distance,
+        callback: this.onScrollEnd.bind(this),
+      });
     }
   }
 
@@ -95,27 +109,47 @@ export default class Scroller {
     });
   }
 
+  calculateReadingHeightRatio() {
+    let v = 0.2;
+    let clientHeight = document.documentElement.clientHeight;
+    let { top, height } = document.documentElement.getBoundingClientRect();
+    let ratio = top / (clientHeight - height);
+    if (ratio < v) {
+      return (0.5 * ratio) / v;
+    } else if (ratio > 1 - v) {
+      return 1 - (0.5 * (1 - ratio)) / v;
+    } else {
+      return 0.5;
+    }
+    //return ratio;
+  }
+
   onScroll() {
-    if (this.isScrolling) {
+    if (this.isScrolling || this.passive) {
       return;
     }
-    const center = document.documentElement.clientHeight / 2;
+    const heightRatio = this.calculateReadingHeightRatio();
+    const readingHeight = document.documentElement.clientHeight * heightRatio;
+    if (this.readingIndex)
+      this.readingIndex.style.top = `${heightRatio * 100}%`;
     let closestDistance = Infinity;
     /** @type {HTMLElement|undefined} */
     let closestElement;
+    let closestRect;
     for (let e of this.visibleAnnotations) {
       const r = e.getBoundingClientRect();
       const m = (r.top + r.bottom) / 2;
-      const d = Math.abs(m - center);
-      if (d < closestDistance) {
+      const d = readingHeight - m;
+      if (Math.abs(d) < Math.abs(closestDistance)) {
         closestDistance = d;
         closestElement = e;
+        closestRect = r;
       }
     }
     document
       .querySelectorAll('.closest')
       .forEach(e => e.classList.remove('closest'));
-    if (closestElement) {
+    if (closestElement && closestRect) {
       closestElement.classList.add('closest');
       const xpath = closestElement.dataset.xpath;
       this.bridge.call('theRewriteScrollToBucket', xpath, closestDistance);
@@ -124,6 +158,7 @@ export default class Scroller {
 
   destroy() {
     if (!this.passive) {
+      this.readingIndex?.remove();
       this.disconnectObserver();
       window.removeEventListener('scroll', this.onScroll.bind(this));
     }
