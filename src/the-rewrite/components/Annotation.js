@@ -11,6 +11,7 @@ import AnnotationHeader from './../../sidebar/components/Annotation/AnnotationHe
 import AnnotationQuote from './../../sidebar/components/Annotation/AnnotationQuote';
 import AnnotationReplyToggle from './../../sidebar/components/Annotation/AnnotationReplyToggle';
 import { Fragment } from 'preact/jsx-runtime';
+import { useEffect, useState } from 'preact/hooks';
 
 /**
  * @typedef {import("../../../types/api").Annotation} Annotation
@@ -47,8 +48,11 @@ function Annotation({
   annotationsService,
   frameSync,
   toastMessenger,
+  destroyGridNow,
+  destroyGridTimeout,
 }) {
   const isCollapsedReply = isReply && threadIsCollapsed;
+  const [rerender, setRerender] = useState(false);
 
   const store = useStoreProxy();
 
@@ -58,6 +62,19 @@ function Annotation({
   const isEditing = annotation && !!store.getDraft(annotation) && !isSaving;
   const isLoggedIn = store.isLoggedIn();
   const userProfile = store.profile();
+
+  useEffect(() => {
+    if (rerender) {
+      destroyGridNow();
+      setRerender(false);
+    }
+  }, [rerender]);
+
+  useEffect(() => {
+    if (isSaving) {
+      destroyGridTimeout(100);
+    }
+  }, [isSaving]);
 
   // Is the current user allowed to take the given `action` on this annotation?
   const userIsAuthorizedTo = action => {
@@ -77,6 +94,7 @@ function Annotation({
       return;
     }
     annotationsService.reply(annotation, userid);
+    setRerender(true);
   };
 
   const onEdit = event => {
@@ -86,6 +104,7 @@ function Annotation({
       text: annotation.text,
       isPrivate: isPrivate(annotation.permissions),
     });
+    setRerender(true);
   };
 
   const scrollToAnnotation = event => {

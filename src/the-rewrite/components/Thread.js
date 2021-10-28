@@ -16,6 +16,8 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  * @typedef ThreadProps
  * @prop {Thread} thread
  * @prop {import('../services/threads').ThreadsService} threadsService
+ * @prop {import('./TheRewriteGrid').destroyGridNow} destroyGridNow
+ * @prop {import('./TheRewriteGrid').destroyGridTimeout} destroyGridTimeout
  */
 
 /**
@@ -25,7 +27,7 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  *
  * @param {ThreadProps} props
  */
-function Thread({ thread, threadsService }) {
+function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout }) {
   // Render this thread's replies only if the thread is expanded
   const showChildren = !thread.collapsed;
 
@@ -68,6 +70,8 @@ function Thread({ thread, threadsService }) {
             onToggleReplies={onToggleReplies}
             replyCount={thread.replyCount}
             threadIsCollapsed={thread.collapsed}
+            destroyGridNow={destroyGridNow}
+            destroyGridTimeout={destroyGridTimeout}
           />
         </>
       ),
@@ -78,7 +82,7 @@ function Thread({ thread, threadsService }) {
       thread.parent,
       thread.replyCount,
       thread.collapsed,
-      thread.visible,
+      thread.visible
     ]
   );
 
