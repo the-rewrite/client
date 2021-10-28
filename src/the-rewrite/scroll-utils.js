@@ -7,7 +7,7 @@
  *  Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
  *
  * @param {Element} target selector to scroll to
- * @param {{duration?: number; callback?: ()=>void}} options Optionally defined duration, offset, callback and easing
+ * @param {{duration?: number; offset?: number; callback?: ()=>void}} options Optionally defined duration, offset, callback and easing
  *
  * @return {()=>void}
  */
@@ -17,7 +17,7 @@ export default function jump(target, options = {}) {
   let start = window.pageYOffset;
   let opt = {
     duration: options.duration || 500,
-    offset: 0,
+    offset: options.offset || 0,
     callback: options.callback,
     easing: easeInOutQuad,
   };
