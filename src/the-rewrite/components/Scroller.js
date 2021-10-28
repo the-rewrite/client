@@ -110,10 +110,18 @@ export default class Scroller {
   }
 
   calculateReadingHeightRatio() {
+    let v = 0.2;
     let clientHeight = document.documentElement.clientHeight;
     let { top, height } = document.documentElement.getBoundingClientRect();
-    let percentage = top / (clientHeight - height);
-    return percentage;
+    let ratio = top / (clientHeight - height);
+    if (ratio < v) {
+      return (0.5 * ratio) / v;
+    } else if (ratio > 1 - v) {
+      return 1 - (0.5 * (1 - ratio)) / v;
+    } else {
+      return 0.5;
+    }
+    //return ratio;
   }
 
   onScroll() {
