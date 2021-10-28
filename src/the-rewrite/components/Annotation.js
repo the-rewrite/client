@@ -3,14 +3,15 @@ import classnames from 'classnames';
 import { useStoreProxy } from './../../sidebar/store/use-store';
 import { quote } from './../../sidebar/helpers/annotation-metadata';
 import { withServices } from './../../sidebar/service-context';
-import { isPrivate } from './../../sidebar/helpers/permissions';
+import { isPrivate, permits } from './../../sidebar/helpers/permissions';
 
-import AnnotationActionBar from './../../sidebar/components/Annotation/AnnotationActionBar';
 import AnnotationBody from './../../sidebar/components/Annotation/AnnotationBody';
 import AnnotationEditor from './../../sidebar/components/Annotation/AnnotationEditor';
 import AnnotationHeader from './../../sidebar/components/Annotation/AnnotationHeader';
 import AnnotationQuote from './../../sidebar/components/Annotation/AnnotationQuote';
 import AnnotationReplyToggle from './../../sidebar/components/Annotation/AnnotationReplyToggle';
+import { Fragment } from 'preact/jsx-runtime';
+import { useEffect, useState } from 'preact/hooks';
 
 /**
  * @typedef {import("../../../types/api").Annotation} Annotation
@@ -47,8 +48,11 @@ function Annotation({
   annotationsService,
   frameSync,
   toastMessenger,
+  destroyGridNow,
+  destroyGridTimeout,
 }) {
   const isCollapsedReply = isReply && threadIsCollapsed;
+  const [rerender, setRerender] = useState(false);
 
   const store = useStoreProxy();
 
@@ -57,6 +61,27 @@ function Annotation({
   const isSaving = annotation && store.isSavingAnnotation(annotation);
   const isEditing = annotation && !!store.getDraft(annotation) && !isSaving;
   const isLoggedIn = store.isLoggedIn();
+  const userProfile = store.profile();
+
+  useEffect(() => {
+    if (rerender) {
+      destroyGridNow();
+      setRerender(false);
+    }
+  }, [rerender]);
+
+  useEffect(() => {
+    if (isSaving) {
+      destroyGridTimeout(100);
+    }
+  }, [isSaving]);
+
+  // Is the current user allowed to take the given `action` on this annotation?
+  const userIsAuthorizedTo = action => {
+    return permits(annotation.permissions, action, userProfile.userid);
+  };
+
+  const showEditAction = userIsAuthorizedTo('update');
 
   const userid = store.profile().userid;
   const showActions = !isSaving && !isEditing;
@@ -69,6 +94,7 @@ function Annotation({
       return;
     }
     annotationsService.reply(annotation, userid);
+    setRerender(true);
   };
 
   const onEdit = event => {
@@ -78,6 +104,7 @@ function Annotation({
       text: annotation.text,
       isPrivate: isPrivate(annotation.permissions),
     });
+    setRerender(true);
   };
 
   const scrollToAnnotation = event => {
@@ -154,13 +181,22 @@ function Annotation({
                     reply
                   </a>{' '}
                   ·{' '}
-                  <a href={annotation.links.html} target="_blank">
+                  <a
+                    href={annotation.links.html}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
                     permalink
                   </a>
-                  ·{' '}
-                  <a href={annotation.links.html} onClick={onEdit}>
-                    edit
-                  </a>
+                  {showEditAction && (
+                    <Fragment>
+                      {' '}
+                      <span>·</span>{' '}
+                      <a href={annotation.links.html} onClick={onEdit}>
+                        edit
+                      </a>{' '}
+                    </Fragment>
+                  )}
                   ·{' '}
                   <a href={annotation.links.html} onClick={onFlag}>
                     flag

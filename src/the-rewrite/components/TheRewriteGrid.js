@@ -6,6 +6,7 @@ import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
 import Muuri from 'muuri';
 import ThreadCard from './ThreadCard';
+import { updateGridElementHeight } from '../grid-utils';
 
 /**
  *
@@ -120,13 +121,25 @@ function GridItemReplies({ children }) {
 }
 
 /**
+ * @typedef GridCallBacks
+ * */
+
+/**
  * @typedef GridItemProps
  * @prop {Thread} thread
  * @prop {Bridge} bridge
  * @prop {boolean} hideReplies
+ * @prop {destroyGridNow} destroyGridNow
+ * @prop {destroyGridTimeout} destroyGridTimeout
  * @param {GridItemProps} props
  */
-function GridItem({ bridge, thread, hideReplies }) {
+function GridItem({
+  bridge,
+  thread,
+  hideReplies,
+  destroyGridNow,
+  destroyGridTimeout,
+}) {
   if (!thread.annotation) {
     return null;
   }
@@ -154,7 +167,11 @@ function GridItem({ bridge, thread, hideReplies }) {
       <div className="inner" lang={lang}>
         <p className="number">{superscript}</p>
 
-        <ThreadCard thread={thread} />
+        <ThreadCard
+          thread={thread}
+          destroyGridNow={destroyGridNow}
+          destroyGridTimeout={destroyGridTimeout}
+        />
 
         {/*
         <section>
@@ -191,12 +208,26 @@ function GridItem({ bridge, thread, hideReplies }) {
  * @param {GridRowProps} props
  */
 function GridRow({ xpath, bridge, bucket, hideReplies }) {
-  const items = bucket.map(a => (
-    <GridItem key={a.id} bridge={bridge} thread={a} hideReplies={hideReplies} />
-  ));
-
   const gridEl = useRef(null);
-  //const [grid, setGrid] = useState(null);
+  const [grid, setGrid] = useState(null);
+
+  /**
+   * typedef destroyGridNow
+   * @returns {void}
+   * */
+  const destroyGridNow = () => {
+    grid.destroy();
+  };
+  /**
+   * @typdef destroyGridTimeout
+   * @param {number} timeout
+   * @returns {void}
+   * */
+  const destroyGridTimeout = timeout => {
+    useEffect(() => {
+      setTimeout(grid.destroy, timeout);
+    }, [timeout]);
+  };
 
   useEffect(() => {
     if (!gridEl) {
@@ -209,23 +240,27 @@ function GridRow({ xpath, bridge, bucket, hideReplies }) {
       },
     });
     grid.on('layoutEnd', items => {
-      let max = 0;
-      for (let item of items) {
-        const y = item._top + item._height;
-        if (y > max) {
-          max = y;
-        }
-      }
-      // @ts-ignore
-      // Add a bit of slack to avoid redraw
-      gridEl.current.style.height = `${max + 10}px`;
+      updateGridElementHeight(grid, items);
     });
     grid.layout(true);
+
+    setGrid(grid);
 
     return () => {
       grid.destroy();
     };
-  }, [gridEl, bucket]);
+  }, [gridEl, bucket, grid]);
+
+  const items = bucket.map(a => (
+    <GridItem
+      key={a.id}
+      bridge={bridge}
+      destroyGridNow={destroyGridNow}
+      destroyGridTimeout={destroyGridTimeout}
+      thread={a}
+      hideReplies={hideReplies}
+    />
+  ));
 
   return (
     <div ref={gridEl} data-xpath={xpath} className="rewrite-grid-row">
