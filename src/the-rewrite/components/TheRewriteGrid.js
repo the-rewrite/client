@@ -1,12 +1,12 @@
 //import MuuriComponent from 'muuri-react';
 
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { Fragment } from 'preact';
 import MarkdownView from '../../sidebar/components/MarkdownView';
 import { tagsToSingleClass } from '../annotation-utils';
 import Muuri from 'muuri';
 import ThreadCard from './ThreadCard';
-import { updateGridElementHeight } from '../grid-utils';
+import { updateGridElementHeight, createGrid } from '../grid-utils';
 
 /**
  *
@@ -211,45 +211,35 @@ function GridRow({ xpath, bridge, bucket, hideReplies }) {
   const gridEl = useRef(null);
   const [grid, setGrid] = useState(null);
 
-  /**
-   * typedef destroyGridNow
-   * @returns {void}
-   * */
   const destroyGridNow = () => {
-    grid.destroy();
+    setGrid(grid => {
+      grid.destroy();
+      return createGrid(gridEl.current);
+    });
   };
-  /**
-   * @typdef destroyGridTimeout
-   * @param {number} timeout
-   * @returns {void}
-   * */
+
   const destroyGridTimeout = timeout => {
-    useEffect(() => {
-      setTimeout(grid.destroy, timeout);
-    }, [timeout]);
+    setTimeout(() => {
+      setGrid(grid => {
+        grid.destroy();
+        return createGrid(gridEl.current);
+      });
+    }, timeout);
   };
 
   useEffect(() => {
     if (!gridEl) {
       return;
     }
-    const grid = new Muuri(gridEl.current, {
-      layout: {
-        fillGaps: true,
-        horizontal: true,
-      },
-    });
-    grid.on('layoutEnd', items => {
-      updateGridElementHeight(grid, items);
-    });
-    grid.layout(true);
-
+    const grid = createGrid(gridEl.current);
     setGrid(grid);
+
+    console.log(grid._id);
 
     return () => {
       grid.destroy();
     };
-  }, [gridEl, bucket, grid]);
+  }, [gridEl, bucket]);
 
   const items = bucket.map(a => (
     <GridItem

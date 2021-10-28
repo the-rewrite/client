@@ -179,4 +179,13 @@ html.the-rewrite .HypothesisApp {
   font-style: normal;
 }
 
+.katex {
+  text-rendering: auto;
+  font: normal f.$base KaTeX_Main, Times New Roman, serif;
+  line-height: f.$multp;
+  padding-left: 0.1em;
+  text-indent: 0;
+}
+
+
 }
