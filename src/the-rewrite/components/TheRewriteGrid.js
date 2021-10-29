@@ -7,6 +7,7 @@ import { tagsToSingleClass } from '../annotation-utils';
 import Muuri from 'muuri';
 import ThreadCard from './ThreadCard';
 import { updateGridElementHeight, createGrid } from '../grid-utils';
+import { countVisible } from '../../sidebar/helpers/thread';
 
 /**
  *
@@ -145,7 +146,6 @@ function GridItem({
   }
   const annotation = thread.annotation;
   const [expand, setExpand] = useState(/** @type boolean */ (false));
-  const isWide = annotation.text.length > 500;
   const cropped = annotation.text.length > 1000;
   const text = annotation.text.substring(0, 1000);
   const superscript = annotation.$tag.split('t')[1];
@@ -156,6 +156,13 @@ function GridItem({
   const toggleExpand = () => {
     setExpand(prev => !prev);
   };
+
+  const visibleChildren = thread.children.reduce(
+    (sum, child) => sum + countVisible(child),
+    0
+  );
+
+  const isWide = annotation.text.length > 500 || visibleChildren > 2;
 
   return (
     <article
