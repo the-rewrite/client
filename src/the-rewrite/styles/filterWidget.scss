@@ -9,7 +9,7 @@ section#filter-widget {
   font-family: 'Space Grotesk';
   z-index: 4;
   border-radius: (f.$base * 0.25);
-  padding: 0 f.$base;
+  padding: (f.$base * 0.5) 0 0 0;
 }
 
 section#filter-widget button {
@@ -22,6 +22,7 @@ section#filter-widget button {
   border: 1px solid c.$gray;
   padding: 2px (f.$base * 0.5) 0 (f.$base * 0.5);
   transition: color 0.15s linear, all 0.3s linear;
+  margin-left: f.$base * 0.5;
 }
 
 section#filter-widget button.with-symbol[data-state='0'] {
@@ -40,11 +41,11 @@ section#filter-widget button.with-symbol:hover {
 }
 
 section#filter-widget section {
-  padding: (f.$base * 0.5) 0;
+  padding: 0 0;
 }
 
 section#filter-widget section button + button {
-  margin-left: (f.$base * 0.5);
+  margin: 0 0 (f.$base * 0.5) (f.$base * 0.5);
 }
 
 section#filter-widget section div.circle {
