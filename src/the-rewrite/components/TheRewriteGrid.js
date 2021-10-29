@@ -173,13 +173,11 @@ function GridItem({
     >
       <div className="inner" lang={lang}>
         <p className="number">{superscript}</p>
-
         <ThreadCard
           thread={thread}
           destroyGridNow={destroyGridNow}
           destroyGridTimeout={destroyGridTimeout}
         />
-
         {/*
         <section>
           {expand ? (

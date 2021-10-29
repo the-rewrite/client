@@ -162,14 +162,18 @@ function Annotation({
             {annotation && showActions && (
               <div className="u-layout-row u-stretch">
                 <p>
-                  <a
-                    href={annotation.links.incontext}
-                    onClick={scrollToAnnotation}
-                    target="_blank"
-                  >
-                    jump to
-                  </a>{' '}
-                  ·{' '}
+                  {!isReply && (
+                    <Fragment>
+                      <a
+                        href={annotation.links.incontext}
+                        onClick={scrollToAnnotation}
+                        target="_blank"
+                      >
+                        jump to
+                      </a>{' '}
+                      <span>·</span>{' '}
+                    </Fragment>
+                  )}
                   <a href="invalid/url" onClick={onReply}>
                     reply
                   </a>{' '}
@@ -180,10 +184,9 @@ function Annotation({
                     target="_blank"
                   >
                     permalink
-                  </a>
+                  </a>{' '}
                   {showEditAction && (
                     <Fragment>
-                      {' '}
                       <span>·</span>{' '}
                       <a href={annotation.links.html} onClick={onEdit}>
                         edit
