@@ -241,8 +241,6 @@ function GridRow({ xpath, bridge, bucket, hideReplies }) {
     const grid = createGrid(gridEl.current);
     setGrid(grid);
 
-    console.log(grid._id);
-
     return () => {
       grid.destroy();
     };
