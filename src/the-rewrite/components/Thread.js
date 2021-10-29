@@ -117,7 +117,7 @@ function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout, hi
           <ul className="Thread__children">
             {visibleChildren.map(child => (
               <li key={child.id}>
-                <Thread destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout}  thread={child} threadsService={threadsService} />
+                <Thread destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout} thread={child} threadsService={threadsService} />
               </li>
             ))}
           </ul>
