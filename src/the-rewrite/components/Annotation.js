@@ -158,13 +158,6 @@ function Annotation({
       {!isCollapsedReply && (
         <footer className="Annotation__footer">
           <div className="Annotation__controls u-layout-row">
-            {showReplyToggle && (
-              <AnnotationReplyToggle
-                onToggleReplies={onToggleReplies}
-                replyCount={replyCount}
-                threadIsCollapsed={threadIsCollapsed}
-              />
-            )}
             {isSaving && <div className="Annotation__actions">Saving...</div>}
             {annotation && showActions && (
               <div className="u-layout-row u-stretch">

@@ -28,8 +28,8 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  * @param {ThreadProps} props
  */
 function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout }) {
-  // Render this thread's replies only if the thread is expanded
-  const showChildren = !thread.collapsed;
+  // Always show replies
+  const showChildren = true;
 
   // Applied search filters will "hide" non-matching threads. If there are
   // hidden items within this thread, provide a control to un-hide them.
