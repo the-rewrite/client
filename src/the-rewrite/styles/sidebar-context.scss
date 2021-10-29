@@ -42,9 +42,9 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-item .number {
   font-family: 'Space Grotesk', sans-serif;
-  margin: 0 f.$base 0 0;
+  margin: 1px f.$base 0 0;
   line-height: 1.618;
-  font-size: 11px;
+  font-size: (f.$base - 1px);
   flex: 0 0 20px;
   text-align: right;
 }
