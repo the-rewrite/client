@@ -18,6 +18,7 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  * @prop {import('../services/threads').ThreadsService} threadsService
  * @prop {import('./TheRewriteGrid').destroyGridNow} destroyGridNow
  * @prop {import('./TheRewriteGrid').destroyGridTimeout} destroyGridTimeout
+ * @prop {boolean} hideReplies
  */
 
 /**
@@ -27,10 +28,7 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  *
  * @param {ThreadProps} props
  */
-function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout }) {
-  // Always show replies
-  const showChildren = true;
-
+function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout, hideReplies }) {
   // Applied search filters will "hide" non-matching threads. If there are
   // hidden items within this thread, provide a control to un-hide them.
   const showHiddenToggle = countHidden(thread) > 0;
@@ -115,7 +113,7 @@ function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout }) 
           </>
         )}
 
-        {showChildren && (
+        {!hideReplies && (
           <ul className="Thread__children">
             {visibleChildren.map(child => (
               <li key={child.id}>

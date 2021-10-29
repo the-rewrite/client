@@ -177,6 +177,7 @@ function GridItem({
           thread={thread}
           destroyGridNow={destroyGridNow}
           destroyGridTimeout={destroyGridTimeout}
+          hideReplies={hideReplies}
         />
         {/*
         <section>

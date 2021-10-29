@@ -15,6 +15,7 @@ import Thread from './Thread';
  * @typedef ThreadCardProps
  * @prop {import('../helpers/build-thread').Thread} thread
  * @prop {import('../services/frame-sync').FrameSyncService} frameSync
+ * @prop {boolean} hideReplies
  */
 
 /**
@@ -23,7 +24,7 @@ import Thread from './Thread';
  *
  * @param {ThreadCardProps} props
  */
-function ThreadCard({ frameSync, thread, destroyGridNow, destroyGridTimeout }) {
+function ThreadCard({ frameSync, thread, destroyGridNow, destroyGridTimeout, hideReplies }) {
   const store = useStoreProxy();
   const threadTag = thread.annotation && thread.annotation.$tag;
   const isFocused = threadTag && store.isAnnotationFocused(threadTag);
@@ -54,18 +55,11 @@ function ThreadCard({ frameSync, thread, destroyGridNow, destroyGridTimeout }) {
   };
   // Memoize threads to reduce avoid re-rendering when something changes in a
   // parent component but the `Thread` itself has not changed.
-  const threadContent = useMemo(() => <Thread destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout} thread={thread} />, [thread]);
+  const threadContent = useMemo(() => <Thread hideReplies={hideReplies} destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout} thread={thread} />, [thread]);
 
   return (
     /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     <div
-      onClick={e => {
-        // Prevent click events intended for another action from
-        // triggering a page scroll.
-        if (!isFromButtonOrLink(/** @type {Element} */ (e.target))) {
-          scrollToAnnotation(threadTag);
-        }
-      }}
       onMouseEnter={() => focusThreadAnnotation(threadTag)}
       onMouseLeave={() => focusThreadAnnotation(null)}
       key={thread.id}
