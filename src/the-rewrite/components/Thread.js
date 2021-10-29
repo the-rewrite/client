@@ -93,22 +93,6 @@ function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout }) 
         'is-collapsed': thread.collapsed,
       })}
     >
-      {showThreadToggle && (
-        <div className="Thread__collapse">
-          <div className="Thread__collapse-button-container">
-            <IconButton
-              className="NonResponsiveIconButton"
-              expanded={!thread.collapsed}
-              icon={toggleIcon}
-              title={toggleTitle}
-              onClick={onToggleReplies}
-              size="medium"
-              variant="light"
-            />
-          </div>
-        </div>
-      )}
-
       <div className="Thread__content">
         {annotationContent}
 
@@ -135,7 +119,7 @@ function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout }) 
           <ul className="Thread__children">
             {visibleChildren.map(child => (
               <li key={child.id}>
-                <Thread thread={child} threadsService={threadsService} />
+                <Thread destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout}  thread={child} threadsService={threadsService} />
               </li>
             ))}
           </ul>
