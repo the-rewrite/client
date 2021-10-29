@@ -246,7 +246,7 @@ export function highlightRange(
 
   // Wrap each text node span with a `<hypothesis-highlight>` element.
   const highlights = [];
-  textNodeSpans.forEach(nodes => {
+  textNodeSpans.forEach((nodes, i) => {
     // A custom element name is used here rather than `<span>` to reduce the
     // likelihood of highlights being hidden by page styling.
 
@@ -256,7 +256,7 @@ export function highlightRange(
 
     // Add superscript number to dataset for later display
     // via css
-    if (sup) highlightEl.dataset.sup = sup;
+    if (textNodeSpans.length - 1 === i && sup) highlightEl.dataset.sup = sup;
 
     nodes[0].parentNode.replaceChild(highlightEl, nodes[0]);
     nodes.forEach(node => highlightEl.appendChild(node));
