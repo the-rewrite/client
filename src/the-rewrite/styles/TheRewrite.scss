@@ -65,7 +65,7 @@
     content: attr(data-sup);
     vertical-align: super;
     font-size: 0.65em;
-    margin-left: 0.1em;
+    margin-left: 0.2em;
     position: static;
     width: auto;
     height: auto;
@@ -73,23 +73,10 @@
     overflow: auto;
   }
 
-  /*
-  .hypothesis-highlight.definition {
-    background-image: linear-gradient(
-      to right top,
-      c.$definition-color 0,
-      c.$definition-color 100%
-    );
-  }
 
-  .hypothesis-highlight.addition {
-    background-image: linear-gradient(
-      to right top,
-      c.$addition-color 0,
-      c.$addition-color 100%
-    );
+  .hypothesis-highlight > .hypothesis-highlight::after {
+    //display: none;
   }
-  */
 
   .hypothesis-highlight > .hypothesis-highlight {
     background-position: left 0 bottom 20%;
