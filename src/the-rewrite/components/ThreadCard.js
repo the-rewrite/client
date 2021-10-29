@@ -52,7 +52,6 @@ function ThreadCard({ frameSync, thread, destroyGridNow, destroyGridTimeout }) {
   const isFromButtonOrLink = target => {
     return !!target.closest('button') || !!target.closest('a');
   };
-
   // Memoize threads to reduce avoid re-rendering when something changes in a
   // parent component but the `Thread` itself has not changed.
   const threadContent = useMemo(() => <Thread destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout} thread={thread} />, [thread]);
