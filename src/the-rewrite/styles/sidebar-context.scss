@@ -42,11 +42,14 @@ html.the-rewrite .HypothesisApp {
 
 .rewrite-grid-item .number {
   font-family: 'Space Grotesk', sans-serif;
-  margin: 1px f.$base 0 0;
+  margin: 0 f.$base 0 0;
   line-height: 1.618;
   font-size: (f.$base - 1px);
   flex: 0 0 20px;
   text-align: right;
+}
+.rewrite-grid-item .number span {
+  padding: 1px 0 0 0;
 }
 
 .rewrite-grid-item.wide {
@@ -116,7 +119,7 @@ html.the-rewrite .HypothesisApp {
   background: c.$addition-color;
 }
 
-.closest {
+.closest .number span {
   animation: fade 1.5s ease-in-out;
   background: transparent;
 }
