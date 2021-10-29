@@ -5,6 +5,9 @@ import {
 } from '../dom-utils';
 import jump from '../scroll-utils';
 
+// @ts-ignore
+const pointRight = require('../images/1f449.svg');
+
 /** @typedef {import('../components/TheRewriteView').Bucket} Bucket*/
 /** @typedef {import('../../types/annotator').Destroyable} Destroyable */
 
@@ -40,9 +43,11 @@ export default class Scroller {
   createReadingIndex() {
     this.readingIndex = document.createElement('span');
     this.readingIndex.id = 'the-rewrite-reading-index';
-    this.readingIndex.innerText = '👉';
+    this.readingIndex.innerHTML = pointRight;
     this.readingIndex.style.cssText = `
-      font-size: 30px;
+      filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+      width: 40px;
+      height: 40px;
       position: fixed;
       left:0;
       top:50%;
@@ -130,8 +135,16 @@ export default class Scroller {
     }
     const heightRatio = this.calculateReadingHeightRatio();
     const readingHeight = document.documentElement.clientHeight * heightRatio;
-    if (this.readingIndex)
-      this.readingIndex.style.top = `${heightRatio * 100}%`;
+    if (this.readingIndex) {
+      this.readingIndex.style.top = `calc(${heightRatio * 100}% - ${
+        this.readingIndex.getBoundingClientRect().height / 2
+      }px)`;
+
+      this.readingIndex.style.left =
+        5 *
+          Math.sin(document.documentElement.getBoundingClientRect().top / 500) +
+        'px';
+    }
     let closestDistance = Infinity;
     /** @type {HTMLElement|undefined} */
     let closestElement;
