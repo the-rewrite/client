@@ -145,17 +145,10 @@ function GridItem({
     return null;
   }
   const annotation = thread.annotation;
-  const [expand, setExpand] = useState(/** @type boolean */ (false));
-  const cropped = annotation.text.length > 1000;
-  const text = annotation.text.substring(0, 1000);
   const superscript = annotation.$tag.split('t')[1];
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
   const lang = 'en';
-
-  const toggleExpand = () => {
-    setExpand(prev => !prev);
-  };
 
   const visibleChildren = thread.children.reduce(
     (sum, child) => sum + countVisible(child),
@@ -169,7 +162,7 @@ function GridItem({
       id={annotation.id}
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${
         thread.include ? '' : 'rewrite-hide-item'
-      }`}
+      } ${tagsToSingleClass(thread.annotation?.tags)}`}
     >
       <div className="inner" lang={lang}>
         <p className="number">
@@ -181,24 +174,6 @@ function GridItem({
           destroyGridTimeout={destroyGridTimeout}
           hideReplies={hideReplies}
         />
-        {/*
-        <section>
-          {expand ? (
-            <MarkdownView lang={lang} markdown={annotation.text} />
-          ) : (
-            <MarkdownView lang={lang} markdown={text} />
-          )}
-          {cropped && (
-            <p>
-              <button onClick={toggleExpand}>
-                {expand ? '↑ Collapse' : '↓ Read all'}
-              </button>
-            </p>
-          )}
-          <GridItemMeta bridge={bridge} annotation={annotation} />
-          {!hideReplies && <GridItemReplies children={thread.children} />}
-        </section>
-*/}
       </div>
     </article>
   );

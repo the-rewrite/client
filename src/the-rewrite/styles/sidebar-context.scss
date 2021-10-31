@@ -49,7 +49,26 @@ html.the-rewrite .HypothesisApp {
   text-align: right;
 }
 .rewrite-grid-item .number span {
+  display: block;
   padding: 1px 0 0 0;
+  text-align: center;
+  transition: background-color 0.5s ease-in-out;
+}
+
+.rewrite-grid-item .number span:after {
+  transition: height 0.5s ease-in-out;
+  content: ' ';
+  display: block;
+  height: 2px;
+  background: var(--category-color, white);
+}
+
+.closest .rewrite-grid-item .number span {
+  background: #d7d7d7;
+}
+
+.closest .rewrite-grid-item .number span:after {
+  height: 10px;
 }
 
 .rewrite-grid-item.wide {
@@ -111,84 +130,62 @@ html.the-rewrite .HypothesisApp {
   flex-wrap: nowrap;
 }
 
-.definition {
-  background: c.$definition-color;
-}
-
-.addition {
-  background: c.$addition-color;
-}
-
-.closest .number span {
-  animation: fade 1.5s ease-in-out;
-  background: transparent;
-}
-
-@keyframes fade {
-  50% {
-    background: #c6e4fd;
-  }
-  0%,
-  100% {
-    background: transparent;
-  }
-}
-
 .TheRewriteView {
+  .ThreadCard,
+  .ThreadCard:hover,
+  .ThreadCard.is-focused {
+    border: unset;
+    box-shadow: unset;
+    padding: 0;
+    flex-grow: 1;
+  }
 
-.ThreadCard,
-.ThreadCard:hover,
-.ThreadCard.is-focused {
-  border: unset;
-  box-shadow: unset;
-  padding: 0;
-  flex-grow: 1;
-}
+  .ThreadCard .Thread__content .Annotation {
+    display: flex;
+    flex-direction: column;
+  }
 
-.ThreadCard .Thread__content .Annotation {
-  display: flex;
-  flex-direction: column;
-}
+  .ThreadCard .AnnotationBody,
+  .Annotation__footer {
+    margin-top: 0 !important;
+  }
 
-.ThreadCard .AnnotationBody,
-.Annotation__footer {
-  margin-top: 0 !important;
-}
+  .ThreadCard .AnnotationQuote,
+  .ThreadCard .AnnotationShareInfo,
+  .TagList {
+    display: none;
+  }
 
-.ThreadCard .AnnotationQuote,
-.ThreadCard .AnnotationShareInfo,
-.TagList {
-  display: none;
-}
+  .ThreadCard {
+    h1,
+    h2,
+    h3,
+    h4,
+    a {
+      font-size: f.$base;
+      line-height: f.$multp;
+    }
+    .AnnotationUser__user-name {
+      font-weight: normal;
+    }
+  }
 
-.ThreadCard {
-  h1, h2, h3, h4, a {
+  .u-font--xlarge,
+  .Hyp-IconButton,
+  .Hyp-LinkButton,
+  .AnnotationTimestamps__edited,
+  .AnnotationTimestamps__timestamp {
     font-size: f.$base;
     line-height: f.$multp;
+    color: #202020;
+    font-style: normal;
   }
-  .AnnotationUser__user-name {
-    font-weight: normal;
+
+  .katex {
+    text-rendering: auto;
+    font: normal f.$base KaTeX_Main, Times New Roman, serif;
+    line-height: f.$multp;
+    padding-left: 0.1em;
+    text-indent: 0;
   }
-}
-
-.u-font--xlarge,
-.Hyp-IconButton,
-.Hyp-LinkButton,
-.AnnotationTimestamps__edited,
-.AnnotationTimestamps__timestamp {
-  font-size: f.$base;
-  line-height: f.$multp;
-  color: #202020;
-  font-style: normal;
-}
-
-.katex {
-  text-rendering: auto;
-  font: normal f.$base KaTeX_Main, Times New Roman, serif;
-  line-height: f.$multp;
-  padding-left: 0.1em;
-  text-indent: 0;
-}
-
-
 }

@@ -28,8 +28,8 @@
 /* GRID */
 
 .closest {
-  animation: fade 1.5s ease-in-out;
-  background: transparent;
+  //animation: fade 1.5s ease-in-out;
+  //background: transparent;
 }
 
 @keyframes fade {
@@ -61,18 +61,42 @@
     background-color: unset;
   }
 
-  .hypothesis-highlight::after {
+  .hypothesis-highlight[data-sup]::after {
     content: attr(data-sup);
     vertical-align: super;
-    font-size: 0.65em;
+    font-size: 0.75em;
     margin-left: 0.2em;
     position: static;
     width: auto;
     height: auto;
     clip: unset;
     overflow: auto;
+    padding: 2px;
+    transition: background-color 0.5s ease-in-out;
   }
 
+  .hypothesis-highlight.hypothesis-highlight-focused[data-sup]::after {
+    animation-name: pulse-highlight-focused;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    color: white !important;
+  }
+  @keyframes pulse-highlight-focused {
+    0% {
+      background-color: #555555;
+    }
+    50% {
+      background-color: black;
+    }
+    100% {
+      background-color: #555555;
+    }
+  }
+
+  .closest .hypothesis-highlight[data-sup]::after {
+    background-color: #d7d7d7;
+    color: black;
+  }
 
   .hypothesis-highlight > .hypothesis-highlight::after {
     //display: none;

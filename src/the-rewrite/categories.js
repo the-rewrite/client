@@ -23,3 +23,15 @@ export function injectCategoriesStyle() {
   style.innerHTML = classes.join('\n\n');
   document.getElementsByTagName('head')[0].appendChild(style);
 }
+
+export function injectCategoriesVariables() {
+  const style = document.createElement('style');
+  const categories = getCategories();
+  const classes = Object.keys(categories).map(
+    c => `.${c.toLowerCase()} {
+      --category-color: ${categories[c]};
+  }`
+  );
+  style.innerHTML = classes.join('\n\n');
+  document.getElementsByTagName('head')[0].appendChild(style);
+}
