@@ -85,9 +85,10 @@ export default class Scroller {
       .forEach(e => e.classList.remove('closest'));
     if (e) {
       e.classList.add('closest');
+      const style = getComputedStyle(e);
       this.isScrolling = true;
       this.stopScrolling = jump(e, {
-        //offset: distance,
+        offset: -parseInt(style.marginTop, 10),
         callback: this.onScrollEnd.bind(this),
       });
     }

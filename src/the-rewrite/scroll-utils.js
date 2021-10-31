@@ -21,7 +21,8 @@ export default function jump(target, options = {}) {
     callback: options.callback,
     easing: easeInOutQuad,
   };
-  let distance = opt.offset + (r.top + r.bottom) / 2 - clientHeight / 2;
+  //let distance = opt.offset + (r.top + r.bottom) / 2 - clientHeight / 2;
+  let distance = opt.offset + r.top;
   let duration = opt.duration;
   let timeStart;
   let timeElapsed;
