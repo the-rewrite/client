@@ -98,7 +98,7 @@ function SidebarView({
       return start;
     }
 
-    children.sort((a, b) => getStartTextPosition(a) - getStartTextPosition(b));
+    //children.sort((a, b) => getStartTextPosition(a) - getStartTextPosition(b));
 
     for (let c of children) {
       if (c.annotation) {
