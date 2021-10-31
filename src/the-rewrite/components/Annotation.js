@@ -193,10 +193,12 @@ function Annotation({
                       </a>{' '}
                     </Fragment>
                   )}
+                  {/*
                   ·{' '}
                   <a href={annotation.links.html} onClick={onFlag}>
                     flag
                   </a>
+                  */}
                 </p>
               </div>
             )}
