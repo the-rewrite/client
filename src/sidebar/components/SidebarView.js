@@ -128,7 +128,7 @@ function SidebarView({
 
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
-  }, [bridge, update, rootThread.children.length, filters]);
+  }, [bridge, update, rootThread.children.map(c => c.id).join(':'), filters]);
 
   useEffect(() => {
     // @ts-ignore
