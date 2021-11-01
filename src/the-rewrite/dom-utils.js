@@ -2,6 +2,7 @@ const BODY_ID = 'theRewrite--body-container';
 
 export function enableLayout() {
   // Change the style of the main document
+  document.body.classList.add('TheRewrite-SidebarOpen');
   document.body.style.cssText = `
       max-width: 100%;
       margin-right: 50%;
@@ -23,6 +24,7 @@ export function enableLayout() {
 
 export function disableLayout() {
   // Change the style of the main document
+  document.body.classList.remove('TheRewrite-SidebarOpen');
   document.body.style.cssText = ``;
 
   // Change the style of the shadow root containing the sidebar
