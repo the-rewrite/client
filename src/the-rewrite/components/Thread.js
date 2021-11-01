@@ -16,6 +16,7 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  * @typedef ThreadProps
  * @prop {Thread} thread
  * @prop {import('../services/threads').ThreadsService} threadsService
+ * @prop {boolean} canEdit
  * @prop {boolean} hideReplies
  */
 
@@ -26,7 +27,7 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  *
  * @param {ThreadProps} props
  */
-function Thread({ thread, threadsService, update, hideReplies }) {
+function Thread({ thread, threadsService, update, hideReplies, canEdit }) {
   // Applied search filters will "hide" non-matching threads. If there are
   // hidden items within this thread, provide a control to un-hide them.
   const showHiddenToggle = countHidden(thread) > 0;
@@ -66,6 +67,7 @@ function Thread({ thread, threadsService, update, hideReplies }) {
             onToggleReplies={onToggleReplies}
             replyCount={thread.replyCount}
             threadIsCollapsed={thread.collapsed}
+            canEdit={canEdit}
             update={update}
           />
         </>

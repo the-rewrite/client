@@ -16,6 +16,7 @@ import Thread from './Thread';
  * @prop {import('../helpers/build-thread').Thread} thread
  * @prop {import('../services/frame-sync').FrameSyncService} frameSync
  * @prop {boolean} hideReplies
+ * @prop {boolean} canEdit
  */
 
 /**
@@ -24,7 +25,7 @@ import Thread from './Thread';
  *
  * @param {ThreadCardProps} props
  */
-function ThreadCard({ frameSync, thread, update, hideReplies }) {
+function ThreadCard({ frameSync, thread, update, hideReplies, canEdit }) {
   const store = useStoreProxy();
   const threadTag = thread.annotation && thread.annotation.$tag;
   const isFocused = threadTag && store.isAnnotationFocused(threadTag);
@@ -56,7 +57,14 @@ function ThreadCard({ frameSync, thread, update, hideReplies }) {
   // Memoize threads to reduce avoid re-rendering when something changes in a
   // parent component but the `Thread` itself has not changed.
   const threadContent = useMemo(
-    () => <Thread hideReplies={hideReplies} update={update} thread={thread} />,
+    () => (
+      <Thread
+        hideReplies={hideReplies}
+        update={update}
+        canEdit={canEdit}
+        thread={thread}
+      />
+    ),
     [thread]
   );
 

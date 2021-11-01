@@ -36,7 +36,7 @@ export function formatAnnotation(annotation) {
  */
 export function tagsToSingleClass(tags) {
   // FIXME This is only good for now and needs to be revisited
-  if (tags && tags.length === 0) {
+  if (!tags || tags.length === 0) {
     return '';
   }
   return tags[0].split(' ')[0].split(',')[0];

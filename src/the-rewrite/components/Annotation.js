@@ -28,6 +28,7 @@ import { updateGridElementHeight } from '../grid-utils';
  * @prop {boolean} isReply
  * @prop {VoidFunction} onToggleReplies - Callback to expand/collapse reply threads
  * @prop {number} replyCount - Number of replies to this annotation's thread
+ * @prop {boolean} canEdit
  * @prop {boolean} threadIsCollapsed - Is the thread to which this annotation belongs currently collapsed?
  * @prop {import('../../services/annotations').AnnotationsService} annotationsService
  * @prop {import('../services/frame-sync').FrameSyncService} frameSync
@@ -49,24 +50,26 @@ function Annotation({
   annotationsService,
   frameSync,
   toastMessenger,
+  canEdit,
   update,
 }) {
   const isCollapsedReply = isReply && threadIsCollapsed;
-  const [rerender, setRerender] = useState(false);
 
   const store = useStoreProxy();
 
   const hasQuote = annotation && !!quote(annotation);
   const isFocused = annotation && store.isAnnotationFocused(annotation.$tag);
   const isSaving = annotation && store.isSavingAnnotation(annotation);
-  const isEditing = annotation && !!store.getDraft(annotation) && !isSaving;
+  const isEditing =
+    annotation && !!store.getDraft(annotation) && !isSaving && canEdit;
   const isLoggedIn = store.isLoggedIn();
   const userProfile = store.profile();
+  if (isEditing) {
+    //console.log('is editing', annotation);
+  }
 
   useEffect(() => {
-    if (isSaving) {
-      //destroyGridTimeout(100);
-    }
+    update();
   }, [isSaving]);
 
   // Is the current user allowed to take the given `action` on this annotation?

@@ -17,6 +17,7 @@ let tagEditorIdCounter = 0;
 
 /**
  * @typedef TagEditorProps
+ * @prop {(tags: string[]) => void} onEditTags - Callback to add a tag to the annotation
  * @prop {(tag: string) => boolean} onAddTag - Callback to add a tag to the annotation
  * @prop {(tag: string) => boolean} onRemoveTag - Callback to remove a tag from the annotation
  * @prop {(tag: string) => any} onTagInput - Callback when inputted tag text changes
@@ -34,6 +35,7 @@ let tagEditorIdCounter = 0;
  */
 function TagEditor({
   onAddTag,
+  onEditTags,
   onRemoveTag,
   onTagInput,
   tagList,
@@ -49,6 +51,8 @@ function TagEditor({
   });
 
   const categories = getCategories();
+  const categoriesNames = Object.keys(categories).map(c => c.toLowerCase());
+  const [selectedCategory] = tagList.filter(t => categoriesNames.includes(t));
 
   // Set up callback to monitor outside click events to close the AutocompleteList
   const closeWrapperRef = useRef(/** @type {HTMLElement|null} */ (null));
@@ -234,9 +238,9 @@ function TagEditor({
   const handleOnChange = e => {
     // @ts-ignore
     const value = e.target.value;
-    console.log(value);
     if (value) {
-      addTag(value);
+      const toKeep = tagList.filter(t => !categoriesNames.includes(t));
+      onEditTags([value, ...toKeep]);
     }
   };
 
@@ -326,11 +330,16 @@ function TagEditor({
         aria-haspopup="listbox"
       >
         <select onChange={handleOnChange}>
-          <option selected disabled>
+          <option selected={!selectedCategory} disabled>
             Add category
           </option>
           {Object.keys(categories).map(c => (
-            <option value={c.toLowerCase()}>{c}</option>
+            <option
+              selected={selectedCategory === c.toLowerCase()}
+              value={c.toLowerCase()}
+            >
+              {c}
+            </option>
           ))}
         </select>
 

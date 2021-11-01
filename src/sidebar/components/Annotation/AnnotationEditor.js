@@ -143,6 +143,7 @@ function AnnotationEditor({
         onAddTag={onAddTag}
         onRemoveTag={onRemoveTag}
         onTagInput={setPendingTag}
+        onEditTags={tags => onEditTags({ tags })}
         tagList={tags}
       />
       <div className="annotation__form-actions u-layout-row">

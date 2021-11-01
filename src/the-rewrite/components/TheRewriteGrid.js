@@ -4,8 +4,10 @@ import ThreadCard from './ThreadCard';
 //import ThreadCard from '../../sidebar/components/ThreadCard';
 import { createGrid } from '../grid-utils';
 import { countVisible } from '../../sidebar/helpers/thread';
+import { useStoreProxy } from '../../sidebar/store/use-store';
 
 /**
+ * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
  *
  * @param {string} s
  * @returns
@@ -81,7 +83,7 @@ function GridRow({ update, xpath, bridge, bucket, hideReplies }) {
   const [grid, setGrid] = useState(null);
 
   useEffect(() => {
-    console.log('render grid', gridEl.current);
+    // console.log('render grid', gridEl.current);
     if (!gridEl) {
       return;
     }
@@ -126,6 +128,7 @@ function TheRewriteGrid({ update, bridge, buckets, hideReplies }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
+
   // so that we can iterate over the xpath expression
   // and add a row for each xpath parent
   // then we use the index to get the corresponding values

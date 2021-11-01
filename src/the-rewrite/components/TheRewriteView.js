@@ -6,12 +6,30 @@ import TheRewriteGrid from './TheRewriteGrid';
 import TheRewriteFilterWidget from './TheRewriteFilterWidget';
 import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
 import { dragToScroll } from '../scroll-utils';
+import { useStoreProxy } from '../../sidebar/store/use-store';
+import ThreadCard from './ThreadCard';
+import { TheRewriteEdit } from './TheRewriteEdit';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
  * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
  * @typedef {{[key: string]:Thread[]}} Bucket
  * */
+
+/**
+ * @param {import('../../sidebar/store').SidebarStore} store
+ * @param {Thread[]} threads
+ */
+function getDrafts(store, threads) {
+  let drafts = [];
+  for (let t of threads) {
+    if (t.annotation && store.getDraft(t.annotation)) {
+      drafts.push(t);
+    }
+    drafts = [...drafts, ...getDrafts(store, t.children)];
+  }
+  return drafts;
+}
 
 /**
  * @typedef TheRewriteViewProps
@@ -35,6 +53,8 @@ function TheRewriteView({
   filterChange,
   hideReplies,
 }) {
+  const store = useStoreProxy();
+  const [draft] = getDrafts(store, threads);
   // Add `the-rewrite` class to the HTML root element
   // document.documentElement.classList.add('the-rewrite');
 
@@ -55,6 +75,13 @@ function TheRewriteView({
   return (
     <div className="TheRewriteView">
       <TheRewriteFilterWidget filterChange={filterChange} />
+      {draft && (
+        <TheRewriteEdit
+          update={update}
+          thread={draft}
+          hideReplies={hideReplies}
+        />
+      )}
       <TheRewriteGrid
         update={update}
         bridge={bridge}
