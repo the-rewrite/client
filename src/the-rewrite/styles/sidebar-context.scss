@@ -188,6 +188,13 @@ html.the-rewrite .HypothesisApp {
     padding-left: 0.1em;
     text-indent: 0;
   }
+  .AnnotationBody__collapse-toggle,
+  .Excerpt__shadow {
+    display: none;
+  }
+  .Excerpt {
+    overflow: auto;
+  }
 }
 
 .TheRewriteEditPanel {
