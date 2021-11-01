@@ -2,7 +2,7 @@ import { IconButton, LabeledButton } from '@hypothesis/frontend-shared';
 import classnames from 'classnames';
 import { useCallback, useMemo } from 'preact/hooks';
 
-import { useStoreProxy } from  './../../sidebar/store/use-store';
+import { useStoreProxy } from './../../sidebar/store/use-store';
 import { withServices } from './../../sidebar/service-context';
 import { countHidden, countVisible } from './../../sidebar/helpers/thread';
 
@@ -16,8 +16,6 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  * @typedef ThreadProps
  * @prop {Thread} thread
  * @prop {import('../services/threads').ThreadsService} threadsService
- * @prop {import('./TheRewriteGrid').destroyGridNow} destroyGridNow
- * @prop {import('./TheRewriteGrid').destroyGridTimeout} destroyGridTimeout
  * @prop {boolean} hideReplies
  */
 
@@ -28,7 +26,7 @@ import ModerationBanner from './../../sidebar/components/ModerationBanner';
  *
  * @param {ThreadProps} props
  */
-function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout, hideReplies }) {
+function Thread({ thread, threadsService, update, hideReplies }) {
   // Applied search filters will "hide" non-matching threads. If there are
   // hidden items within this thread, provide a control to un-hide them.
   const showHiddenToggle = countHidden(thread) > 0;
@@ -68,8 +66,7 @@ function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout, hi
             onToggleReplies={onToggleReplies}
             replyCount={thread.replyCount}
             threadIsCollapsed={thread.collapsed}
-            destroyGridNow={destroyGridNow}
-            destroyGridTimeout={destroyGridTimeout}
+            update={update}
           />
         </>
       ),
@@ -80,7 +77,7 @@ function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout, hi
       thread.parent,
       thread.replyCount,
       thread.collapsed,
-      thread.visible
+      thread.visible,
     ]
   );
 
@@ -117,7 +114,11 @@ function Thread({ thread, threadsService, destroyGridNow, destroyGridTimeout, hi
           <ul className="Thread__children">
             {visibleChildren.map(child => (
               <li key={child.id}>
-                <Thread destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout} thread={child} threadsService={threadsService} />
+                <Thread
+                  update={update}
+                  thread={child}
+                  threadsService={threadsService}
+                />
               </li>
             ))}
           </ul>

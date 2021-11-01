@@ -1,12 +1,8 @@
-//import MuuriComponent from 'muuri-react';
-
-import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
-import { Fragment } from 'preact';
-import MarkdownView from '../../sidebar/components/MarkdownView';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { tagsToSingleClass } from '../annotation-utils';
-import Muuri from 'muuri';
 import ThreadCard from './ThreadCard';
-import { updateGridElementHeight, createGrid } from '../grid-utils';
+//import ThreadCard from '../../sidebar/components/ThreadCard';
+import { createGrid } from '../grid-utils';
 import { countVisible } from '../../sidebar/helpers/thread';
 
 /**
@@ -18,109 +14,6 @@ function prettifyUser(s) {
   return s.split(':')[1].split('@')[0];
 }
 
-const dateFormatter = new Intl.DateTimeFormat({
-  day: 'numeric',
-  month: 'numeric',
-  year: 'numeric',
-});
-
-/**
- * @typedef GridItemMetaProps
- * @prop {Annotation} annotation
- * @prop {Bridge} bridge
- * @param {GridItemMetaProps} props */
-function GridItemMeta({ bridge, annotation }) {
-  const tagClass = tagsToSingleClass(annotation.tags);
-
-  const showAnnotationsByUser = userId => {
-    return event => {
-      event.preventDefault();
-      // REVIEW add bridge call
-      console.log(`bridge.call ${userId}`);
-    };
-  };
-
-  const scrollToAnnotation = event => {
-    event.preventDefault();
-    bridge.call('scrollToAnnotation', annotation.$tag);
-  };
-
-  const replyTo = event => {
-    event.preventDefault();
-    // REVIEW add bridge call
-    console.log('bridge call, reply');
-  };
-
-  const permaLink = event => {
-    event.preventDefault();
-    // REVIEW add copy to clipboard
-    console.log('copy to clipboard', annotation.links.html);
-  };
-
-  const output = dateFormatter.format(new Date(annotation.created));
-
-  return (
-    <Fragment>
-      <p>
-        A <span className={tagClass}>{tagClass}</span> by{' '}
-        <a
-          onClick={showAnnotationsByUser(annotation.user)}
-          href="localhost/123"
-        >
-          {prettifyUser(annotation.user)}
-        </a>{' '}
-        on {output}
-      </p>
-      <p>
-        <a href={annotation.links.incontext} onClick={scrollToAnnotation}>
-          jump to
-        </a>{' '}
-        ·{' '}
-        <a href="invalid/url" onClick={replyTo}>
-          reply
-        </a>{' '}
-        ·{' '}
-        <a href={annotation.links.html} onClick={permaLink}>
-          permalink
-        </a>
-      </p>
-    </Fragment>
-  );
-}
-
-/**
- * @typedef {import('../../types/api').Annotation} Annotation
- * @typedef {import('../../shared/bridge').Bridge} Bridge
- * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
- *
- */
-
-/**
- * @typedef GridItemRepliesProps
- * @prop {Thread[]} children
- * @param {GridItemRepliesProps} props
- */
-function GridItemReplies({ children }) {
-  if (children.length === 0) {
-    return null;
-  }
-
-  return (
-    <ul>
-      {children.map(
-        c =>
-          c.annotation && (
-            <li>
-              <p>↝ Reply by {prettifyUser(c.annotation.user)}</p>
-              <MarkdownView markdown={c.annotation.text} />
-              <GridItemReplies children={c.children} />
-            </li>
-          )
-      )}
-    </ul>
-  );
-}
-
 /**
  * @typedef GridCallBacks
  * */
@@ -130,17 +23,9 @@ function GridItemReplies({ children }) {
  * @prop {Thread} thread
  * @prop {Bridge} bridge
  * @prop {boolean} hideReplies
- * @prop {destroyGridNow} destroyGridNow
- * @prop {destroyGridTimeout} destroyGridTimeout
  * @param {GridItemProps} props
  */
-function GridItem({
-  bridge,
-  thread,
-  hideReplies,
-  destroyGridNow,
-  destroyGridTimeout,
-}) {
+function GridItem({ bridge, thread, hideReplies, update }) {
   if (!thread.annotation) {
     return null;
   }
@@ -168,12 +53,13 @@ function GridItem({
         <p className="number">
           <span>{superscript}</span>
         </p>
-        <ThreadCard
-          thread={thread}
-          destroyGridNow={destroyGridNow}
-          destroyGridTimeout={destroyGridTimeout}
-          hideReplies={hideReplies}
-        />
+
+        {/*
+        <div className="ThreadList__card" id={thread.id} key={thread.id}>
+          <ThreadCard thread={thread} />
+        </div>
+        */}
+        <ThreadCard thread={thread} update={update} hideReplies={hideReplies} />
       </div>
     </article>
   );
@@ -190,27 +76,12 @@ function GridItem({
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ xpath, bridge, bucket, hideReplies }) {
+function GridRow({ update, xpath, bridge, bucket, hideReplies }) {
   const gridEl = useRef(null);
   const [grid, setGrid] = useState(null);
 
-  const destroyGridNow = () => {
-    setGrid(grid => {
-      grid.destroy();
-      return createGrid(gridEl.current);
-    });
-  };
-
-  const destroyGridTimeout = timeout => {
-    setTimeout(() => {
-      setGrid(grid => {
-        grid.destroy();
-        return createGrid(gridEl.current);
-      });
-    }, timeout);
-  };
-
   useEffect(() => {
+    console.log('render grid', gridEl.current);
     if (!gridEl) {
       return;
     }
@@ -220,15 +91,14 @@ function GridRow({ xpath, bridge, bucket, hideReplies }) {
     return () => {
       grid.destroy();
     };
-  }, [gridEl, bucket]);
+  }, [gridEl, bucket, update]);
 
   const items = bucket.map(a => (
     <GridItem
       key={a.id}
       bridge={bridge}
-      destroyGridNow={destroyGridNow}
-      destroyGridTimeout={destroyGridTimeout}
       thread={a}
+      update={update}
       hideReplies={hideReplies}
     />
   ));
@@ -252,7 +122,7 @@ function GridRow({ xpath, bridge, bucket, hideReplies }) {
 /**
  * @param {TheRewriteGridProps} props
  */
-function TheRewriteGrid({ bridge, buckets, hideReplies }) {
+function TheRewriteGrid({ update, bridge, buckets, hideReplies }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
@@ -266,6 +136,7 @@ function TheRewriteGrid({ bridge, buckets, hideReplies }) {
       xpath={b}
       bridge={bridge}
       bucket={bucketValues[i]}
+      update={update}
       hideReplies={hideReplies}
     />
   ));

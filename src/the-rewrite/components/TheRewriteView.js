@@ -29,6 +29,7 @@ import { dragToScroll } from '../scroll-utils';
  */
 function TheRewriteView({
   threads,
+  update,
   buckets,
   bridge,
   filterChange,
@@ -55,6 +56,7 @@ function TheRewriteView({
     <div className="TheRewriteView">
       <TheRewriteFilterWidget filterChange={filterChange} />
       <TheRewriteGrid
+        update={update}
         bridge={bridge}
         buckets={buckets}
         hideReplies={hideReplies}

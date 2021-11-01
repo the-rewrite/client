@@ -12,6 +12,7 @@ import AnnotationQuote from './../../sidebar/components/Annotation/AnnotationQuo
 import AnnotationReplyToggle from './../../sidebar/components/Annotation/AnnotationReplyToggle';
 import { Fragment } from 'preact/jsx-runtime';
 import { useEffect, useState } from 'preact/hooks';
+import { updateGridElementHeight } from '../grid-utils';
 
 /**
  * @typedef {import("../../../types/api").Annotation} Annotation
@@ -48,8 +49,7 @@ function Annotation({
   annotationsService,
   frameSync,
   toastMessenger,
-  destroyGridNow,
-  destroyGridTimeout,
+  update,
 }) {
   const isCollapsedReply = isReply && threadIsCollapsed;
   const [rerender, setRerender] = useState(false);
@@ -64,15 +64,8 @@ function Annotation({
   const userProfile = store.profile();
 
   useEffect(() => {
-    if (rerender) {
-      destroyGridNow();
-      setRerender(false);
-    }
-  }, [rerender]);
-
-  useEffect(() => {
     if (isSaving) {
-      destroyGridTimeout(100);
+      //destroyGridTimeout(100);
     }
   }, [isSaving]);
 
@@ -94,8 +87,12 @@ function Annotation({
       return;
     }
     annotationsService.reply(annotation, userid);
-    setRerender(true);
+    update();
   };
+
+  useEffect(() => {
+    update();
+  }, [isEditing]);
 
   const onEdit = event => {
     event.preventDefault();
@@ -104,7 +101,6 @@ function Annotation({
       text: annotation.text,
       isPrivate: isPrivate(annotation.permissions),
     });
-    setRerender(true);
   };
 
   const scrollToAnnotation = event => {

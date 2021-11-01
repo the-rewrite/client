@@ -52,6 +52,7 @@ function SidebarView({
     setEnableTheRewrite(!enableTheRewrite);
   };
 
+  const [update, setUpdate] = useState(null);
   const [buckets, setBuckets] = useState(/** @type {Bucket} */ ({}));
   const [filters, setFilters] = useState([]); // FIXME add typedefs for functions list
   const [hideReplies, setHideReplies] = useState(false);
@@ -127,7 +128,7 @@ function SidebarView({
 
     bridge.call('theRewriteBuckets', localBuckets);
     setBuckets(localBuckets);
-  }, [bridge, rootThread.children.length, filters]);
+  }, [bridge, update, rootThread.children.length, filters]);
 
   useEffect(() => {
     // @ts-ignore
@@ -281,6 +282,7 @@ function SidebarView({
       </label>
       {enableTheRewrite ? (
         <TheRewriteView
+          update={() => setUpdate(new Date())}
           threads={rootThread.children}
           buckets={buckets}
           filterChange={filterChange}

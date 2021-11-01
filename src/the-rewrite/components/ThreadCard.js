@@ -24,7 +24,7 @@ import Thread from './Thread';
  *
  * @param {ThreadCardProps} props
  */
-function ThreadCard({ frameSync, thread, destroyGridNow, destroyGridTimeout, hideReplies }) {
+function ThreadCard({ frameSync, thread, update, hideReplies }) {
   const store = useStoreProxy();
   const threadTag = thread.annotation && thread.annotation.$tag;
   const isFocused = threadTag && store.isAnnotationFocused(threadTag);
@@ -55,7 +55,10 @@ function ThreadCard({ frameSync, thread, destroyGridNow, destroyGridTimeout, hid
   };
   // Memoize threads to reduce avoid re-rendering when something changes in a
   // parent component but the `Thread` itself has not changed.
-  const threadContent = useMemo(() => <Thread hideReplies={hideReplies} destroyGridNow={destroyGridNow} destroyGridTimeout={destroyGridTimeout} thread={thread} />, [thread]);
+  const threadContent = useMemo(
+    () => <Thread hideReplies={hideReplies} update={update} thread={thread} />,
+    [thread]
+  );
 
   return (
     /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
