@@ -37,6 +37,7 @@ export default class Scroller {
     if (!passive) {
       window.addEventListener('scroll', this.onScroll.bind(this));
       this.createReadingIndex();
+      this.onScroll();
     }
   }
 
@@ -137,9 +138,11 @@ export default class Scroller {
     const heightRatio = this.calculateReadingHeightRatio();
     const readingHeight = document.documentElement.clientHeight * heightRatio;
     if (this.readingIndex) {
-      this.readingIndex.style.top = `calc(${heightRatio * 100}% - ${
-        this.readingIndex.getBoundingClientRect().height / 2
-      }px)`;
+      const halfHeight = this.readingIndex.getBoundingClientRect().height / 2;
+      const heightPerc = heightRatio * 100;
+      this.readingIndex.style.top = `max( 0px , ${heightPerc}% - ${halfHeight}px )`;
+
+      //window.getComputedStyle(this.readingIndex).top
 
       this.readingIndex.style.left =
         5 *
