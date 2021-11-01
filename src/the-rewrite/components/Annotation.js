@@ -62,10 +62,16 @@ function Annotation({
   const isSaving = annotation && store.isSavingAnnotation(annotation);
   const isEditing =
     annotation && !!store.getDraft(annotation) && !isSaving && canEdit;
+  const isEditingOther =
+    annotation && !!store.getDraft(annotation) && !isSaving && !canEdit;
   const isLoggedIn = store.isLoggedIn();
   const userProfile = store.profile();
   if (isEditing) {
     //console.log('is editing', annotation);
+  }
+
+  if (isEditingOther) {
+    return null;
   }
 
   useEffect(() => {
