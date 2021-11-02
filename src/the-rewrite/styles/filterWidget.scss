@@ -36,7 +36,8 @@ section#filter-widget button.with-symbol[data-state='1'] {
 }
 
 section#filter-widget button:hover,
-section#filter-widget button.with-symbol:hover {
+section#filter-widget button.with-symbol:hover
+section#filter-widget button.annotation[data-state='1']:hover {
   color: c.$hover;
 }
 
@@ -77,4 +78,22 @@ section#filter-widget button[data-state='1'] {
   background-color: c.$active;
   border-color: c.$active;
   color: c.$white;
+}
+
+section#filter-widget button.annotation[data-state='0'] {
+  background-color: transparent;
+  cursor: default;
+  color: rgba(16, 16, 16, 0.3);
+  border-color: rgba(16, 16, 16, 0.3);
+}
+
+section#filter-widget button.annotation[data-state='1'] {
+  background-color: c.$white;
+  border-color: c.$gray;
+  color: rgb(0,0,0);
+}
+
+section#filter-widget button.annotation[data-state='1'] span {
+  color: c.$hover;
+  padding: 0 0.1em;
 }

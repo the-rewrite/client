@@ -32,13 +32,10 @@ function TheRewriteFilterWidget({ streamer, filterChange }) {
           action={() => filterChange('ShowHideReplies')}
           initialState={0}
         />
-        {pendingUpdateCount > 0 && (
-          <FilterButton
-            text="Load new annotations"
-            action={applyPendingUpdates}
-            initialState={0}
-          />
-        )}
+        <AnnotationButton
+          action={applyPendingUpdates}
+          number={pendingUpdateCount}
+        />
         {/* FIXME: Add PAGENOTES button */}
         {/* <FilterButton */}
         {/*   text="Page Notes" */}
@@ -91,6 +88,26 @@ function FilterButton({ text, action, initialState }) {
   return (
     <button data-state={state} onClick={_action}>
       {text}
+    </button>
+  );
+}
+
+function AnnotationButton({ action, number }) {
+  const _action = () => {
+    action();
+  };
+  const state = number > 0 ? 1 : 0;
+  const text = number === 1 ? 'annotation' : 'annotations';
+  const load = number > 0 ? 'load ' : '';
+  return (
+    <button
+      disabled={number === 0}
+      data-state={state}
+      className="annotation"
+      onClick={_action}
+    >
+      {load}
+      <span>{number}</span> new {text}
     </button>
   );
 }
