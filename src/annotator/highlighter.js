@@ -211,7 +211,7 @@ function wholeTextNodesInRange(range) {
 export function highlightRange(
   range,
   cssClass = 'hypothesis-highlight',
-  sup = null
+  sup = '⋇'
 ) {
   const textNodes = wholeTextNodesInRange(range);
 

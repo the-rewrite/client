@@ -32,7 +32,7 @@ function GridItem({ bridge, thread, hideReplies, update }) {
     return null;
   }
   const annotation = thread.annotation;
-  const superscript = annotation.$tag.split('t')[1];
+  const superscript = annotation.$tag.split('t')[1] || '⋇';
 
   // REVIEW: Lang attribute is set for correct hypentation, super important!!
   const lang = 'en';
