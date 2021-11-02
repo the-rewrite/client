@@ -1,11 +1,16 @@
 import { useState } from 'preact/hooks';
+import { withServices } from '../../sidebar/service-context';
+import { useStoreProxy } from '../../sidebar/store/use-store';
 import { getCategories } from '../categories';
 
 function log(...args) {
   console.log(window.location.protocol, ...args);
 }
 
-function TheRewriteFilterWidget({ filterChange }) {
+function TheRewriteFilterWidget({ streamer, filterChange }) {
+  const store = useStoreProxy();
+  const pendingUpdateCount = store.pendingUpdateCount();
+  const applyPendingUpdates = () => streamer.applyPendingUpdates();
   // REVIEW: Get these values from somewhere
   const categories = getCategories();
   const categoriesButtons = Object.keys(categories).map((c, i) => (
@@ -27,6 +32,13 @@ function TheRewriteFilterWidget({ filterChange }) {
           action={() => filterChange('ShowHideReplies')}
           initialState={0}
         />
+        {pendingUpdateCount > 0 && (
+          <FilterButton
+            text="Load new annotations"
+            action={applyPendingUpdates}
+            initialState={0}
+          />
+        )}
         {/* FIXME: Add PAGENOTES button */}
         {/* <FilterButton */}
         {/*   text="Page Notes" */}
@@ -97,4 +109,6 @@ function CircleSymbol({ color }) {
   return <div className="circle" style={`background-color: ${color}`} />;
 }
 
-export default TheRewriteFilterWidget;
+//export default TheRewriteFilterWidget;
+
+export default withServices(TheRewriteFilterWidget, ['streamer']);
