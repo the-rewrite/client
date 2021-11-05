@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 
+import { confirm } from '../../shared/prompts';
 import { useStoreProxy } from './../../sidebar/store/use-store';
 import { quote } from './../../sidebar/helpers/annotation-metadata';
 import { withServices } from './../../sidebar/service-context';
@@ -84,6 +85,7 @@ function Annotation({
   };
 
   const showEditAction = userIsAuthorizedTo('update');
+  const showDeleteAction = userIsAuthorizedTo('delete');
 
   const userid = store.profile().userid;
   const showActions = !isSaving && !isEditing;
@@ -110,6 +112,24 @@ function Annotation({
       text: annotation.text,
       isPrivate: isPrivate(annotation.permissions),
     });
+  };
+
+  const onDelete = async event => {
+    event.preventDefault();
+    if (
+      await confirm({
+        title: 'Delete annotation?',
+        message: 'Are you sure you want to delete this annotation?',
+        confirmAction: 'Delete',
+      })
+    ) {
+      try {
+        await annotationsService.delete(annotation);
+        update();
+      } catch (err) {
+        toastMessenger.error(err.message);
+      }
+    }
   };
 
   const scrollToAnnotation = event => {
@@ -195,6 +215,14 @@ function Annotation({
                       <span>·</span>{' '}
                       <a href={annotation.links.html} onClick={onEdit}>
                         edit
+                      </a>{' '}
+                    </Fragment>
+                  )}
+                  {showEditAction && (
+                    <Fragment>
+                      <span>·</span>{' '}
+                      <a href={annotation.links.html} onClick={onDelete}>
+                        delete
                       </a>{' '}
                     </Fragment>
                   )}
