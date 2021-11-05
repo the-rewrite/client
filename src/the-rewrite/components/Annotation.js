@@ -218,7 +218,7 @@ function Annotation({
                       </a>{' '}
                     </Fragment>
                   )}
-                  {showEditAction && (
+                  {showDeleteAction && (
                     <Fragment>
                       <span>·</span>{' '}
                       <a href={annotation.links.html} onClick={onDelete}>
