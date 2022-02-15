@@ -192,7 +192,6 @@ function Annotation({
                       <a
                         href={annotation.links.incontext}
                         onClick={scrollToAnnotation}
-                        target="_blank"
                       >
                         jump to
                       </a>{' '}
