@@ -47,6 +47,7 @@ html.the-rewrite .HypothesisApp {
   font-size: (f.$base - 1px);
   flex: 0 0 20px;
   text-align: right;
+  cursor: pointer;
 }
 .rewrite-grid-item .number span {
   display: block;

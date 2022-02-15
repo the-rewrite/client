@@ -5,6 +5,7 @@ import ThreadCard from './ThreadCard';
 import { createGrid } from '../grid-utils';
 import { countVisible } from '../../sidebar/helpers/thread';
 import { useStoreProxy } from '../../sidebar/store/use-store';
+import { withServices } from './../../sidebar/service-context';
 
 /**
  * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
@@ -27,7 +28,7 @@ function prettifyUser(s) {
  * @prop {boolean} hideReplies
  * @param {GridItemProps} props
  */
-function GridItem({ bridge, thread, hideReplies, update }) {
+function GridItem({ bridge, thread, hideReplies, update, frameSync }) {
   if (!thread.annotation) {
     return null;
   }
@@ -42,6 +43,12 @@ function GridItem({ bridge, thread, hideReplies, update }) {
     0
   );
 
+  const scrollToAnnotation = event => {
+    event.preventDefault();
+    console.log( annotation.$tag );
+    frameSync.scrollToAnnotation(annotation.$tag);
+  };
+
   const isWide = annotation.text.length > 500 || visibleChildren > 2;
 
   return (
@@ -52,7 +59,7 @@ function GridItem({ bridge, thread, hideReplies, update }) {
       } ${tagsToSingleClass(thread.annotation?.tags)}`}
     >
       <div className="inner" lang={lang}>
-        <p className="number">
+        <p className="number" onClick={scrollToAnnotation}>
           <span>{superscript}</span>
         </p>
 
@@ -78,7 +85,7 @@ function GridItem({ bridge, thread, hideReplies, update }) {
 /**
  * @param {GridRowProps} props
  */
-function GridRow({ update, xpath, bridge, bucket, hideReplies }) {
+function GridRow({ update, xpath, bridge, bucket, hideReplies, frameSync }) {
   const gridEl = useRef(null);
   const [grid, setGrid] = useState(null);
 
@@ -102,6 +109,7 @@ function GridRow({ update, xpath, bridge, bucket, hideReplies }) {
       thread={a}
       update={update}
       hideReplies={hideReplies}
+      frameSync={frameSync}
     />
   ));
 
@@ -124,7 +132,7 @@ function GridRow({ update, xpath, bridge, bucket, hideReplies }) {
 /**
  * @param {TheRewriteGridProps} props
  */
-function TheRewriteGrid({ update, bridge, buckets, hideReplies }) {
+function TheRewriteGrid({ update, bridge, buckets, hideReplies, frameSync }) {
   // So the incoming buckets is a map of xpath parent path -> [ annotations ]
   // We create a list of values to use in the map below
   const bucketValues = Object.values(buckets) || [];
@@ -141,9 +149,10 @@ function TheRewriteGrid({ update, bridge, buckets, hideReplies }) {
       bucket={bucketValues[i]}
       update={update}
       hideReplies={hideReplies}
+      frameSync={frameSync}
     />
   ));
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
 
-export default TheRewriteGrid;
+export default withServices( TheRewriteGrid, [ 'frameSync' ]);
