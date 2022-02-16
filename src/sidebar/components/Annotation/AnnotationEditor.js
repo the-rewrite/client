@@ -139,13 +139,15 @@ function AnnotationEditor({
         text={text}
         onEditText={onEditText}
       />
-      <TagEditor
-        onAddTag={onAddTag}
-        onRemoveTag={onRemoveTag}
-        onTagInput={setPendingTag}
-        onEditTags={tags => onEditTags({ tags })}
-        tagList={tags}
-      />
+      {!annotation.references && (
+        <TagEditor
+          onAddTag={onAddTag}
+          onRemoveTag={onRemoveTag}
+          onTagInput={setPendingTag}
+          onEditTags={tags => onEditTags({ tags })}
+          tagList={tags}
+        />
+      )}
       <div className="annotation__form-actions u-layout-row">
         <AnnotationPublishControl
           annotation={annotation}
