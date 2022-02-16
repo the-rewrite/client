@@ -6,6 +6,7 @@ import { useStoreProxy } from './../../sidebar/store/use-store';
 import { withServices } from './../../sidebar/service-context';
 
 import Thread from './Thread';
+import { FrameSyncService } from '../../sidebar/services/frame-sync';
 
 /**
  * @typedef {import('../../types/config').MergedConfig} MergedConfig
@@ -13,9 +14,10 @@ import Thread from './Thread';
 
 /**
  * @typedef ThreadCardProps
- * @prop {import('../helpers/build-thread').Thread} thread
- * @prop {import('../services/frame-sync').FrameSyncService} frameSync
+ * @prop {Thread} thread
+ * @prop {FrameSyncService} frameSync
  * @prop {boolean} hideReplies
+ * @prop {Date} update
  * @prop {boolean} canEdit
  */
 

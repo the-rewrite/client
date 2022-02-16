@@ -34,9 +34,10 @@ function getDrafts(store, threads) {
 /**
  * @typedef TheRewriteViewProps
  * @prop {Thread[]} threads
+ * @prop {Date} update
  * @prop {Bucket} buckets
  * @prop {import('../../shared/bridge').Bridge} bridge
- * @prop {function} filterCharge
+ * @prop {function} filterChange
  * @prop {boolean} hideReplies
  */
 

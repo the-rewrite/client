@@ -4,8 +4,8 @@ import ThreadCard from './ThreadCard';
 //import ThreadCard from '../../sidebar/components/ThreadCard';
 import { createGrid } from '../grid-utils';
 import { countVisible } from '../../sidebar/helpers/thread';
-import { useStoreProxy } from '../../sidebar/store/use-store';
 import { withServices } from './../../sidebar/service-context';
+import { Bridge } from '../../shared/bridge';
 
 /**
  * @typedef {import('../../sidebar/helpers/build-thread').Thread} Thread
@@ -18,11 +18,8 @@ function prettifyUser(s) {
 }
 
 /**
- * @typedef GridCallBacks
- * */
-
-/**
  * @typedef GridItemProps
+ * @prop {Date} update
  * @prop {Thread} thread
  * @prop {Bridge} bridge
  * @prop {boolean} hideReplies
@@ -45,7 +42,7 @@ function GridItem({ bridge, thread, hideReplies, update, frameSync }) {
 
   const scrollToAnnotation = event => {
     event.preventDefault();
-    console.log( annotation.$tag );
+    console.log(annotation.$tag);
     frameSync.scrollToAnnotation(annotation.$tag);
   };
 
@@ -76,6 +73,7 @@ function GridItem({ bridge, thread, hideReplies, update, frameSync }) {
 
 /**
  * @typedef GridRowProps
+ * @prop {Date} update
  * @prop {Bridge} bridge
  * @prop {string} xpath
  * @prop {Thread[]} bucket
@@ -124,6 +122,7 @@ function GridRow({ update, xpath, bridge, bucket, hideReplies, frameSync }) {
  * @typedef {import('./TheRewriteView').Bucket} Bucket
  *
  * @typedef TheRewriteGridProps
+ * @prop {Date} update
  * @prop {Bridge} bridge
  * @prop {Bucket} buckets
  * @prop {boolean} hideReplies
@@ -155,4 +154,4 @@ function TheRewriteGrid({ update, bridge, buckets, hideReplies, frameSync }) {
   return <div className="rewrite-grid-parent">{rows}</div>;
 }
 
-export default withServices( TheRewriteGrid, [ 'frameSync' ]);
+export default withServices(TheRewriteGrid, ['frameSync']);
