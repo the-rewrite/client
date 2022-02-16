@@ -10,6 +10,10 @@ import TagEditor from '../TagEditor';
 
 import AnnotationLicense from './AnnotationLicense';
 import AnnotationPublishControl from './AnnotationPublishControl';
+import {
+  getCategories,
+  THE_REWRITE_TAG_CATEGORIES,
+} from '../../../the-rewrite/categories';
 
 /**
  * @typedef {import("../../../types/api").Annotation} Annotation
@@ -54,9 +58,26 @@ function AnnotationEditor({
   const shouldShowLicense =
     !draft.isPrivate && group && group.type !== 'private';
 
-  const tags = draft.tags;
-  const text = draft.text;
+  let tags = draft.tags;
+  let text = draft.text;
   const isEmpty = !text && !tags.length;
+  const categories = getCategories();
+
+  console.log('categories', categories);
+
+  if (categories.length === 0 && isEmpty) {
+    setPendingTag(THE_REWRITE_TAG_CATEGORIES);
+    text = `👋 this document doesn't specify any category. Edit this comment to define up to 10 custom categories.
+
+# Categories
+
+- Definition: Select this category to add definitions of terms you found in the documents.
+- Explosion: Select to add terms, notes and descriptions or external resources, e.g. links to material you feel needs to included in the document.
+- Deletion: Select to signal that you would like to delete specific terms in the document altogether. Add some thoughts or links to sources that explain why you feel the term should be deleted.
+- Correction: Select to propose changes to the term in question. Note that correction has an authoritative connotation: you're suggesting a definitive replacement!
+- Speculation: Select this category if you would like to avoid the authoritative connotation of correction. Speculation is future-oriented, open-ended, evocative and can involve uncertain trajectories.
+`;
+  }
 
   const onEditTags = ({ tags }) => {
     store.createDraft(draft.annotation, { ...draft, tags });
@@ -139,7 +160,7 @@ function AnnotationEditor({
         text={text}
         onEditText={onEditText}
       />
-      {!annotation.references && (
+      {categories.length > 0 && !annotation.references && (
         <TagEditor
           onAddTag={onAddTag}
           onRemoveTag={onRemoveTag}

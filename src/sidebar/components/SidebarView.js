@@ -14,7 +14,7 @@ import ThreadList from './ThreadList';
 import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
 import { enableLayout } from '../../the-rewrite/dom-utils';
 import { tagsToSingleClass } from '../../the-rewrite/annotation-utils';
-import { getCategories } from '../../the-rewrite/categories';
+import { getCategories2 } from '../../the-rewrite/categories';
 
 /**
  * @typedef {import('./Thread').Thread} Thread
@@ -64,7 +64,7 @@ function SidebarView({
         return xpath.split('/').slice(0, 4).join('/');
       };
 
-    const categories = getCategories();
+    const categories = getCategories2();
     // filter has to happen here
     const children = [...rootThread.children].map(child => {
       let include = true;

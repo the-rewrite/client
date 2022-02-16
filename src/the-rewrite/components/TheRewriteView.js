@@ -7,8 +7,12 @@ import TheRewriteFilterWidget from './TheRewriteFilterWidget';
 import { disableLayoutInSidebar, enableLayoutInSidebar } from '../dom-utils';
 import { dragToScroll } from '../scroll-utils';
 import { useStoreProxy } from '../../sidebar/store/use-store';
-import ThreadCard from './ThreadCard';
 import { TheRewriteEdit } from './TheRewriteEdit';
+import {
+  extractCategoriesFromMarkdown,
+  getMetadataAnnotation,
+  setCategories,
+} from '../categories';
 
 /**
  * @typedef {import('../../types/api').Annotation} Annotation
@@ -56,6 +60,12 @@ function TheRewriteView({
 }) {
   const store = useStoreProxy();
   const [draft] = getDrafts(store, threads);
+  const metadata = getMetadataAnnotation(store.allAnnotations());
+  console.log('asdasd', metadata);
+  if (metadata) {
+    const categories = extractCategoriesFromMarkdown(metadata.text);
+    setCategories(categories);
+  }
   // Add `the-rewrite` class to the HTML root element
   // document.documentElement.classList.add('the-rewrite');
 

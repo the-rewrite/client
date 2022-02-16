@@ -13,11 +13,11 @@ function TheRewriteFilterWidget({ streamer, filterChange }) {
   const applyPendingUpdates = () => streamer.applyPendingUpdates();
   // REVIEW: Get these values from somewhere
   const categories = getCategories();
-  const categoriesButtons = Object.keys(categories).map((c, i) => (
+  const categoriesButtons = categories.map((c, i) => (
     <FilterButtonWithSymbol
-      key={c}
-      text={c}
-      symbol={<CircleSymbol color={categories[c]} />}
+      key={i}
+      text={c.name}
+      symbol={<CircleSymbol color={c.color} />}
       action={() => filterChange('toggleCategory', i)}
       initialState={1}
     />

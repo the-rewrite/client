@@ -42,6 +42,9 @@ function TagEditor({
   tags: tagsService,
 }) {
   const inputEl = useRef(/** @type {HTMLInputElement|null} */ (null));
+  const [categoryDescription, setCategoryDescription] = useState(
+    /** @type {string} */ ('')
+  );
   const [suggestions, setSuggestions] = useState(/** @type {string[]} */ ([]));
   const [activeItem, setActiveItem] = useState(-1); // -1 is unselected
   const [suggestionsListOpen, setSuggestionsListOpen] = useState(false);
@@ -51,7 +54,7 @@ function TagEditor({
   });
 
   const categories = getCategories();
-  const categoriesNames = Object.keys(categories).map(c => c.toLowerCase());
+  const categoriesNames = categories.map(c => c.name.toLowerCase());
   const [selectedCategory] = tagList.filter(t => categoriesNames.includes(t));
 
   // Set up callback to monitor outside click events to close the AutocompleteList
@@ -241,6 +244,12 @@ function TagEditor({
     if (value) {
       const toKeep = tagList.filter(t => !categoriesNames.includes(t));
       onEditTags([value, ...toKeep]);
+      const matching = categories.filter(
+        c => c.name.toLowerCase() === value.toLowerCase()
+      );
+      if (matching.length > 0) {
+        setCategoryDescription(matching[0].description);
+      }
     }
   };
 
@@ -329,19 +338,23 @@ function TagEditor({
         aria-owns={`${tagEditorId}-AutocompleteList`}
         aria-haspopup="listbox"
       >
-        <select onChange={handleOnChange}>
+        <select onChange={handleOnChange} style="display: inline">
           <option selected={!selectedCategory} disabled>
             Add category
           </option>
-          {Object.keys(categories).map(c => (
+          {categories.map(c => (
             <option
-              selected={selectedCategory === c.toLowerCase()}
-              value={c.toLowerCase()}
+              required
+              selected={selectedCategory === c.name.toLowerCase()}
+              value={c.name.toLowerCase()}
             >
-              {c}
+              {c.name}
             </option>
           ))}
         </select>
+        <p style="display: inline-block; margin-left: 12px">
+          {categoryDescription}
+        </p>
 
         <input
           onInput={handleOnInput}
