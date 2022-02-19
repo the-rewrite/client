@@ -34,10 +34,10 @@ export function formatAnnotation(annotation) {
 /**
  * @param {string[]} tags
  */
-export function tagsToSingleClass(tags) {
+export function categoriesToClasses(tags) {
   // FIXME This is only good for now and needs to be revisited
   if (!tags || tags.length === 0) {
     return '';
   }
-  return tags[0].split(' ')[0].split(',')[0];
+  return tags.join(' ');
 }

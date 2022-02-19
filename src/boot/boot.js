@@ -1,4 +1,3 @@
-import { injectCategoriesStyle } from '../the-rewrite/categories';
 import { requiredPolyfillSets } from './polyfills';
 
 /**
@@ -181,7 +180,6 @@ export function bootHypothesisClient(doc, config) {
     'styles/annotator.css',
     'styles/pdfjs-overrides.css',
   ]);
-  injectCategoriesStyle();
 }
 
 /**
