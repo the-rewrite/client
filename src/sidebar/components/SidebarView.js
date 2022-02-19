@@ -14,7 +14,10 @@ import ThreadList from './ThreadList';
 import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
 import { enableLayout } from '../../the-rewrite/dom-utils';
 import { categoriesToClasses } from '../../the-rewrite/annotation-utils';
-import { getCategories } from '../../the-rewrite/categories';
+import {
+  getCategories,
+  THE_REWRITE_TAG_CATEGORIES,
+} from '../../the-rewrite/categories';
 
 /**
  * @typedef {import('./Thread').Thread} Thread
@@ -66,7 +69,7 @@ function SidebarView({
 
     const categories = getCategories();
     // filter has to happen here
-    const children = [...rootThread.children].map(child => {
+    let children = [...rootThread.children].map(child => {
       let include = true;
 
       categories.forEach((c, i) => {
@@ -79,6 +82,15 @@ function SidebarView({
       return child;
       //return include;
     });
+
+    const userId = store.profile().userid;
+    console.log('profile is', userId, children);
+    console.log(store.profile());
+    children = children.filter(
+      c =>
+        !c.annotation?.tags.includes(THE_REWRITE_TAG_CATEGORIES) ||
+        c.annotation?.user == userId
+    );
 
     /**
      * @param {Thread} t
