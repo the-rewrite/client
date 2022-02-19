@@ -19,7 +19,6 @@ import NotebookView from './NotebookView';
 import ShareAnnotationsPanel from './ShareAnnotationsPanel';
 import ToastMessages from './ToastMessages';
 import TopBar from './TopBar';
-import { injectCategoriesVariables } from '../../the-rewrite/categories';
 
 /**
  * @typedef {import('../../types/api').Profile} Profile
@@ -70,7 +69,6 @@ function authStateFromProfile(profile) {
  * @param {HypothesisAppProps} props
  */
 function HypothesisApp({ auth, bridge, settings, session, toastMessenger }) {
-  injectCategoriesVariables();
   const store = useStoreProxy();
   const hasFetchedProfile = store.hasFetchedProfile();
   const profile = store.profile();
