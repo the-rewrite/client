@@ -54,8 +54,8 @@ function TagEditor({
   });
 
   const categories = getCategories();
-  const categoriesNames = categories.map(c => c.name.toLowerCase());
-  const [selectedCategory] = tagList.filter(t => categoriesNames.includes(t));
+  const categoriesTags = categories.map(c => c.tag);
+  const [selectedCategory] = tagList.filter(t => categoriesTags.includes(t));
 
   // Set up callback to monitor outside click events to close the AutocompleteList
   const closeWrapperRef = useRef(/** @type {HTMLElement|null} */ (null));
@@ -242,11 +242,9 @@ function TagEditor({
     // @ts-ignore
     const value = e.target.value;
     if (value) {
-      const toKeep = tagList.filter(t => !categoriesNames.includes(t));
+      const toKeep = tagList.filter(t => !categoriesTags.includes(t));
       onEditTags([value, ...toKeep]);
-      const matching = categories.filter(
-        c => c.name.toLowerCase() === value.toLowerCase()
-      );
+      const matching = categories.filter(c => c.tag === value);
       if (matching.length > 0) {
         setCategoryDescription(matching[0].description);
       }
@@ -345,8 +343,8 @@ function TagEditor({
           {categories.map(c => (
             <option
               required
-              selected={selectedCategory === c.name.toLowerCase()}
-              value={c.name.toLowerCase()}
+              selected={selectedCategory === c.tag}
+              value={c.tag}
             >
               {c.name}
             </option>

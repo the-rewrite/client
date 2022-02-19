@@ -13,8 +13,8 @@ import SidebarContentError from './SidebarContentError';
 import ThreadList from './ThreadList';
 import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
 import { enableLayout } from '../../the-rewrite/dom-utils';
-import { tagsToSingleClass } from '../../the-rewrite/annotation-utils';
-import { getCategories2 } from '../../the-rewrite/categories';
+import { categoriesToClasses } from '../../the-rewrite/annotation-utils';
+import { getCategories } from '../../the-rewrite/categories';
 
 /**
  * @typedef {import('./Thread').Thread} Thread
@@ -64,16 +64,14 @@ function SidebarView({
         return xpath.split('/').slice(0, 4).join('/');
       };
 
-    const categories = getCategories2();
+    const categories = getCategories();
     // filter has to happen here
     const children = [...rootThread.children].map(child => {
       let include = true;
 
-      Object.keys(categories).forEach((c, i) => {
+      categories.forEach((c, i) => {
         if (filters[i]) {
-          include &&= !(
-            tagsToSingleClass(child.annotation.tags) === c.toLowerCase()
-          );
+          include &&= !child.annotation.tags.includes(c.tag);
         }
       });
       //@ts-ignore

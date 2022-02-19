@@ -11,7 +11,8 @@ import { TheRewriteEdit } from './TheRewriteEdit';
 import {
   extractCategoriesFromMarkdown,
   getMetadataAnnotation,
-  setCategories,
+  injectCategoriesVariables,
+  updateCategories,
 } from '../categories';
 
 /**
@@ -61,10 +62,12 @@ function TheRewriteView({
   const store = useStoreProxy();
   const [draft] = getDrafts(store, threads);
   const metadata = getMetadataAnnotation(store.allAnnotations());
-  console.log('asdasd', metadata);
   if (metadata) {
     const categories = extractCategoriesFromMarkdown(metadata.text);
-    setCategories(categories);
+    if (updateCategories(categories)) {
+      bridge.call('theRewriteUpdateCategories', categories);
+      injectCategoriesVariables(categories);
+    }
   }
   // Add `the-rewrite` class to the HTML root element
   // document.documentElement.classList.add('the-rewrite');

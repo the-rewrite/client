@@ -16,8 +16,9 @@ import * as rangeUtil from './range-util';
 import { SelectionObserver } from './selection-observer';
 import { normalizeURI } from './util/url';
 import { ListenerCollection } from './util/listener-collection';
-import { tagsToSingleClass } from './../the-rewrite/annotation-utils';
+import { categoriesToClasses } from './../the-rewrite/annotation-utils';
 import { disableLayout, enableLayout } from '../the-rewrite/dom-utils';
+import { injectCategoriesStyle } from '../the-rewrite/categories';
 
 /**
  * @typedef {import('./util/emitter').EventBus} EventBus
@@ -168,6 +169,8 @@ export default class Guest {
 
     // Setup connection to sidebar.
     this.crossframe = new CrossFrame(this.element, eventBus, config);
+    /** @type {import('../the-rewrite/categories').Categories|null} */
+    this.categories = null;
 
     // FIXME: remove bridge from window
     // @ts-ignore
@@ -368,6 +371,14 @@ export default class Guest {
       disableLayout();
       this.isTheRewriteOpen = false;
     });
+    this.crossframe.on(
+      'theRewriteUpdateCategories',
+      /** @param {import('../the-rewrite/categories').Categories} categories */ categories => {
+        this.categories = categories;
+        console.log('update cat', categories);
+        injectCategoriesStyle(categories);
+      }
+    );
   }
 
   destroy() {
@@ -381,6 +392,14 @@ export default class Guest {
     this._integration.destroy();
     this._emitter.destroy();
     this.crossframe.destroy();
+  }
+
+  /**
+   *
+   * @param {import('../the-rewrite/categories').Categories} categories
+   */
+  updateCategories(categories) {
+    document.querySelectorAll('hypothesis-highlight').forEach(e => {});
   }
 
   /**
@@ -469,7 +488,7 @@ export default class Guest {
       annotation.target = [];
     }
     const anchors = await Promise.all(annotation.target.map(locate));
-    const cssClass = tagsToSingleClass(annotation.tags);
+    const cssClass = categoriesToClasses(annotation.tags);
     for (let anchor of anchors) {
       highlight(anchor, cssClass);
     }

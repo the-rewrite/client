@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { tagsToSingleClass } from '../annotation-utils';
+import { categoriesToClasses } from '../annotation-utils';
 import ThreadCard from './ThreadCard';
 //import ThreadCard from '../../sidebar/components/ThreadCard';
 import { createGrid } from '../grid-utils';
@@ -53,7 +53,7 @@ function GridItem({ bridge, thread, hideReplies, update, frameSync }) {
       id={annotation.id}
       className={`rewrite-grid-item outer ${isWide ? 'wide' : ''} ${
         thread.include ? '' : 'rewrite-hide-item'
-      } ${tagsToSingleClass(thread.annotation?.tags)}`}
+      } ${categoriesToClasses(thread.annotation?.tags)}`}
     >
       <div className="inner" lang={lang}>
         <p className="number" onClick={scrollToAnnotation}>
