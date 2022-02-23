@@ -12,7 +12,22 @@ section#filter-widget {
   padding: (f.$base * 0.5) 0 0 0;
 }
 
-section#filter-widget button {
+.TagEditor select,
+.PublishControlButton,
+.AnnotationPublishControl .Hyp-LabeledButton {
+  font-family: 'Space Grotesk';
+}
+
+.PublishControlButton,
+.AnnotationPublishControl .Hyp-LabeledButton {
+  color: #000;
+  font-weight: normal;
+}
+
+section#filter-widget button,
+.TagEditor select,
+.PublishControlButton,
+.AnnotationPublishControl .Hyp-LabeledButton {
   font-size: f.$base;
   line-height: f.$multp;
   text-transform: uppercase;
@@ -74,13 +89,15 @@ section#filter-widget button[data-state='0'] div.circle {
   background-color: c.$gray;
 }
 
-section#filter-widget button[data-state='1'] {
+section#filter-widget button[data-state='1'],
+.PublishControlButton {
   background-color: c.$active;
   border-color: c.$active;
   color: c.$white;
 }
 
-section#filter-widget button.annotation[data-state='0'] {
+section#filter-widget button.annotation[data-state='0'],
+.PublishControlButton:disabled {
   background-color: transparent;
   cursor: default;
   color: rgba(16, 16, 16, 0.3);
