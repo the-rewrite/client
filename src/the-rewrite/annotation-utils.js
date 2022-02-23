@@ -49,6 +49,5 @@ export function categoriesToClasses(tags) {
     return '';
   }
   tags = tags.map(t => THE_REWRITE_V1_TO_V2_TAGS[t] || t);
-  console.log(tags);
   return tags.join(' ');
 }

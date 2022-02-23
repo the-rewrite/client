@@ -26,14 +26,16 @@ export function getMetadataAnnotation(annotations) {
     return;
   }
 
-  let lowest = annotations
-    .filter(a => a.tags.includes(THE_REWRITE_TAG_CATEGORIES))
-    .reduce(
-      (prev, curr) => (prev.created < curr.created ? prev : curr),
-      annotations[0]
-    );
+  let matching = annotations.filter(a =>
+    a.tags.includes(THE_REWRITE_TAG_CATEGORIES)
+  );
 
-  return lowest;
+  if (matching.length) {
+    return matching.reduce(
+      (prev, curr) => (prev.created < curr.created ? prev : curr),
+      matching[0]
+    );
+  }
 }
 
 /**
