@@ -1,4 +1,5 @@
 import { formatAnnot } from './../sidebar/services/frame-sync';
+import { THE_REWRITE_TAG_CATEGORY } from './categories';
 
 /**
  * @typedef {import('../types/annotator').AnnotationData} AnnotationData
@@ -31,6 +32,14 @@ export function formatAnnotation(annotation) {
   return /** @type { AnnotationMessage } */ message;
 }
 
+const THE_REWRITE_V1_TO_V2_TAGS = {
+  definition: [THE_REWRITE_TAG_CATEGORY, 'definition'].join('_'),
+  addition: [THE_REWRITE_TAG_CATEGORY, 'addition'].join('_'),
+  deletion: [THE_REWRITE_TAG_CATEGORY, 'deletion'].join('_'),
+  correction: [THE_REWRITE_TAG_CATEGORY, 'correction'].join('_'),
+  speculation: [THE_REWRITE_TAG_CATEGORY, 'speculation'].join('_'),
+};
+
 /**
  * @param {string[]} tags
  */
@@ -39,5 +48,7 @@ export function categoriesToClasses(tags) {
   if (!tags || tags.length === 0) {
     return '';
   }
+  tags = tags.map(t => THE_REWRITE_V1_TO_V2_TAGS[t] || t);
+  console.log(tags);
   return tags.join(' ');
 }
