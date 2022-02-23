@@ -12,8 +12,6 @@ import SelectionTabs from './SelectionTabs';
 import SidebarContentError from './SidebarContentError';
 import ThreadList from './ThreadList';
 import TheRewriteView from '../../the-rewrite/components/TheRewriteView';
-import { enableLayout } from '../../the-rewrite/dom-utils';
-import { categoriesToClasses } from '../../the-rewrite/annotation-utils';
 import {
   getCategories,
   THE_REWRITE_TAG_CATEGORIES,
@@ -49,7 +47,7 @@ function SidebarView({
 }) {
   const rootThread = useRootThread();
   const store = useStoreProxy();
-  const [enableTheRewrite, setEnableTheRewrite] = useState(false);
+  const [enableTheRewrite, setEnableTheRewrite] = useState(true);
 
   const handleEnableTheRewrite = () => {
     setEnableTheRewrite(!enableTheRewrite);

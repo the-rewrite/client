@@ -10,6 +10,7 @@ import { ToolbarController } from './toolbar';
 import { createShadowRoot } from './util/shadow-root';
 import BucketBar from './bucket-bar';
 import { ListenerCollection } from './util/listener-collection';
+import { disableLayout, enableLayout } from '../the-rewrite/dom-utils';
 
 /**
  * @typedef {import('./guest').default} Guest
@@ -461,6 +462,7 @@ export default class Sidebar {
     }
 
     this._notifyOfLayoutChange(true);
+    enableLayout();
   }
 
   close() {
@@ -476,6 +478,7 @@ export default class Sidebar {
     }
 
     this._notifyOfLayoutChange(false);
+    disableLayout();
   }
 
   /**

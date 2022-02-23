@@ -364,11 +364,11 @@ export default class Guest {
     });
 
     this.crossframe.on('theRewriteOpened', () => {
-      enableLayout();
+      //enableLayout();
       this.isTheRewriteOpen = true;
     });
     this.crossframe.on('theRewriteClosed', () => {
-      disableLayout();
+      //disableLayout();
       this.isTheRewriteOpen = false;
     });
     this.crossframe.on(
