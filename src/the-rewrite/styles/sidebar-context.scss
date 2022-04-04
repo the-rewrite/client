@@ -156,6 +156,9 @@ html.the-rewrite .HypothesisApp {
   .TagList {
     display: none;
   }
+  .Thread--reply .Thread__content {
+    margin-left: 0;
+  }
 
   .ThreadCard {
     h1,
