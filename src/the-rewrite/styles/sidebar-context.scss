@@ -159,6 +159,11 @@ html.the-rewrite .HypothesisApp {
   .Thread--reply .Thread__content {
     margin-left: 0;
   }
+  @media (min-width: 450px) {
+  .MarkdownView__embed {
+    width: 100%;
+  }
+  }
 
   .ThreadCard {
     h1,
